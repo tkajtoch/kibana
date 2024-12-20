@@ -618,6 +618,6 @@ module.exports = {
     /src[\/\\]plugins[\/\\]custom_integrations[\/\\]public[\/\\]components[\/\\]fleet_integration[\/\\]elasticsearch_py[\/\\]elasticsearch_py_readme.tsx/,
     /src[\/\\]plugins[\/\\]custom_integrations[\/\\]public[\/\\]components[\/\\]fleet_integration[\/\\]elasticsearch_ruby[\/\\]elasticsearch_ruby_readme.tsx/,
     /src[\/\\]plugins[\/\\]custom_integrations[\/\\]public[\/\\]components[\/\\]fleet_integration[\/\\]sample[\/\\]sample_client_readme.tsx/,
-    /packages[\/\\]react[\/\\]kibana_context[\/\\]styled[\/\\]styled_provider.tsx/
+    /packages[\/\\]react[\/\\]kibana_context[\/\\]styled[\/\\]styled_provider.tsx/,
   ],
 };
