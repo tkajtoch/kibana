@@ -5,13 +5,13 @@
  * 2.0.
  */
 
-import { schema, TypeOf } from '@kbn/config-schema';
-import type * as estypes from '@elastic/elasticsearch/lib/api/typesWithBodyKey';
+import type { TypeOf } from '@kbn/config-schema';
+import { schema } from '@kbn/config-schema';
 
-import { SnapshotRestore, SnapshotRestoreShardEs } from '../../../common/types';
+import type { SnapshotRestore, SnapshotRestoreShardEs } from '../../../common/types';
 import { serializeRestoreSettings } from '../../../common/lib';
 import { deserializeRestoreShard } from '../../lib';
-import { RouteDependencies } from '../../types';
+import type { RouteDependencies } from '../../types';
 import { addBasePath } from '../helpers';
 import { restoreSettingsSchema } from './validate_schemas';
 
@@ -22,7 +22,16 @@ export function registerRestoreRoutes({
 }: RouteDependencies) {
   // GET all snapshot restores
   router.get(
-    { path: addBasePath('restores'), validate: false },
+    {
+      path: addBasePath('restores'),
+      security: {
+        authz: {
+          enabled: false,
+          reason: 'Relies on es client for authorization',
+        },
+      },
+      validate: false,
+    },
     license.guardApiRoute(async (ctx, req, res) => {
       const { client: clusterClient } = (await ctx.core).elasticsearch;
 
@@ -30,6 +39,7 @@ export function registerRestoreRoutes({
         const snapshotRestores: SnapshotRestore[] = [];
         const recoveryByIndexName = await clusterClient.asCurrentUser.indices.recovery({
           human: true,
+          expand_wildcards: 'all',
         });
 
         // Filter to snapshot-recovered shards only
@@ -89,13 +99,19 @@ export function registerRestoreRoutes({
 
   // Restore snapshot
   const restoreParamsSchema = schema.object({
-    repository: schema.string(),
-    snapshot: schema.string(),
+    repository: schema.string({ maxLength: 1000 }),
+    snapshot: schema.string({ maxLength: 1000 }),
   });
 
   router.post(
     {
       path: addBasePath('restore/{repository}/{snapshot}'),
+      security: {
+        authz: {
+          enabled: false,
+          reason: 'Relies on es client for authorization',
+        },
+      },
       validate: { body: restoreSettingsSchema, params: restoreParamsSchema },
     },
     license.guardApiRoute(async (ctx, req, res) => {
@@ -105,10 +121,10 @@ export function registerRestoreRoutes({
 
       try {
         const response = await clusterClient.asCurrentUser.snapshot.restore({
+          // TODO: Bring {@link RestoreSettingsEs} in line with {@link RestoreRequest}
+          ...serializeRestoreSettings(restoreSettings),
           repository,
           snapshot,
-          // TODO: Bring {@link RestoreSettingsEs} in line with {@link RestoreRequest['body']}
-          body: serializeRestoreSettings(restoreSettings) as estypes.SnapshotRestoreRequest['body'],
         });
 
         return res.ok({ body: response });

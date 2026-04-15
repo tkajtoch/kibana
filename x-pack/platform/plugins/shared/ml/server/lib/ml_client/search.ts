@@ -7,7 +7,7 @@
 
 import Boom from '@hapi/boom';
 import type { IScopedClusterClient } from '@kbn/core/server';
-import type * as estypes from '@elastic/elasticsearch/lib/api/typesWithBodyKey';
+import type { estypes } from '@elastic/elasticsearch';
 import type {
   TransportResult,
   TransportRequestOptions,
@@ -18,10 +18,12 @@ import type {
 import type { MLSavedObjectService } from '../../saved_objects';
 import { ML_RESULTS_INDEX_PATTERN } from '../../../common/constants/index_patterns';
 import type { JobType } from '../../../common/types/saved_objects';
+import type { ServerlessInfo } from '../../types';
 
 export function searchProvider(
   client: IScopedClusterClient,
-  mlSavedObjectService: MLSavedObjectService
+  mlSavedObjectService: MLSavedObjectService,
+  serverless: ServerlessInfo
 ) {
   async function jobIdsCheck(jobType: JobType, jobIds: string[]) {
     if (jobIds.length) {
@@ -59,6 +61,9 @@ export function searchProvider(
       {
         ...searchParams,
         index: ML_RESULTS_INDEX_PATTERN,
+        ...(serverless.isServerless && serverless.cpsEnabled
+          ? { project_routing: '_alias:_origin' }
+          : {}),
       },
       options
     );

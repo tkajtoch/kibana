@@ -21,7 +21,9 @@
         "description": [
           "\nThe `core` context provided to route handler.\n\nProvides the following clients and services:\n   - {@link SavedObjectsClient | savedObjects.client} - Saved Objects client\n     which uses the credentials of the incoming request\n   - {@link ISavedObjectTypeRegistry | savedObjects.typeRegistry} - Type registry containing\n     all the registered types.\n   - {@link IScopedClusterClient | elasticsearch.client} - Elasticsearch\n     data client which uses the credentials of the incoming request\n   - {@link IUiSettingsClient | uiSettings.client} - uiSettings client\n     which uses the credentials of the incoming request"
         ],
-        "path": "packages/core/http/core-http-request-handler-context-server/src/request_handler_context.ts",
+        "path": "src/core/packages/http/request-handler-context-server/src/request_handler_context.ts",
+        "lineNumber": 19,
+        "columnNumber": 1,
         "deprecated": false,
         "trackAdoption": false,
         "children": [
@@ -35,15 +37,11 @@
               "\n{@link SavedObjectsRequestHandlerContext}"
             ],
             "signature": [
-              {
-                "pluginId": "@kbn/core-saved-objects-server",
-                "scope": "server",
-                "docId": "kibKbnCoreSavedObjectsServerPluginApi",
-                "section": "def-server.SavedObjectsRequestHandlerContext",
-                "text": "SavedObjectsRequestHandlerContext"
-              }
+              "SavedObjectsRequestHandlerContext"
             ],
-            "path": "packages/core/http/core-http-request-handler-context-server/src/request_handler_context.ts",
+            "path": "src/core/packages/http/request-handler-context-server/src/request_handler_context.ts",
+            "lineNumber": 34,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           },
@@ -57,15 +55,11 @@
               "\n{@link ElasticsearchRequestHandlerContext}"
             ],
             "signature": [
-              {
-                "pluginId": "@kbn/core-elasticsearch-server",
-                "scope": "server",
-                "docId": "kibKbnCoreElasticsearchServerPluginApi",
-                "section": "def-server.ElasticsearchRequestHandlerContext",
-                "text": "ElasticsearchRequestHandlerContext"
-              }
+              "ElasticsearchRequestHandlerContext"
             ],
-            "path": "packages/core/http/core-http-request-handler-context-server/src/request_handler_context.ts",
+            "path": "src/core/packages/http/request-handler-context-server/src/request_handler_context.ts",
+            "lineNumber": 38,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           },
@@ -81,7 +75,9 @@
             "signature": [
               "{ getBooleanValue: (flagName: string, fallbackValue: boolean) => Promise<boolean>; getStringValue: <Value extends string>(flagName: string, fallbackValue: Value) => Promise<Value>; getNumberValue: <Value extends number>(flagName: string, fallbackValue: Value) => Promise<Value>; }"
             ],
-            "path": "packages/core/http/core-http-request-handler-context-server/src/request_handler_context.ts",
+            "path": "src/core/packages/http/request-handler-context-server/src/request_handler_context.ts",
+            "lineNumber": 42,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           },
@@ -95,15 +91,11 @@
               "\n{@link UiSettingsRequestHandlerContext}"
             ],
             "signature": [
-              {
-                "pluginId": "@kbn/core-ui-settings-server",
-                "scope": "server",
-                "docId": "kibKbnCoreUiSettingsServerPluginApi",
-                "section": "def-server.UiSettingsRequestHandlerContext",
-                "text": "UiSettingsRequestHandlerContext"
-              }
+              "UiSettingsRequestHandlerContext"
             ],
-            "path": "packages/core/http/core-http-request-handler-context-server/src/request_handler_context.ts",
+            "path": "src/core/packages/http/request-handler-context-server/src/request_handler_context.ts",
+            "lineNumber": 46,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           },
@@ -117,15 +109,11 @@
               "\n{@link DeprecationsRequestHandlerContext}"
             ],
             "signature": [
-              {
-                "pluginId": "@kbn/core-deprecations-server",
-                "scope": "server",
-                "docId": "kibKbnCoreDeprecationsServerPluginApi",
-                "section": "def-server.DeprecationsRequestHandlerContext",
-                "text": "DeprecationsRequestHandlerContext"
-              }
+              "DeprecationsRequestHandlerContext"
             ],
-            "path": "packages/core/http/core-http-request-handler-context-server/src/request_handler_context.ts",
+            "path": "src/core/packages/http/request-handler-context-server/src/request_handler_context.ts",
+            "lineNumber": 50,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           },
@@ -139,15 +127,11 @@
               "\n{@link SecurityRequestHandlerContext}"
             ],
             "signature": [
-              {
-                "pluginId": "@kbn/core-security-server",
-                "scope": "server",
-                "docId": "kibKbnCoreSecurityServerPluginApi",
-                "section": "def-server.SecurityRequestHandlerContext",
-                "text": "SecurityRequestHandlerContext"
-              }
+              "SecurityRequestHandlerContext"
             ],
-            "path": "packages/core/http/core-http-request-handler-context-server/src/request_handler_context.ts",
+            "path": "src/core/packages/http/request-handler-context-server/src/request_handler_context.ts",
+            "lineNumber": 54,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           },
@@ -161,15 +145,11 @@
               "\n{@link UserProfileRequestHandlerContext}"
             ],
             "signature": [
-              {
-                "pluginId": "@kbn/core-user-profile-server",
-                "scope": "server",
-                "docId": "kibKbnCoreUserProfileServerPluginApi",
-                "section": "def-server.UserProfileRequestHandlerContext",
-                "text": "UserProfileRequestHandlerContext"
-              }
+              "UserProfileRequestHandlerContext"
             ],
-            "path": "packages/core/http/core-http-request-handler-context-server/src/request_handler_context.ts",
+            "path": "src/core/packages/http/request-handler-context-server/src/request_handler_context.ts",
+            "lineNumber": 58,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           }
@@ -185,7 +165,9 @@
         "description": [
           "\nThe `core` context provided to route handler during the preboot phase."
         ],
-        "path": "packages/core/http/core-http-request-handler-context-server/src/preboot_request_handler_context.ts",
+        "path": "src/core/packages/http/request-handler-context-server/src/preboot_request_handler_context.ts",
+        "lineNumber": 24,
+        "columnNumber": 1,
         "deprecated": false,
         "trackAdoption": false,
         "children": [
@@ -199,15 +181,11 @@
               "\n{@link PrebootUiSettingsRequestHandlerContext}"
             ],
             "signature": [
-              {
-                "pluginId": "@kbn/core-http-request-handler-context-server",
-                "scope": "server",
-                "docId": "kibKbnCoreHttpRequestHandlerContextServerPluginApi",
-                "section": "def-server.PrebootUiSettingsRequestHandlerContext",
-                "text": "PrebootUiSettingsRequestHandlerContext"
-              }
+              "PrebootUiSettingsRequestHandlerContext"
             ],
-            "path": "packages/core/http/core-http-request-handler-context-server/src/preboot_request_handler_context.ts",
+            "path": "src/core/packages/http/request-handler-context-server/src/preboot_request_handler_context.ts",
+            "lineNumber": 29,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           }
@@ -224,23 +202,13 @@
           "\nBase context passed to a route handler during the preboot phase, containing the `core` context part."
         ],
         "signature": [
-          {
-            "pluginId": "@kbn/core-http-request-handler-context-server",
-            "scope": "server",
-            "docId": "kibKbnCoreHttpRequestHandlerContextServerPluginApi",
-            "section": "def-server.PrebootRequestHandlerContext",
-            "text": "PrebootRequestHandlerContext"
-          },
+          "PrebootRequestHandlerContext",
           " extends ",
-          {
-            "pluginId": "@kbn/core-http-server",
-            "scope": "server",
-            "docId": "kibKbnCoreHttpServerPluginApi",
-            "section": "def-server.RequestHandlerContextBase",
-            "text": "RequestHandlerContextBase"
-          }
+          "RequestHandlerContextBase"
         ],
-        "path": "packages/core/http/core-http-request-handler-context-server/src/preboot_request_handler_context.ts",
+        "path": "src/core/packages/http/request-handler-context-server/src/preboot_request_handler_context.ts",
+        "lineNumber": 35,
+        "columnNumber": 1,
         "deprecated": false,
         "trackAdoption": false,
         "children": [
@@ -255,16 +223,12 @@
             ],
             "signature": [
               "Promise<",
-              {
-                "pluginId": "@kbn/core-http-request-handler-context-server",
-                "scope": "server",
-                "docId": "kibKbnCoreHttpRequestHandlerContextServerPluginApi",
-                "section": "def-server.PrebootCoreRequestHandlerContext",
-                "text": "PrebootCoreRequestHandlerContext"
-              },
+              "PrebootCoreRequestHandlerContext",
               ">"
             ],
-            "path": "packages/core/http/core-http-request-handler-context-server/src/preboot_request_handler_context.ts",
+            "path": "src/core/packages/http/request-handler-context-server/src/preboot_request_handler_context.ts",
+            "lineNumber": 40,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           }
@@ -280,7 +244,9 @@
         "description": [
           "\n`uiSettings` http request context provider during the preboot phase."
         ],
-        "path": "packages/core/http/core-http-request-handler-context-server/src/preboot_request_handler_context.ts",
+        "path": "src/core/packages/http/request-handler-context-server/src/preboot_request_handler_context.ts",
+        "lineNumber": 13,
+        "columnNumber": 1,
         "deprecated": false,
         "trackAdoption": false,
         "children": [
@@ -294,15 +260,11 @@
               "\nThe {@link IUiSettingsClient | UI Settings client}."
             ],
             "signature": [
-              {
-                "pluginId": "@kbn/core-ui-settings-server",
-                "scope": "server",
-                "docId": "kibKbnCoreUiSettingsServerPluginApi",
-                "section": "def-server.IUiSettingsClient",
-                "text": "IUiSettingsClient"
-              }
+              "IUiSettingsClient"
             ],
-            "path": "packages/core/http/core-http-request-handler-context-server/src/preboot_request_handler_context.ts",
+            "path": "src/core/packages/http/request-handler-context-server/src/preboot_request_handler_context.ts",
+            "lineNumber": 18,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           }
@@ -319,23 +281,13 @@
           "\nBase context passed to a route handler, containing the `core` context part.\n"
         ],
         "signature": [
-          {
-            "pluginId": "@kbn/core-http-request-handler-context-server",
-            "scope": "server",
-            "docId": "kibKbnCoreHttpRequestHandlerContextServerPluginApi",
-            "section": "def-server.RequestHandlerContext",
-            "text": "RequestHandlerContext"
-          },
+          "RequestHandlerContext",
           " extends ",
-          {
-            "pluginId": "@kbn/core-http-server",
-            "scope": "server",
-            "docId": "kibKbnCoreHttpServerPluginApi",
-            "section": "def-server.RequestHandlerContextBase",
-            "text": "RequestHandlerContextBase"
-          }
+          "RequestHandlerContextBase"
         ],
-        "path": "packages/core/http/core-http-request-handler-context-server/src/request_handler_context.ts",
+        "path": "src/core/packages/http/request-handler-context-server/src/request_handler_context.ts",
+        "lineNumber": 64,
+        "columnNumber": 1,
         "deprecated": false,
         "trackAdoption": false,
         "children": [
@@ -350,16 +302,12 @@
             ],
             "signature": [
               "Promise<",
-              {
-                "pluginId": "@kbn/core-http-request-handler-context-server",
-                "scope": "server",
-                "docId": "kibKbnCoreHttpRequestHandlerContextServerPluginApi",
-                "section": "def-server.CoreRequestHandlerContext",
-                "text": "CoreRequestHandlerContext"
-              },
+              "CoreRequestHandlerContext",
               ">"
             ],
-            "path": "packages/core/http/core-http-request-handler-context-server/src/request_handler_context.ts",
+            "path": "src/core/packages/http/request-handler-context-server/src/request_handler_context.ts",
+            "lineNumber": 70,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           }
@@ -379,16 +327,12 @@
           "\nMixin allowing plugins to define their own request handler contexts.\n"
         ],
         "signature": [
-          {
-            "pluginId": "@kbn/core-http-request-handler-context-server",
-            "scope": "server",
-            "docId": "kibKbnCoreHttpRequestHandlerContextServerPluginApi",
-            "section": "def-server.RequestHandlerContext",
-            "text": "RequestHandlerContext"
-          },
+          "RequestHandlerContext",
           " & { [Key in keyof T]: T[Key] extends Promise<unknown> ? T[Key] : Promise<T[Key]>; }"
         ],
-        "path": "packages/core/http/core-http-request-handler-context-server/src/request_handler_context.ts",
+        "path": "src/core/packages/http/request-handler-context-server/src/request_handler_context.ts",
+        "lineNumber": 76,
+        "columnNumber": 1,
         "deprecated": false,
         "trackAdoption": false,
         "initialIsOpen": false

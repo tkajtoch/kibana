@@ -7,7 +7,7 @@
 
 import { addBasePath } from '../../../services';
 import { deserializeAutoFollowStats } from '../../../lib/ccr_stats_serialization';
-import { RouteDependencies } from '../../../types';
+import type { RouteDependencies } from '../../../types';
 
 /**
  * Returns Auto-follow stats
@@ -20,6 +20,12 @@ export const registerStatsRoute = ({
   router.get(
     {
       path: addBasePath('/stats/auto_follow'),
+      security: {
+        authz: {
+          enabled: false,
+          reason: 'Relies on es client for authorization',
+        },
+      },
       validate: false,
     },
     license.guardApiRoute(async (context, request, response) => {

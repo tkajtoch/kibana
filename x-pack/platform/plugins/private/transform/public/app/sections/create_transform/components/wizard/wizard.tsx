@@ -10,6 +10,7 @@ import { pick } from 'lodash';
 
 import type { EuiStepStatus } from '@elastic/eui';
 import { EuiSteps } from '@elastic/eui';
+import { css } from '@emotion/react';
 
 import { i18n } from '@kbn/i18n';
 import type { DataView } from '@kbn/data-views-plugin/public';
@@ -46,6 +47,14 @@ import {
 import { WizardNav } from '../wizard_nav';
 
 import { TRANSFORM_STORAGE_KEYS } from './storage';
+
+const styles = {
+  steps: css`
+    .euiStep__content {
+      padding-right: 0;
+    }
+  `,
+};
 
 const localStorage = new Storage(window.localStorage);
 
@@ -111,7 +120,7 @@ export const CreateTransformWizardContext = createContext<{
 export const Wizard: FC<WizardProps> = React.memo(({ cloneConfig, searchItems }) => {
   const { showNodeInfo } = useEnabledFeatures();
   const appDependencies = useAppDependencies();
-  const { uiSettings, data, fieldFormats, charts, theme } = appDependencies;
+  const { uiSettings, data, fieldFormats, charts } = appDependencies;
   const { dataView } = searchItems;
 
   // The current WIZARD_STEP
@@ -195,6 +204,7 @@ export const Wizard: FC<WizardProps> = React.memo(({ cloneConfig, searchItems })
           {currentStep === WIZARD_STEPS.CREATE ? (
             <StepCreateForm
               createDataView={stepDetailsState.createDataView}
+              deferValidation={stepDetailsState.deferValidation}
               transformId={stepDetailsState.transformId}
               transformConfig={transformConfig}
               onChange={setStepCreateState}
@@ -215,6 +225,7 @@ export const Wizard: FC<WizardProps> = React.memo(({ cloneConfig, searchItems })
     currentStep,
     setCurrentStep,
     stepDetailsState.createDataView,
+    stepDetailsState.deferValidation,
     stepDetailsState.transformId,
     transformConfig,
     setStepCreateState,
@@ -225,7 +236,15 @@ export const Wizard: FC<WizardProps> = React.memo(({ cloneConfig, searchItems })
   const stepsConfig = [stepDefine, stepDetails, stepCreate];
 
   const datePickerDeps: DatePickerDependencies = {
-    ...pick(appDependencies, ['data', 'http', 'notifications', 'theme', 'uiSettings', 'i18n']),
+    ...pick(appDependencies, [
+      'data',
+      'http',
+      'notifications',
+      'theme',
+      'uiSettings',
+      'userProfile',
+      'i18n',
+    ]),
     uiSettingsKeys: UI_SETTINGS,
     showFrozenDataTierChoice: showNodeInfo,
   };
@@ -247,7 +266,6 @@ export const Wizard: FC<WizardProps> = React.memo(({ cloneConfig, searchItems })
       fieldStatsServices={fieldStatsServices}
       timeRangeMs={stepDefineState.timeRangeMs}
       dslQuery={transformConfig.source.query}
-      theme={theme}
     >
       <CreateTransformWizardContext.Provider
         value={{ dataView, runtimeMappings: stepDefineState.runtimeMappings }}
@@ -255,7 +273,7 @@ export const Wizard: FC<WizardProps> = React.memo(({ cloneConfig, searchItems })
         <UrlStateProvider>
           <StorageContextProvider storage={localStorage} storageKeys={TRANSFORM_STORAGE_KEYS}>
             <DatePickerContextProvider {...datePickerDeps}>
-              <EuiSteps className="transform__steps" steps={stepsConfig} />
+              <EuiSteps css={styles.steps} steps={stepsConfig} />
             </DatePickerContextProvider>
           </StorageContextProvider>
         </UrlStateProvider>

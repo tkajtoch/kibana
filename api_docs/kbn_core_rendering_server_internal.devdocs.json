@@ -21,7 +21,9 @@
         "signature": [
           "({ url }: Props) => React.JSX.Element"
         ],
-        "path": "packages/core/rendering/core-rendering-server-internal/src/views/fonts.tsx",
+        "path": "src/core/packages/rendering/server-internal/src/views/fonts.tsx",
+        "lineNumber": 222,
+        "columnNumber": 14,
         "deprecated": false,
         "trackAdoption": false,
         "children": [
@@ -35,7 +37,9 @@
             "signature": [
               "Props"
             ],
-            "path": "packages/core/rendering/core-rendering-server-internal/src/views/fonts.tsx",
+            "path": "src/core/packages/rendering/server-internal/src/views/fonts.tsx",
+            "lineNumber": 222,
+            "columnNumber": 49,
             "deprecated": false,
             "trackAdoption": false,
             "isRequired": true

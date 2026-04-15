@@ -7,25 +7,28 @@
 import { EuiFlexGroup, EuiFlexItem, EuiSpacer, EuiLoadingSpinner } from '@elastic/eui';
 import React from 'react';
 import { AlertConsumers, SYNTHETICS_RULE_TYPE_IDS } from '@kbn/rule-data-utils';
-import { useKibana } from '@kbn/kibana-react-plugin/public';
 import { useParams } from 'react-router-dom';
+import { ObservabilityAlertsTable, AlertActions } from '@kbn/observability-plugin/public';
+import { useKibana } from '@kbn/kibana-react-plugin/public';
+import type { ClientPluginsStart } from '../../../../../plugin';
 import { useRefreshedRangeFromUrl } from '../../../hooks';
 import { SyntheticsDatePicker } from '../../common/date_picker/synthetics_date_picker';
 import { useSelectedLocation } from '../hooks/use_selected_location';
-import { ClientPluginsStart } from '../../../../../plugin';
+import { useMonitorAttachmentConfig } from '../hooks/use_monitor_attachment_config';
 
-export const MONITOR_ALERTS_TABLE_ID = 'xpack.observability.slo.sloDetails.alertTable';
+export const MONITOR_ALERTS_TABLE_ID = 'xpack.synthetics.monitor.alertTable';
 
 export function MonitorDetailsAlerts() {
-  const {
-    triggersActionsUi: { alertsTableConfigurationRegistry, getAlertsStateTable: AlertsStateTable },
-    observability: { observabilityRuleTypeRegistry },
-  } = useKibana<ClientPluginsStart>().services;
-
   const { monitorId: configId } = useParams<{ monitorId: string }>();
+
+  const { data, http, notifications, fieldFormats, application, licensing, cases, settings } =
+    useKibana<ClientPluginsStart>().services;
 
   const selectedLocation = useSelectedLocation();
   const { from, to } = useRefreshedRangeFromUrl();
+
+  // Configure the agent builder flyout with the monitor details
+  useMonitorAttachmentConfig();
 
   if (!selectedLocation) {
     return <EuiLoadingSpinner size="xl" />;
@@ -39,11 +42,18 @@ export function MonitorDetailsAlerts() {
           <SyntheticsDatePicker fullWidth={true} />
         </EuiFlexItem>
         <EuiFlexItem>
-          <AlertsStateTable
-            alertsTableConfigurationRegistry={alertsTableConfigurationRegistry}
-            configurationId={AlertConsumers.OBSERVABILITY}
+          <ObservabilityAlertsTable
+            services={{
+              data,
+              http,
+              notifications,
+              fieldFormats,
+              application,
+              licensing,
+              cases,
+              settings,
+            }}
             id={MONITOR_ALERTS_TABLE_ID}
-            data-test-subj="monitorAlertsTable"
             ruleTypeIds={SYNTHETICS_RULE_TYPE_IDS}
             consumers={[AlertConsumers.UPTIME, AlertConsumers.ALERTS, AlertConsumers.OBSERVABILITY]}
             query={{
@@ -55,9 +65,10 @@ export function MonitorDetailsAlerts() {
                 ],
               },
             }}
-            showAlertStatusWithFlapping
-            initialPageSize={100}
-            cellContext={{ observabilityRuleTypeRegistry }}
+            pageSize={100}
+            data-test-subj="monitorAlertsTable"
+            renderActionsCell={AlertActions}
+            showInspectButton
           />
         </EuiFlexItem>
       </EuiFlexGroup>

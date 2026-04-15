@@ -36,7 +36,9 @@
             "text": "Actions"
           }
         ],
-        "path": "x-pack/packages/security/authorization_core/src/actions/actions.ts",
+        "path": "x-pack/platform/packages/private/security/authorization_core/src/actions/actions.ts",
+        "lineNumber": 18,
+        "columnNumber": 1,
         "deprecated": false,
         "trackAdoption": false,
         "children": [
@@ -50,7 +52,9 @@
             "signature": [
               "ApiActions"
             ],
-            "path": "x-pack/packages/security/authorization_core/src/actions/actions.ts",
+            "path": "x-pack/platform/packages/private/security/authorization_core/src/actions/actions.ts",
+            "lineNumber": 23,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           },
@@ -64,7 +68,9 @@
             "signature": [
               "AppActions"
             ],
-            "path": "x-pack/packages/security/authorization_core/src/actions/actions.ts",
+            "path": "x-pack/platform/packages/private/security/authorization_core/src/actions/actions.ts",
+            "lineNumber": 24,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           },
@@ -78,7 +84,9 @@
             "signature": [
               "CasesActions"
             ],
-            "path": "x-pack/packages/security/authorization_core/src/actions/actions.ts",
+            "path": "x-pack/platform/packages/private/security/authorization_core/src/actions/actions.ts",
+            "lineNumber": 25,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           },
@@ -89,7 +97,9 @@
             "tags": [],
             "label": "login",
             "description": [],
-            "path": "x-pack/packages/security/authorization_core/src/actions/actions.ts",
+            "path": "x-pack/platform/packages/private/security/authorization_core/src/actions/actions.ts",
+            "lineNumber": 26,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           },
@@ -103,7 +113,9 @@
             "signature": [
               "SavedObjectActions"
             ],
-            "path": "x-pack/packages/security/authorization_core/src/actions/actions.ts",
+            "path": "x-pack/platform/packages/private/security/authorization_core/src/actions/actions.ts",
+            "lineNumber": 27,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           },
@@ -117,7 +129,9 @@
             "signature": [
               "AlertingActions"
             ],
-            "path": "x-pack/packages/security/authorization_core/src/actions/actions.ts",
+            "path": "x-pack/platform/packages/private/security/authorization_core/src/actions/actions.ts",
+            "lineNumber": 28,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           },
@@ -131,7 +145,9 @@
             "signature": [
               "SpaceActions"
             ],
-            "path": "x-pack/packages/security/authorization_core/src/actions/actions.ts",
+            "path": "x-pack/platform/packages/private/security/authorization_core/src/actions/actions.ts",
+            "lineNumber": 29,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           },
@@ -145,7 +161,9 @@
             "signature": [
               "UIActions"
             ],
-            "path": "x-pack/packages/security/authorization_core/src/actions/actions.ts",
+            "path": "x-pack/platform/packages/private/security/authorization_core/src/actions/actions.ts",
+            "lineNumber": 30,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           },
@@ -159,7 +177,9 @@
             "signature": [
               "any"
             ],
-            "path": "x-pack/packages/security/authorization_core/src/actions/actions.ts",
+            "path": "x-pack/platform/packages/private/security/authorization_core/src/actions/actions.ts",
+            "lineNumber": 32,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false,
             "children": [],
@@ -198,7 +218,9 @@
           },
           "[] | undefined"
         ],
-        "path": "x-pack/packages/security/authorization_core/src/privileges/privileges.ts",
+        "path": "x-pack/platform/packages/private/security/authorization_core/src/privileges/privileges.ts",
+        "lineNumber": 264,
+        "columnNumber": 1,
         "deprecated": false,
         "trackAdoption": false,
         "children": [
@@ -214,7 +236,9 @@
             "signature": [
               "string"
             ],
-            "path": "x-pack/packages/security/authorization_core/src/privileges/privileges.ts",
+            "path": "x-pack/platform/packages/private/security/authorization_core/src/privileges/privileges.ts",
+            "lineNumber": 271,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false,
             "isRequired": true
@@ -237,7 +261,9 @@
                 "text": "FeatureKibanaPrivileges"
               }
             ],
-            "path": "x-pack/packages/security/authorization_core/src/privileges/privileges.ts",
+            "path": "x-pack/platform/packages/private/security/authorization_core/src/privileges/privileges.ts",
+            "lineNumber": 272,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false,
             "isRequired": true
@@ -280,7 +306,9 @@
           },
           ", \"getFeatures\" | \"hasAtLeast\">) => { get(respectLicenseLevel?: boolean): { features: Record<string, Record<string, string[]>>; global: { all: string[]; read: string[]; }; space: { all: string[]; read: string[]; }; reserved: Record<string, string[]>; }; }"
         ],
-        "path": "x-pack/packages/security/authorization_core/src/privileges/privileges.ts",
+        "path": "x-pack/platform/packages/private/security/authorization_core/src/privileges/privileges.ts",
+        "lineNumber": 39,
+        "columnNumber": 1,
         "deprecated": false,
         "trackAdoption": false,
         "children": [
@@ -300,7 +328,9 @@
                 "text": "Actions"
               }
             ],
-            "path": "x-pack/packages/security/authorization_core/src/privileges/privileges.ts",
+            "path": "x-pack/platform/packages/private/security/authorization_core/src/privileges/privileges.ts",
+            "lineNumber": 40,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false,
             "isRequired": true
@@ -321,7 +351,9 @@
                 "text": "FeaturesPluginSetup"
               }
             ],
-            "path": "x-pack/packages/security/authorization_core/src/privileges/privileges.ts",
+            "path": "x-pack/platform/packages/private/security/authorization_core/src/privileges/privileges.ts",
+            "lineNumber": 41,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false,
             "isRequired": true
@@ -344,7 +376,9 @@
               },
               ", \"getFeatures\" | \"hasAtLeast\">"
             ],
-            "path": "x-pack/packages/security/authorization_core/src/privileges/privileges.ts",
+            "path": "x-pack/platform/packages/private/security/authorization_core/src/privileges/privileges.ts",
+            "lineNumber": 42,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false,
             "isRequired": true
@@ -362,7 +396,9 @@
         "tags": [],
         "label": "PrivilegesService",
         "description": [],
-        "path": "x-pack/packages/security/authorization_core/src/privileges/privileges.ts",
+        "path": "x-pack/platform/packages/private/security/authorization_core/src/privileges/privileges.ts",
+        "lineNumber": 25,
+        "columnNumber": 1,
         "deprecated": false,
         "trackAdoption": false,
         "children": [
@@ -383,7 +419,9 @@
                 "text": "RawKibanaPrivileges"
               }
             ],
-            "path": "x-pack/packages/security/authorization_core/src/privileges/privileges.ts",
+            "path": "x-pack/platform/packages/private/security/authorization_core/src/privileges/privileges.ts",
+            "lineNumber": 26,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false,
             "children": [
@@ -397,7 +435,9 @@
                 "signature": [
                   "boolean | undefined"
                 ],
-                "path": "x-pack/packages/security/authorization_core/src/privileges/privileges.ts",
+                "path": "x-pack/platform/packages/private/security/authorization_core/src/privileges/privileges.ts",
+                "lineNumber": 26,
+                "columnNumber": 7,
                 "deprecated": false,
                 "trackAdoption": false,
                 "isRequired": false
@@ -419,9 +459,11 @@
         "label": "CasesSupportedOperations",
         "description": [],
         "signature": [
-          "\"getTags\" | \"createComment\" | \"reopenCase\" | \"pushCase\" | \"createCase\" | \"getCase\" | \"getComment\" | \"getReporters\" | \"getUserActions\" | \"findConfigurations\" | \"updateCase\" | \"updateComment\" | \"deleteCase\" | \"deleteComment\" | \"createConfiguration\" | \"updateConfiguration\""
+          "\"getTags\" | \"createComment\" | \"reopenCase\" | \"pushCase\" | \"createCase\" | \"getCase\" | \"getComment\" | \"getReporters\" | \"getUserActions\" | \"findConfigurations\" | \"updateCase\" | \"updateComment\" | \"deleteCase\" | \"deleteComment\" | \"createConfiguration\" | \"updateConfiguration\" | \"assignCase\" | \"manageTemplate\""
         ],
-        "path": "x-pack/packages/security/authorization_core/src/privileges/feature_privilege_builder/cases.ts",
+        "path": "x-pack/platform/packages/private/security/authorization_core/src/privileges/feature_privilege_builder/cases.ts",
+        "lineNumber": 14,
+        "columnNumber": 1,
         "deprecated": false,
         "trackAdoption": false,
         "initialIsOpen": false

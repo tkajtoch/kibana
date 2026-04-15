@@ -6,21 +6,19 @@
  */
 
 import React from 'react';
+import type { BarStyleAccessor, DomainRange, TickFormatter } from '@elastic/charts';
 import {
   Axis,
   BarSeries,
-  BarStyleAccessor,
   Chart,
-  DomainRange,
   Position,
   ScaleType,
   Settings,
-  TickFormatter,
   TooltipType,
   Tooltip,
 } from '@elastic/charts';
 import { i18n } from '@kbn/i18n';
-import { useBaseChartTheme } from '../../../../../hooks/use_base_chart_theme';
+import { useElasticChartsTheme } from '@kbn/charts-theme';
 import { WaterfallChartFixedAxisContainer } from './styles';
 import { WaterfallChartMarkers } from './waterfall_markers';
 
@@ -31,7 +29,7 @@ interface Props {
 }
 
 export const WaterfallChartFixedAxis = ({ tickFormat, domain, barStyleAccessor }: Props) => {
-  const baseChartTheme = useBaseChartTheme();
+  const chartBaseTheme = useElasticChartsTheme();
 
   return (
     <WaterfallChartFixedAxisContainer>
@@ -40,8 +38,7 @@ export const WaterfallChartFixedAxis = ({ tickFormat, domain, barStyleAccessor }
         <Settings
           showLegend={false}
           rotation={90}
-          // TODO connect to charts.theme service see src/plugins/charts/public/services/theme/README.md
-          baseTheme={baseChartTheme}
+          baseTheme={chartBaseTheme}
           locale={i18n.getLocale()}
         />
 

@@ -7,7 +7,7 @@
 
 import { deserializeListFollowerIndices } from '../../../../common/services/follower_index_serialization';
 import { addBasePath } from '../../../services';
-import { RouteDependencies } from '../../../types';
+import type { RouteDependencies } from '../../../types';
 
 /**
  * Returns a list of all follower indices
@@ -20,6 +20,12 @@ export const registerFetchRoute = ({
   router.get(
     {
       path: addBasePath('/follower_indices'),
+      security: {
+        authz: {
+          enabled: false,
+          reason: 'Relies on es client for authorization',
+        },
+      },
       validate: false,
     },
     license.guardApiRoute(async (context, request, response) => {

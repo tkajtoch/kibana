@@ -39,6 +39,7 @@ import { useFieldStatsFlyoutContext } from '@kbn/ml-field-stats-flyout';
 
 import { MAX_ROW_COUNT } from '@kbn/ml-data-grid/lib/common';
 import { FormattedMessage } from '@kbn/i18n-react';
+import { css } from '@emotion/react';
 import type { PivotAggDict } from '../../../../../../common/types/pivot_aggs';
 import type { PivotGroupByDict } from '../../../../../../common/types/pivot_group_by';
 import { TRANSFORM_FUNCTION } from '../../../../../../common/constants';
@@ -136,6 +137,11 @@ export const StepDefineForm: FC<StepDefineFormProps> = React.memo((props) => {
         : [],
     [fieldStatsContext?.populatedFields]
   );
+
+  const maxInlineSizeStyles = css`
+    max-inline-size: 100%;
+    min-inline-size: 0;
+  `;
 
   const indexPreviewProps = {
     ...useIndexData({
@@ -342,7 +348,7 @@ export const StepDefineForm: FC<StepDefineFormProps> = React.memo((props) => {
           >
             <EuiFlexGroup alignItems="flexStart" justifyContent="spaceBetween">
               {/* Flex Column #1: Date Picker */}
-              <EuiFlexItem>
+              <EuiFlexItem css={maxInlineSizeStyles}>
                 <DatePickerWrapper
                   isAutoRefreshOnly={!hasValidTimeField}
                   showRefresh={!hasValidTimeField}
@@ -377,8 +383,8 @@ export const StepDefineForm: FC<StepDefineFormProps> = React.memo((props) => {
           fullWidth
           label={
             searchItems?.savedSearch?.id !== undefined
-              ? i18n.translate('xpack.transform.stepDefineForm.savedSearchLabel', {
-                  defaultMessage: 'Saved search',
+              ? i18n.translate('xpack.transform.stepDefineForm.discoverSessionLabel', {
+                  defaultMessage: 'Discover session',
                 })
               : i18n.translate('xpack.transform.stepDefineForm.searchFilterLabel', {
                   defaultMessage: 'Search filter',
@@ -416,11 +422,12 @@ export const StepDefineForm: FC<StepDefineFormProps> = React.memo((props) => {
                         <EuiCopy
                           beforeMessage={copyToClipboardSourceDescription}
                           textToCopy={copyToClipboardSource}
+                          tooltipProps={{ disableScreenReaderOutput: true }}
                         >
                           {(copy: () => void) => (
                             <EuiButtonIcon
                               onClick={copy}
-                              iconType="copyClipboard"
+                              iconType="copy"
                               aria-label={copyToClipboardSourceDescription}
                             />
                           )}

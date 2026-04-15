@@ -7,9 +7,14 @@
  * License v3.0 only", or the "Server Side Public License, v 1".
  */
 
-import React, { ReactElement } from 'react';
+import type { ReactElement } from 'react';
+import React from 'react';
 
-import { FieldDefinition, SettingType, UnsavedFieldChange } from '@kbn/management-settings-types';
+import type {
+  FieldDefinition,
+  SettingType,
+  UnsavedFieldChange,
+} from '@kbn/management-settings-types';
 import { EuiText } from '@elastic/eui';
 
 import { useFieldStyles } from '../field_row.styles';
@@ -49,7 +54,7 @@ export const FieldDescription = <T extends SettingType>({
   const { description, name } = field;
 
   // TODO - this does *not* match the `UiSetting` type.
-  // @see packages/core/ui-settings/core-ui-settings-common/src/ui_settings.ts
+  // @see src/core/packages/ui-settings/common/src/ui_settings.ts
   let content: ReactElement | string | undefined = description;
 
   if (!React.isValidElement(content)) {

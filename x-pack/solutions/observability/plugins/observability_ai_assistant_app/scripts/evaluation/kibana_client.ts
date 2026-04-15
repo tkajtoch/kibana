@@ -5,32 +5,34 @@
  * 2.0.
  */
 
-import {
+import { isSupportedConnectorType } from '@kbn/inference-common';
+import type {
   BufferFlushEvent,
   ChatCompletionChunkEvent,
-  ChatCompletionErrorCode,
   ChatCompletionErrorEvent,
-  concatenateChatCompletionChunks,
   ConversationCreateEvent,
   FunctionDefinition,
-  isChatCompletionError,
   MessageAddEvent,
   StreamingChatResponseEvent,
+} from '@kbn/observability-ai-assistant-plugin/common';
+import {
+  ChatCompletionErrorCode,
+  concatenateChatCompletionChunks,
+  isChatCompletionError,
   StreamingChatResponseEventType,
 } from '@kbn/observability-ai-assistant-plugin/common';
 import type { ObservabilityAIAssistantScreenContext } from '@kbn/observability-ai-assistant-plugin/common/types';
 import type { AssistantScope } from '@kbn/ai-assistant-common';
 import { throwSerializedChatCompletionErrors } from '@kbn/observability-ai-assistant-plugin/common/utils/throw_serialized_chat_completion_errors';
-import {
-  isSupportedConnectorType,
-  Message,
-  MessageRole,
-} from '@kbn/observability-ai-assistant-plugin/common';
+import type { Message } from '@kbn/observability-ai-assistant-plugin/common';
+import { MessageRole } from '@kbn/observability-ai-assistant-plugin/common';
 import { streamIntoObservable } from '@kbn/observability-ai-assistant-plugin/server';
-import { ToolingLog } from '@kbn/tooling-log';
-import axios, { AxiosInstance, AxiosResponse, isAxiosError } from 'axios';
-import { isArray, omit, pick, remove } from 'lodash';
+import type { ToolingLog } from '@kbn/tooling-log';
+import type { AxiosInstance, AxiosResponse, AxiosRequestConfig } from 'axios';
+import axios, { isAxiosError } from 'axios';
+import { omit, pick, remove } from 'lodash';
 import pRetry from 'p-retry';
+import type { OperatorFunction, Observable } from 'rxjs';
 import {
   concatMap,
   defer,
@@ -38,19 +40,18 @@ import {
   from,
   lastValueFrom,
   of,
-  OperatorFunction,
   retry,
   switchMap,
   timer,
   toArray,
   catchError,
-  Observable,
   throwError,
 } from 'rxjs';
-import { format, parse, UrlObject } from 'url';
+import type { UrlObject } from 'url';
+import { format, parse } from 'url';
 import { inspect } from 'util';
 import type { ObservabilityAIAssistantAPIClientRequestParamsOf } from '@kbn/observability-ai-assistant-plugin/public';
-import { EvaluationResult } from './types';
+import type { EvaluationResult } from './types';
 
 // eslint-disable-next-line spaced-comment
 /// <reference types="@kbn/ambient-ftr-types"/>
@@ -62,28 +63,29 @@ interface Options {
   screenContexts?: ObservabilityAIAssistantScreenContext[];
 }
 
-type CompleteFunction = (
-  ...args:
-    | [StringOrMessageList]
-    | [StringOrMessageList, Options]
-    | [string | undefined, StringOrMessageList]
-    | [string | undefined, StringOrMessageList, Options]
-) => Promise<{
+interface CompleteFunctionParams {
+  messages: StringOrMessageList;
+  conversationId?: string;
+  options?: Options;
+  scope?: AssistantScope;
+}
+
+type CompleteFunction = (params: CompleteFunctionParams) => Promise<{
   conversationId?: string;
   messages: InnerMessage[];
   errors: ChatCompletionErrorEvent[];
 }>;
 
 export interface ChatClient {
-  chat: (message: StringOrMessageList) => Promise<InnerMessage>;
+  chat: (message: StringOrMessageList, system: string) => Promise<InnerMessage>;
   complete: CompleteFunction;
-
   evaluate: (
     {}: { conversationId?: string; messages: InnerMessage[]; errors: ChatCompletionErrorEvent[] },
     criteria: string[]
   ) => Promise<EvaluationResult>;
   getResults: () => EvaluationResult[];
   onResult: (cb: (result: EvaluationResult) => void) => () => void;
+  getConnectorId: () => string;
 }
 
 export class KibanaClient {
@@ -96,6 +98,7 @@ export class KibanaClient {
     this.axios = axios.create({
       headers: {
         'kbn-xsrf': 'foo',
+        'x-elastic-internal-origin': 'kibana',
       },
     });
   }
@@ -121,17 +124,15 @@ export class KibanaClient {
   callKibana<T>(
     method: string,
     props: { query?: UrlObject['query']; pathname: string; ignoreSpaceId?: boolean },
-    data?: any
+    data?: any,
+    axiosParams: Partial<AxiosRequestConfig> = {}
   ) {
     const url = this.getUrl(props);
     return this.axios<T>({
       method,
       url,
-      data: data || {},
-      headers: {
-        'kbn-xsrf': 'true',
-        'x-elastic-internal-origin': 'foo',
-      },
+      ...(method.toLowerCase() === 'delete' && !data ? {} : { data: data || {} }),
+      ...axiosParams,
     }).catch((error) => {
       if (isAxiosError(error)) {
         const interestingPartsOfError = {
@@ -151,7 +152,7 @@ export class KibanaClient {
   }
 
   async installKnowledgeBase() {
-    this.log.debug('Checking to see whether knowledge base is installed');
+    this.log.info('Checking whether the knowledge base is installed');
 
     const {
       data: { ready },
@@ -160,7 +161,7 @@ export class KibanaClient {
     });
 
     if (ready) {
-      this.log.info('Knowledge base is installed');
+      this.log.success('Knowledge base is already installed');
       return;
     }
 
@@ -172,6 +173,10 @@ export class KibanaClient {
       async () => {
         const response = await this.callKibana<{}>('POST', {
           pathname: '/internal/observability_ai_assistant/kb/setup',
+          query: {
+            inference_id: '.elser-2-elasticsearch',
+            wait_until_complete: true,
+          },
         });
         this.log.info('Knowledge base is ready');
         return response.data;
@@ -179,7 +184,7 @@ export class KibanaClient {
       { retries: 10 }
     );
 
-    this.log.info('Knowledge base installed');
+    this.log.success('Knowledge base installed');
   }
 
   async createSpaceIfNeeded() {
@@ -187,7 +192,7 @@ export class KibanaClient {
       return;
     }
 
-    this.log.debug(`Checking if space ${this.spaceId} exists`);
+    this.log.info(`Checking if space ${this.spaceId} exists`);
 
     const spaceExistsResponse = await this.callKibana<{
       id?: string;
@@ -207,7 +212,7 @@ export class KibanaClient {
     });
 
     if (spaceExistsResponse.data.id) {
-      this.log.debug(`Space id ${this.spaceId} found`);
+      this.log.success(`Space id ${this.spaceId} found`);
       return;
     }
 
@@ -226,12 +231,24 @@ export class KibanaClient {
     );
 
     if (spaceCreatedResponse.status === 200) {
-      this.log.info(`Created space ${this.spaceId}`);
+      this.log.success(`Created space ${this.spaceId}`);
     } else {
       throw new Error(
         `Error creating space: ${spaceCreatedResponse.status} - ${spaceCreatedResponse.data}`
       );
     }
+  }
+
+  getMessages(message: string | Array<Message['message']>): Array<Message['message']> {
+    if (typeof message === 'string') {
+      return [
+        {
+          content: message,
+          role: MessageRole.User,
+        },
+      ];
+    }
+    return message;
   }
 
   createChatClient({
@@ -247,22 +264,11 @@ export class KibanaClient {
     suite?: Mocha.Suite;
     scopes: AssistantScope[];
   }): ChatClient {
-    function getMessages(message: string | Array<Message['message']>): Array<Message['message']> {
-      if (typeof message === 'string') {
-        return [
-          {
-            content: message,
-            role: MessageRole.User,
-          },
-        ];
-      }
-      return message;
-    }
-
     const that = this;
 
     let currentTitle: string = '';
     let firstSuiteName: string = '';
+    let currentScopes = scopes;
 
     if (suite) {
       suite.beforeEach(function () {
@@ -293,14 +299,16 @@ export class KibanaClient {
     >(): OperatorFunction<Buffer, Exclude<T, ChatCompletionErrorEvent>> {
       return (source$) => {
         const processed$ = source$.pipe(
-          concatMap((buffer: Buffer) =>
-            buffer
+          concatMap((buffer: Buffer) => {
+            return buffer
               .toString('utf-8')
               .split('\n')
               .map((line) => line.trim())
               .filter(Boolean)
-              .map((line) => JSON.parse(line) as T | BufferFlushEvent)
-          ),
+              .map((line) => {
+                return JSON.parse(line) as T | BufferFlushEvent;
+              });
+          }),
           throwSerializedChatCompletionErrors(),
           retry({
             count: 1,
@@ -330,10 +338,10 @@ export class KibanaClient {
               }
 
               if (error.message.includes('Status code: 429')) {
-                that.log.info(`429, backing off 20s`);
-
-                return timer(20000);
+                that.log.info(`429, backing off 30s`);
+                return timer(30000);
               }
+
               that.log.info(`Retrying in 5s`);
               return timer(5000);
             },
@@ -351,11 +359,13 @@ export class KibanaClient {
     async function chat(
       name: string,
       {
+        systemMessage,
         messages,
         functions,
         functionCall,
         connectorIdOverride,
       }: {
+        systemMessage: string;
         messages: Message[];
         functions: FunctionDefinition[];
         functionCall?: string;
@@ -365,15 +375,16 @@ export class KibanaClient {
       that.log.info('Chat', name);
 
       const chat$ = defer(() => {
-        that.log.debug(`Calling chat API`);
+        that.log.info('Calling the /chat API');
         const params: ObservabilityAIAssistantAPIClientRequestParamsOf<'POST /internal/observability_ai_assistant/chat'>['params']['body'] =
           {
             name,
+            systemMessage,
             messages,
             connectorId: connectorIdOverride || connectorId,
             functions: functions.map((fn) => pick(fn, 'name', 'description', 'parameters')),
             functionCall,
-            scopes,
+            scopes: currentScopes,
           };
 
         return that.axios.post(
@@ -381,7 +392,11 @@ export class KibanaClient {
             pathname: '/internal/observability_ai_assistant/chat',
           }),
           params,
-          { responseType: 'stream', timeout: NaN }
+          {
+            responseType: 'stream',
+            timeout: NaN,
+            headers: { 'x-elastic-internal-origin': 'Kibana' },
+          }
         );
       }).pipe(
         switchMap((response) => streamIntoObservable(response.data)),
@@ -401,56 +416,35 @@ export class KibanaClient {
     const results: EvaluationResult[] = [];
 
     return {
-      chat: async (message) => {
+      chat: async (message, systemMessage) => {
         const messages = [
-          ...getMessages(message).map((msg) => ({
+          ...this.getMessages(message).map((msg) => ({
             message: msg,
             '@timestamp': new Date().toISOString(),
           })),
         ];
-        return chat('chat', { messages, functions: [] });
+        return chat('chat', { systemMessage, messages, functions: [] });
       },
-      complete: async (...args) => {
-        that.log.info(`Complete`);
-        let messagesArg: StringOrMessageList | undefined;
-        let conversationId: string | undefined;
-        let options: Options = {};
+      complete: async ({
+        messages: messagesArg,
+        conversationId,
+        options = {},
+        scope: newScope,
+      }: CompleteFunctionParams) => {
+        that.log.info('Calling complete');
 
-        function isMessageList(arg: any): arg is StringOrMessageList {
-          return isArray(arg) || typeof arg === 'string';
-        }
-
-        // | [StringOrMessageList]
-        // | [StringOrMessageList, Options]
-        // | [string, StringOrMessageList]
-        // | [string, StringOrMessageList, Options]
-        if (args.length === 1) {
-          messagesArg = args[0];
-        } else if (args.length === 2 && !isMessageList(args[1])) {
-          messagesArg = args[0];
-          options = args[1];
-        } else if (
-          args.length === 2 &&
-          (typeof args[0] === 'string' || typeof args[0] === 'undefined') &&
-          isMessageList(args[1])
-        ) {
-          conversationId = args[0];
-          messagesArg = args[1];
-        } else if (args.length === 3) {
-          conversationId = args[0];
-          messagesArg = args[1];
-          options = args[2];
-        }
+        // set scope
+        currentScopes = [newScope || 'observability'];
 
         const messages = [
-          ...getMessages(messagesArg!).map((msg) => ({
+          ...this.getMessages(messagesArg!).map((msg) => ({
             message: msg,
             '@timestamp': new Date().toISOString(),
           })),
         ];
 
         const stream$ = defer(() => {
-          that.log.debug(`Calling /chat/complete API`);
+          that.log.info(`Calling /chat/complete API`);
           return from(
             that.axios.post(
               that.getUrl({
@@ -463,9 +457,13 @@ export class KibanaClient {
                 connectorId,
                 persist,
                 title: currentTitle,
-                scopes,
+                scopes: currentScopes,
               },
-              { responseType: 'stream', timeout: NaN }
+              {
+                responseType: 'stream',
+                timeout: NaN,
+                headers: { 'x-elastic-internal-origin': 'Kibana' },
+              }
             )
           );
         }).pipe(
@@ -528,22 +526,26 @@ export class KibanaClient {
         };
       },
       evaluate: async ({ messages, conversationId, errors }, criteria) => {
+        const criteriaCount = criteria.length;
+
         const message = await chat('evaluate', {
           connectorIdOverride: evaluationConnectorId,
-          messages: [
-            {
-              '@timestamp': new Date().toISOString(),
-              message: {
-                role: MessageRole.System,
-                content: `You are a critical assistant for evaluating conversations with the Elastic Observability AI Assistant,
+          systemMessage: `You are a critical assistant for evaluating conversations with the Elastic Observability AI Assistant,
                 which helps our users make sense of their Observability data.
 
                 Your goal is to verify whether a conversation between the user and the assistant matches the given criteria.
 
                 For each criterion, calculate a score. Explain your score, by describing what the assistant did right, and describing and quoting what the
-                assistant did wrong, where it could improve, and what the root cause was in case of a failure.`,
-              },
-            },
+                assistant did wrong, where it could improve, and what the root cause was in case of a failure.
+                
+                ### Scoring Contract
+
+                * You MUST call the function "scores" exactly once.  
+                * The "criteria" array in the arguments MUST contain **one object for EVERY criterion**.  
+                  * If a criterion cannot be satisfied, still include it with \`"score": 0\` and a short \`"reasoning"\`.  
+                * Do NOT omit, merge, or reorder indices.  
+                * Do NOT place the scores in normal text; only in the "scores" function call.`,
+          messages: [
             {
               '@timestamp': new Date().toString(),
               message: {
@@ -572,12 +574,14 @@ export class KibanaClient {
                 properties: {
                   criteria: {
                     type: 'array',
+                    minLength: criteriaCount,
+                    maxLength: criteriaCount,
                     items: {
                       type: 'object',
                       properties: {
                         index: {
                           type: 'number',
-                          description: 'The number of the criterion',
+                          description: 'The index number of the criterion',
                         },
                         score: {
                           type: 'number',
@@ -608,28 +612,35 @@ export class KibanaClient {
           }
         ).criteria;
 
-        const scores = scoredCriteria
-          .map(({ index, score, reasoning }) => {
-            return {
-              criterion: criteria[index],
-              score,
-              reasoning,
-            };
-          })
-          .concat({
-            score: errors.length === 0 ? 1 : 0,
-            criterion: 'The conversation encountered errors',
-            reasoning: errors.length
-              ? `The following errors occurred: ${errors.map((error) => error.error.message)}`
-              : 'No errors occurred',
-          });
+        const scoredMap = new Map(scoredCriteria.map((c) => [c.index, c] as const));
+
+        // Although very rare, the LLM judge can sometimes skip evaluation of certain criteria.
+        // The fallback default score is 0, with self-explanatory reasoning.
+        const scores = criteria.map((criterion, idx) => {
+          const criterionScore = scoredMap.get(idx);
+          return {
+            criterion,
+            score: criterionScore?.score ?? 0,
+            reasoning: criterionScore
+              ? criterionScore.reasoning
+              : 'No score returned by LLM judge, defaulting to 0.',
+          };
+        });
+
+        scores.push({
+          score: errors.length === 0 ? 1 : 0,
+          criterion: 'The conversation did not encounter any errors',
+          reasoning: errors.length
+            ? `The following errors occurred: ${errors.map((error) => error.error.message)}`
+            : 'No errors occurred',
+        });
 
         const result: EvaluationResult = {
           name: currentTitle,
           category: firstSuiteName,
           conversationId,
           messages,
-          passed: scoredCriteria.every(({ score }) => score >= 1),
+          passed: scores.every(({ score }) => score === 1),
           scores,
           errors,
         };
@@ -650,6 +661,7 @@ export class KibanaClient {
         onResultCallbacks.push({ callback, unregister });
         return unregister;
       },
+      getConnectorId: () => connectorId,
     };
   }
 

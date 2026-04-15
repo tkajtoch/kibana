@@ -5,11 +5,14 @@
  * 2.0.
  */
 
-import d3 from 'd3';
-import type { euiDarkVars as euiThemeDark, euiLightVars as euiThemeLight } from '@kbn/ui-theme';
+import { range } from 'd3-array';
+// TODO to be replaced with the original `d3-color` once we upgrade from v2 to v3
+import { rgb } from '@elastic/kibana-d3-color';
+import { scaleLinear, scaleSqrt } from 'd3-scale';
+
+import { useEuiTheme } from '@elastic/eui';
 
 import { i18n } from '@kbn/i18n';
-import { useCurrentThemeVars } from '../../contexts/kibana';
 
 /**
  * Custom color scale factory that takes the amount of feature influencers
@@ -19,7 +22,7 @@ import { useCurrentThemeVars } from '../../contexts/kibana';
  * considered influential.
  *
  * @param n number of influencers
- * @returns a function suitable as a preprocessor for d3.scale.linear()
+ * @returns a function suitable as a preprocessor for scaleLinear()
  */
 export const influencerColorScaleFactory = (n: number) => (t: number) => {
   // for 1 influencer or less we fall back to a plain linear scale.
@@ -125,7 +128,7 @@ const coloursYGB = [
   '#1F2D86',
   '#000086',
 ];
-const colourRangeYGB = d3.range(0, 1, 1.0 / (coloursYGB.length - 1));
+const colourRangeYGB = range(0, 1, 1.0 / (coloursYGB.length - 1));
 colourRangeYGB.push(1);
 
 const colorDomains = {
@@ -148,24 +151,23 @@ export const useColorRange = (
   colorRangeScale = COLOR_RANGE_SCALE.LINEAR,
   featureCount = 1
 ) => {
-  const { euiTheme } = useCurrentThemeVars();
+  const { euiTheme } = useEuiTheme();
 
   const colorRanges: Record<COLOR_RANGE, string[]> = {
     [COLOR_RANGE.BLUE]: [
-      d3.rgb(euiTheme.euiColorEmptyShade).toString(),
-      d3.rgb(euiTheme.euiColorVis1).toString(),
+      rgb(euiTheme.colors.emptyShade).toString(),
+      rgb(euiTheme.colors.vis.euiColorVis2).toString(),
     ],
     [COLOR_RANGE.RED]: [
-      d3.rgb(euiTheme.euiColorEmptyShade).toString(),
-      d3.rgb(euiTheme.euiColorDanger).toString(),
+      rgb(euiTheme.colors.emptyShade).toString(),
+      rgb(euiTheme.colors.danger).toString(),
     ],
     [COLOR_RANGE.RED_GREEN]: ['red', 'green'],
     [COLOR_RANGE.GREEN_RED]: ['green', 'red'],
     [COLOR_RANGE.YELLOW_GREEN_BLUE]: coloursYGB,
   };
 
-  const linearScale = d3.scale
-    .linear<string>()
+  const linearScale = scaleLinear<string>()
     .domain(colorDomains[colorRange])
     .range(colorRanges[colorRange]);
   const influencerColorScale = influencerColorScaleFactory(featureCount);
@@ -174,8 +176,7 @@ export const useColorRange = (
   const scaleTypes = {
     [COLOR_RANGE_SCALE.LINEAR]: linearScale,
     [COLOR_RANGE_SCALE.INFLUENCER]: influencerScaleLinearWrapper,
-    [COLOR_RANGE_SCALE.SQRT]: d3.scale
-      .sqrt<string>()
+    [COLOR_RANGE_SCALE.SQRT]: scaleSqrt<string>()
       .domain(colorDomains[colorRange])
       // typings for .range() incorrectly don't allow passing in a color extent.
       // @ts-ignore
@@ -184,5 +185,3 @@ export const useColorRange = (
 
   return scaleTypes[colorRangeScale];
 };
-
-export type EuiThemeType = typeof euiThemeLight | typeof euiThemeDark;

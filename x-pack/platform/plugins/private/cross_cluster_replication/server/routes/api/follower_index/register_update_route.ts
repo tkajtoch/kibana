@@ -7,10 +7,10 @@
 
 import { schema } from '@kbn/config-schema';
 import { serializeAdvancedSettings } from '../../../../common/services/follower_index_serialization';
-import { FollowerIndexAdvancedSettings } from '../../../../common/types';
+import type { FollowerIndexAdvancedSettings } from '../../../../common/types';
 import { removeEmptyFields } from '../../../../common/services/utils';
 import { addBasePath } from '../../../services';
-import { RouteDependencies } from '../../../types';
+import type { RouteDependencies } from '../../../types';
 
 /**
  * Update a follower index
@@ -38,6 +38,12 @@ export const registerUpdateRoute = ({
   router.put(
     {
       path: addBasePath('/follower_indices/{id}'),
+      security: {
+        authz: {
+          enabled: false,
+          reason: 'Relies on es client for authorization',
+        },
+      },
       validate: {
         params: paramsSchema,
         body: bodySchema,

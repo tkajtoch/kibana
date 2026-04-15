@@ -54,7 +54,6 @@ import { groupsProvider } from './groups';
 import type { MlClient } from '../../lib/ml_client';
 import { ML_ALERT_TYPES } from '../../../common/constants/alerts';
 import type { MlAnomalyDetectionAlertParams } from '../../routes/schemas/alerting_schema';
-import type { AuthorizationHeader } from '../../lib/request_authorization';
 
 interface Results {
   [id: string]: {
@@ -218,7 +217,7 @@ export function jobsProvider(
 
     const body = await mlClient.stopDatafeed({
       datafeed_id: datafeedId,
-      body: { force: true },
+      force: true,
     });
     if (body.stopped !== true) {
       return { success: false };
@@ -672,27 +671,21 @@ export function jobsProvider(
     return job.node === undefined && job.state === JOB_STATE.OPENING;
   }
 
-  async function bulkCreate(
-    jobs: Array<{ job: Job; datafeed: Datafeed }>,
-    authHeader: AuthorizationHeader
-  ) {
+  async function bulkCreate(jobs: Array<{ job: Job; datafeed: Datafeed }>) {
     const results: BulkCreateResults = Object.create(null);
     await Promise.all(
       jobs.map(async ({ job, datafeed }) => {
         results[job.job_id] = { job: { success: false }, datafeed: { success: false } };
 
         try {
-          await mlClient.putJob({ job_id: job.job_id, body: job });
+          await mlClient.putJob(job);
           results[job.job_id].job = { success: true };
         } catch (error) {
           results[job.job_id].job = { success: false, error: error.body ?? error };
         }
 
         try {
-          await mlClient.putDatafeed(
-            { datafeed_id: datafeed.datafeed_id, body: datafeed },
-            authHeader
-          );
+          await mlClient.putDatafeed(datafeed);
           results[job.job_id].datafeed = { success: true };
         } catch (error) {
           results[job.job_id].datafeed = { success: false, error: error.body ?? error };

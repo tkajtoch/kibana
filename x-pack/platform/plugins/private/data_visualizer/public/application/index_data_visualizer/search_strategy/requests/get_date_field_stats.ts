@@ -5,7 +5,7 @@
  * 2.0.
  */
 
-import type * as estypes from '@elastic/elasticsearch/lib/api/typesWithBodyKey';
+import type { estypes } from '@elastic/elasticsearch';
 import { get } from 'lodash';
 import type { Observable } from 'rxjs';
 import { of } from 'rxjs';
@@ -30,7 +30,7 @@ export const getDateFieldsStatsRequest = (
   params: FieldStatsCommonRequestParams,
   fields: Field[]
 ) => {
-  const { index, query, runtimeFieldMap } = params;
+  const { index, query, runtimeFieldMap, projectRouting } = params;
 
   const size = 0;
 
@@ -55,7 +55,8 @@ export const getDateFieldsStatsRequest = (
   return {
     index,
     size,
-    body: searchBody,
+    ...searchBody,
+    ...(projectRouting ? { project_routing: projectRouting } : {}),
   };
 };
 

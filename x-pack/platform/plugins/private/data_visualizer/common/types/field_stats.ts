@@ -5,7 +5,7 @@
  * 2.0.
  */
 
-import type * as estypes from '@elastic/elasticsearch/lib/api/typesWithBodyKey';
+import type { estypes } from '@elastic/elasticsearch';
 import type { Query } from '@kbn/es-query';
 import type { IKibanaSearchResponse } from '@kbn/search-types';
 import { isPopulatedObject } from '@kbn/ml-is-populated-object';
@@ -210,6 +210,7 @@ export function isValidFieldStats(arg: unknown): arg is FieldStats {
 
 export interface FieldStatsCommonRequestParams {
   index: string;
+  projectRouting?: string;
   timeFieldName?: string;
   earliestMs?: number | string | undefined;
   latestMs?: number | string | undefined;
@@ -235,6 +236,7 @@ export interface OverallStatsSearchStrategyParams {
   index: string;
   timeFieldName?: string;
   runtimeFieldMap?: estypes.MappingRuntimeFields;
+  projectRouting?: string;
   aggregatableFields: Array<{
     name: string;
     supportedAggs: SupportedAggs;

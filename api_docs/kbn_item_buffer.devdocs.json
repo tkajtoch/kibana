@@ -37,7 +37,9 @@
           },
           "<Item>"
         ],
-        "path": "packages/kbn-item-buffer/src/item_buffer.ts",
+        "path": "src/platform/packages/private/kbn-item-buffer/src/item_buffer.ts",
+        "lineNumber": 26,
+        "columnNumber": 1,
         "deprecated": false,
         "trackAdoption": false,
         "children": [
@@ -51,7 +53,9 @@
             "signature": [
               "any"
             ],
-            "path": "packages/kbn-item-buffer/src/item_buffer.ts",
+            "path": "src/platform/packages/private/kbn-item-buffer/src/item_buffer.ts",
+            "lineNumber": 33,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false,
             "children": [
@@ -72,7 +76,9 @@
                   },
                   "<Item>"
                 ],
-                "path": "packages/kbn-item-buffer/src/item_buffer.ts",
+                "path": "src/platform/packages/private/kbn-item-buffer/src/item_buffer.ts",
+                "lineNumber": 33,
+                "columnNumber": 15,
                 "deprecated": false,
                 "trackAdoption": false,
                 "isRequired": true
@@ -89,7 +95,9 @@
             "description": [
               "\nGet current buffer size."
             ],
-            "path": "packages/kbn-item-buffer/src/item_buffer.ts",
+            "path": "src/platform/packages/private/kbn-item-buffer/src/item_buffer.ts",
+            "lineNumber": 35,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           },
@@ -105,7 +113,9 @@
             "signature": [
               "(item: Item) => void"
             ],
-            "path": "packages/kbn-item-buffer/src/item_buffer.ts",
+            "path": "src/platform/packages/private/kbn-item-buffer/src/item_buffer.ts",
+            "lineNumber": 42,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false,
             "children": [
@@ -119,7 +129,9 @@
                 "signature": [
                   "Item"
                 ],
-                "path": "packages/kbn-item-buffer/src/item_buffer.ts",
+                "path": "src/platform/packages/private/kbn-item-buffer/src/item_buffer.ts",
+                "lineNumber": 45,
+                "columnNumber": 16,
                 "deprecated": false,
                 "trackAdoption": false,
                 "isRequired": true
@@ -139,7 +151,9 @@
             "signature": [
               "() => void"
             ],
-            "path": "packages/kbn-item-buffer/src/item_buffer.ts",
+            "path": "src/platform/packages/private/kbn-item-buffer/src/item_buffer.ts",
+            "lineNumber": 56,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false,
             "children": [],
@@ -157,7 +171,9 @@
             "signature": [
               "() => void"
             ],
-            "path": "packages/kbn-item-buffer/src/item_buffer.ts",
+            "path": "src/platform/packages/private/kbn-item-buffer/src/item_buffer.ts",
+            "lineNumber": 63,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false,
             "children": [],
@@ -175,7 +191,9 @@
             "signature": [
               "() => Promise<void>"
             ],
-            "path": "packages/kbn-item-buffer/src/item_buffer.ts",
+            "path": "src/platform/packages/private/kbn-item-buffer/src/item_buffer.ts",
+            "lineNumber": 70,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false,
             "children": [],
@@ -209,7 +227,9 @@
           },
           "<Item>"
         ],
-        "path": "packages/kbn-item-buffer/src/timed_item_buffer.ts",
+        "path": "src/platform/packages/private/kbn-item-buffer/src/timed_item_buffer.ts",
+        "lineNumber": 21,
+        "columnNumber": 1,
         "deprecated": false,
         "trackAdoption": false,
         "children": [
@@ -223,7 +243,9 @@
             "signature": [
               "any"
             ],
-            "path": "packages/kbn-item-buffer/src/timed_item_buffer.ts",
+            "path": "src/platform/packages/private/kbn-item-buffer/src/timed_item_buffer.ts",
+            "lineNumber": 24,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false,
             "children": [
@@ -244,7 +266,9 @@
                   },
                   "<Item>"
                 ],
-                "path": "packages/kbn-item-buffer/src/timed_item_buffer.ts",
+                "path": "src/platform/packages/private/kbn-item-buffer/src/timed_item_buffer.ts",
+                "lineNumber": 24,
+                "columnNumber": 15,
                 "deprecated": false,
                 "trackAdoption": false,
                 "isRequired": true
@@ -262,7 +286,9 @@
             "signature": [
               "(item: Item) => void"
             ],
-            "path": "packages/kbn-item-buffer/src/timed_item_buffer.ts",
+            "path": "src/platform/packages/private/kbn-item-buffer/src/timed_item_buffer.ts",
+            "lineNumber": 28,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false,
             "children": [
@@ -276,7 +302,9 @@
                 "signature": [
                   "Item"
                 ],
-                "path": "packages/kbn-item-buffer/src/timed_item_buffer.ts",
+                "path": "src/platform/packages/private/kbn-item-buffer/src/timed_item_buffer.ts",
+                "lineNumber": 28,
+                "columnNumber": 16,
                 "deprecated": false,
                 "trackAdoption": false,
                 "isRequired": true
@@ -294,7 +322,9 @@
             "signature": [
               "() => void"
             ],
-            "path": "packages/kbn-item-buffer/src/timed_item_buffer.ts",
+            "path": "src/platform/packages/private/kbn-item-buffer/src/timed_item_buffer.ts",
+            "lineNumber": 36,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false,
             "children": [],
@@ -310,7 +340,9 @@
             "signature": [
               "() => void"
             ],
-            "path": "packages/kbn-item-buffer/src/timed_item_buffer.ts",
+            "path": "src/platform/packages/private/kbn-item-buffer/src/timed_item_buffer.ts",
+            "lineNumber": 41,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false,
             "children": [],
@@ -326,7 +358,9 @@
             "signature": [
               "() => Promise<void>"
             ],
-            "path": "packages/kbn-item-buffer/src/timed_item_buffer.ts",
+            "path": "src/platform/packages/private/kbn-item-buffer/src/timed_item_buffer.ts",
+            "lineNumber": 46,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false,
             "children": [],
@@ -355,7 +389,9 @@
           },
           "<Item>"
         ],
-        "path": "packages/kbn-item-buffer/src/item_buffer.ts",
+        "path": "src/platform/packages/private/kbn-item-buffer/src/item_buffer.ts",
+        "lineNumber": 10,
+        "columnNumber": 1,
         "deprecated": false,
         "trackAdoption": false,
         "children": [
@@ -371,7 +407,9 @@
             "signature": [
               "number | undefined"
             ],
-            "path": "packages/kbn-item-buffer/src/item_buffer.ts",
+            "path": "src/platform/packages/private/kbn-item-buffer/src/item_buffer.ts",
+            "lineNumber": 11,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           },
@@ -387,7 +425,9 @@
             "signature": [
               "(items: Item[]) => void | Promise<void>"
             ],
-            "path": "packages/kbn-item-buffer/src/item_buffer.ts",
+            "path": "src/platform/packages/private/kbn-item-buffer/src/item_buffer.ts",
+            "lineNumber": 18,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false,
             "children": [
@@ -401,7 +441,9 @@
                 "signature": [
                   "Item[]"
                 ],
-                "path": "packages/kbn-item-buffer/src/item_buffer.ts",
+                "path": "src/platform/packages/private/kbn-item-buffer/src/item_buffer.ts",
+                "lineNumber": 23,
+                "columnNumber": 13,
                 "deprecated": false,
                 "trackAdoption": false,
                 "isRequired": true
@@ -437,7 +479,9 @@
           },
           "<Item>"
         ],
-        "path": "packages/kbn-item-buffer/src/timed_item_buffer.ts",
+        "path": "src/platform/packages/private/kbn-item-buffer/src/timed_item_buffer.ts",
+        "lineNumber": 13,
+        "columnNumber": 1,
         "deprecated": false,
         "trackAdoption": false,
         "children": [
@@ -453,7 +497,9 @@
             "signature": [
               "number | undefined"
             ],
-            "path": "packages/kbn-item-buffer/src/timed_item_buffer.ts",
+            "path": "src/platform/packages/private/kbn-item-buffer/src/timed_item_buffer.ts",
+            "lineNumber": 14,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           }

@@ -5,12 +5,12 @@
  * 2.0.
  */
 
-import type * as estypes from '@elastic/elasticsearch/lib/api/typesWithBodyKey';
+import type { estypes } from '@elastic/elasticsearch';
 import { find, get } from 'lodash';
 import { catchError, map } from 'rxjs';
 import type { Observable } from 'rxjs';
 import { of } from 'rxjs';
-import type { AggregationsTermsAggregation } from '@elastic/elasticsearch/lib/api/typesWithBodyKey';
+import type { AggregationsTermsAggregation } from '@elastic/elasticsearch/lib/api/types';
 import type {
   IKibanaSearchResponse,
   IKibanaSearchRequest,
@@ -43,7 +43,7 @@ export const getNumericFieldsStatsRequest = (
   params: FieldStatsCommonRequestParams,
   fields: Field[]
 ) => {
-  const { index, query, runtimeFieldMap } = params;
+  const { index, query, runtimeFieldMap, projectRouting } = params;
 
   const size = 0;
 
@@ -117,12 +117,13 @@ export const getNumericFieldsStatsRequest = (
     query,
     aggs: buildAggregationWithSamplingOption(aggs, params.samplingOption),
     ...(isPopulatedObject(runtimeFieldMap) ? { runtime_mappings: runtimeFieldMap } : {}),
+    ...(projectRouting ? { project_routing: projectRouting } : {}),
   };
 
   return {
     index,
     size,
-    body: searchBody,
+    ...searchBody,
   };
 };
 

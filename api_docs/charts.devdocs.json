@@ -25,7 +25,9 @@
           },
           " & React.RefAttributes<{}>>"
         ],
-        "path": "src/plugins/charts/public/static/components/index.ts",
+        "path": "src/platform/plugins/shared/charts/public/static/components/index.ts",
+        "lineNumber": 35,
+        "columnNumber": 14,
         "deprecated": false,
         "trackAdoption": false,
         "returnComment": [],
@@ -41,6 +43,8 @@
               "P"
             ],
             "path": "node_modules/@types/react/ts5.0/index.d.ts",
+            "lineNumber": 630,
+            "columnNumber": 10,
             "deprecated": false,
             "trackAdoption": false
           }
@@ -61,7 +65,9 @@
           "ColorPickerProps",
           ") => React.JSX.Element>"
         ],
-        "path": "src/plugins/charts/public/static/components/index.ts",
+        "path": "src/platform/plugins/shared/charts/public/static/components/index.ts",
+        "lineNumber": 24,
+        "columnNumber": 14,
         "deprecated": false,
         "trackAdoption": false,
         "returnComment": [],
@@ -77,6 +83,8 @@
               "P"
             ],
             "path": "node_modules/@types/react/ts5.0/index.d.ts",
+            "lineNumber": 630,
+            "columnNumber": 10,
             "deprecated": false,
             "trackAdoption": false
           }
@@ -95,7 +103,9 @@
         "signature": [
           "(num: number) => string[]"
         ],
-        "path": "src/plugins/charts/public/static/colors/color_palette.ts",
+        "path": "src/platform/plugins/shared/charts/public/static/colors/color_palette.ts",
+        "lineNumber": 37,
+        "columnNumber": 1,
         "deprecated": false,
         "trackAdoption": false,
         "children": [
@@ -109,7 +119,9 @@
             "signature": [
               "number"
             ],
-            "path": "src/plugins/charts/public/static/colors/color_palette.ts",
+            "path": "src/platform/plugins/shared/charts/public/static/colors/color_palette.ts",
+            "lineNumber": 42,
+            "columnNumber": 36,
             "deprecated": false,
             "trackAdoption": false,
             "isRequired": true
@@ -130,7 +142,9 @@
         "signature": [
           "({ isDarkMode, domainEnd }: CurrentTimeProps) => React.JSX.Element"
         ],
-        "path": "src/plugins/charts/public/static/components/current_time.tsx",
+        "path": "src/platform/plugins/shared/charts/public/static/components/current_time.tsx",
+        "lineNumber": 27,
+        "columnNumber": 14,
         "deprecated": false,
         "trackAdoption": false,
         "children": [
@@ -144,7 +158,9 @@
             "signature": [
               "CurrentTimeProps"
             ],
-            "path": "src/plugins/charts/public/static/components/current_time.tsx",
+            "path": "src/platform/plugins/shared/charts/public/static/components/current_time.tsx",
+            "lineNumber": 27,
+            "columnNumber": 51,
             "deprecated": false,
             "trackAdoption": false,
             "isRequired": true
@@ -165,7 +181,9 @@
         "signature": [
           "(baseColor: string, step: number, totalSteps: number) => string"
         ],
-        "path": "src/plugins/charts/public/services/palettes/decrease_opacity.ts",
+        "path": "src/platform/plugins/shared/charts/public/services/palettes/decrease_opacity.ts",
+        "lineNumber": 15,
+        "columnNumber": 1,
         "deprecated": false,
         "trackAdoption": false,
         "children": [
@@ -179,7 +197,9 @@
             "signature": [
               "string"
             ],
-            "path": "src/plugins/charts/public/services/palettes/decrease_opacity.ts",
+            "path": "src/platform/plugins/shared/charts/public/services/palettes/decrease_opacity.ts",
+            "lineNumber": 20,
+            "columnNumber": 33,
             "deprecated": false,
             "trackAdoption": false,
             "isRequired": true
@@ -194,7 +214,9 @@
             "signature": [
               "number"
             ],
-            "path": "src/plugins/charts/public/services/palettes/decrease_opacity.ts",
+            "path": "src/platform/plugins/shared/charts/public/services/palettes/decrease_opacity.ts",
+            "lineNumber": 20,
+            "columnNumber": 52,
             "deprecated": false,
             "trackAdoption": false,
             "isRequired": true
@@ -209,7 +231,9 @@
             "signature": [
               "number"
             ],
-            "path": "src/plugins/charts/public/services/palettes/decrease_opacity.ts",
+            "path": "src/platform/plugins/shared/charts/public/services/palettes/decrease_opacity.ts",
+            "lineNumber": 20,
+            "columnNumber": 66,
             "deprecated": false,
             "trackAdoption": false,
             "isRequired": true
@@ -230,7 +254,9 @@
           "EmptyPlaceholderProps",
           ") => React.JSX.Element"
         ],
-        "path": "src/plugins/charts/public/static/components/empty_placeholder.tsx",
+        "path": "src/platform/plugins/shared/charts/public/static/components/empty_placeholder.tsx",
+        "lineNumber": 33,
+        "columnNumber": 14,
         "deprecated": false,
         "trackAdoption": false,
         "children": [
@@ -244,7 +270,9 @@
             "signature": [
               "EmptyPlaceholderProps"
             ],
-            "path": "src/plugins/charts/public/static/components/empty_placeholder.tsx",
+            "path": "src/platform/plugins/shared/charts/public/static/components/empty_placeholder.tsx",
+            "lineNumber": 33,
+            "columnNumber": 34,
             "deprecated": false,
             "trackAdoption": false,
             "isRequired": true
@@ -263,7 +291,9 @@
         "signature": [
           "({ isDarkMode, domainStart, domainEnd, interval, domainMin, domainMax, hideTooltips, isFullBin, }: EndzonesProps) => React.JSX.Element"
         ],
-        "path": "src/plugins/charts/public/static/components/endzones.tsx",
+        "path": "src/platform/plugins/shared/charts/public/static/components/endzones.tsx",
+        "lineNumber": 41,
+        "columnNumber": 14,
         "deprecated": false,
         "trackAdoption": false,
         "children": [
@@ -277,7 +307,9 @@
             "signature": [
               "EndzonesProps"
             ],
-            "path": "src/plugins/charts/public/static/components/endzones.tsx",
+            "path": "src/platform/plugins/shared/charts/public/static/components/endzones.tsx",
+            "lineNumber": 41,
+            "columnNumber": 45,
             "deprecated": false,
             "trackAdoption": false,
             "isRequired": true
@@ -298,7 +330,9 @@
         "signature": [
           "(xValues: number[], esValue: number, esUnit: moment.unitOfTime.Base, timeZone: string) => number"
         ],
-        "path": "src/plugins/charts/public/static/components/endzones.tsx",
+        "path": "src/platform/plugins/shared/charts/public/static/components/endzones.tsx",
+        "lineNumber": 124,
+        "columnNumber": 14,
         "deprecated": false,
         "trackAdoption": false,
         "children": [
@@ -314,7 +348,9 @@
             "signature": [
               "number[]"
             ],
-            "path": "src/plugins/charts/public/static/components/endzones.tsx",
+            "path": "src/platform/plugins/shared/charts/public/static/components/endzones.tsx",
+            "lineNumber": 125,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false,
             "isRequired": true
@@ -329,7 +365,9 @@
             "signature": [
               "number"
             ],
-            "path": "src/plugins/charts/public/static/components/endzones.tsx",
+            "path": "src/platform/plugins/shared/charts/public/static/components/endzones.tsx",
+            "lineNumber": 126,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false,
             "isRequired": true
@@ -344,7 +382,9 @@
             "signature": [
               "moment.unitOfTime.Base"
             ],
-            "path": "src/plugins/charts/public/static/components/endzones.tsx",
+            "path": "src/platform/plugins/shared/charts/public/static/components/endzones.tsx",
+            "lineNumber": 127,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false,
             "isRequired": true
@@ -359,7 +399,9 @@
             "signature": [
               "string"
             ],
-            "path": "src/plugins/charts/public/static/components/endzones.tsx",
+            "path": "src/platform/plugins/shared/charts/public/static/components/endzones.tsx",
+            "lineNumber": 128,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false,
             "isRequired": true
@@ -378,7 +420,9 @@
         "signature": [
           "(value: any, colorSchemaName: string) => string"
         ],
-        "path": "src/plugins/charts/common/static/color_maps/heatmap_color.ts",
+        "path": "src/platform/plugins/shared/charts/common/static/color_maps/heatmap_color.ts",
+        "lineNumber": 39,
+        "columnNumber": 1,
         "deprecated": false,
         "trackAdoption": false,
         "children": [
@@ -392,7 +436,9 @@
             "signature": [
               "any"
             ],
-            "path": "src/plugins/charts/common/static/color_maps/heatmap_color.ts",
+            "path": "src/platform/plugins/shared/charts/common/static/color_maps/heatmap_color.ts",
+            "lineNumber": 39,
+            "columnNumber": 34,
             "deprecated": false,
             "trackAdoption": false,
             "isRequired": true
@@ -407,7 +453,9 @@
             "signature": [
               "string"
             ],
-            "path": "src/plugins/charts/common/static/color_maps/heatmap_color.ts",
+            "path": "src/platform/plugins/shared/charts/common/static/color_maps/heatmap_color.ts",
+            "lineNumber": 39,
+            "columnNumber": 46,
             "deprecated": false,
             "trackAdoption": false,
             "isRequired": true
@@ -438,7 +486,9 @@
           },
           " & React.RefAttributes<{}>>"
         ],
-        "path": "src/plugins/charts/public/static/components/index.ts",
+        "path": "src/platform/plugins/shared/charts/public/static/components/index.ts",
+        "lineNumber": 52,
+        "columnNumber": 14,
         "deprecated": false,
         "trackAdoption": false,
         "returnComment": [],
@@ -454,6 +504,8 @@
               "P"
             ],
             "path": "node_modules/@types/react/ts5.0/index.d.ts",
+            "lineNumber": 630,
+            "columnNumber": 10,
             "deprecated": false,
             "trackAdoption": false
           }
@@ -474,7 +526,9 @@
           "LegendToggleProps",
           ") => React.JSX.Element>>"
         ],
-        "path": "src/plugins/charts/public/static/components/index.ts",
+        "path": "src/platform/plugins/shared/charts/public/static/components/index.ts",
+        "lineNumber": 41,
+        "columnNumber": 14,
         "deprecated": false,
         "trackAdoption": false,
         "returnComment": [],
@@ -490,6 +544,8 @@
               "P"
             ],
             "path": "node_modules/@types/react/ts5.0/index.d.ts",
+            "lineNumber": 630,
+            "columnNumber": 10,
             "deprecated": false,
             "trackAdoption": false
           }
@@ -506,7 +562,9 @@
         "signature": [
           "(baseColor: string, step: number, totalSteps: number) => string"
         ],
-        "path": "src/plugins/charts/public/services/palettes/lighten_color.ts",
+        "path": "src/platform/plugins/shared/charts/public/services/palettes/lighten_color.ts",
+        "lineNumber": 16,
+        "columnNumber": 1,
         "deprecated": false,
         "trackAdoption": false,
         "children": [
@@ -520,7 +578,9 @@
             "signature": [
               "string"
             ],
-            "path": "src/plugins/charts/public/services/palettes/lighten_color.ts",
+            "path": "src/platform/plugins/shared/charts/public/services/palettes/lighten_color.ts",
+            "lineNumber": 16,
+            "columnNumber": 30,
             "deprecated": false,
             "trackAdoption": false,
             "isRequired": true
@@ -535,7 +595,9 @@
             "signature": [
               "number"
             ],
-            "path": "src/plugins/charts/public/services/palettes/lighten_color.ts",
+            "path": "src/platform/plugins/shared/charts/public/services/palettes/lighten_color.ts",
+            "lineNumber": 16,
+            "columnNumber": 49,
             "deprecated": false,
             "trackAdoption": false,
             "isRequired": true
@@ -550,7 +612,9 @@
             "signature": [
               "number"
             ],
-            "path": "src/plugins/charts/public/services/palettes/lighten_color.ts",
+            "path": "src/platform/plugins/shared/charts/public/services/palettes/lighten_color.ts",
+            "lineNumber": 16,
+            "columnNumber": 63,
             "deprecated": false,
             "trackAdoption": false,
             "isRequired": true
@@ -573,7 +637,9 @@
           "SeriesIdentifier",
           ">) => string | JSX.Element"
         ],
-        "path": "src/plugins/charts/public/static/components/endzones.tsx",
+        "path": "src/platform/plugins/shared/charts/public/static/components/endzones.tsx",
+        "lineNumber": 166,
+        "columnNumber": 14,
         "deprecated": false,
         "trackAdoption": false,
         "children": [
@@ -587,7 +653,9 @@
             "signature": [
               "number | undefined"
             ],
-            "path": "src/plugins/charts/public/static/components/endzones.tsx",
+            "path": "src/platform/plugins/shared/charts/public/static/components/endzones.tsx",
+            "lineNumber": 168,
+            "columnNumber": 5,
             "deprecated": false,
             "trackAdoption": false,
             "isRequired": false
@@ -602,7 +670,9 @@
             "signature": [
               "number | undefined"
             ],
-            "path": "src/plugins/charts/public/static/components/endzones.tsx",
+            "path": "src/platform/plugins/shared/charts/public/static/components/endzones.tsx",
+            "lineNumber": 169,
+            "columnNumber": 5,
             "deprecated": false,
             "trackAdoption": false,
             "isRequired": false
@@ -617,7 +687,9 @@
             "signature": [
               "number | undefined"
             ],
-            "path": "src/plugins/charts/public/static/components/endzones.tsx",
+            "path": "src/platform/plugins/shared/charts/public/static/components/endzones.tsx",
+            "lineNumber": 170,
+            "columnNumber": 5,
             "deprecated": false,
             "trackAdoption": false,
             "isRequired": false
@@ -632,7 +704,9 @@
             "signature": [
               "((v: any) => string) | undefined"
             ],
-            "path": "src/plugins/charts/public/static/components/endzones.tsx",
+            "path": "src/platform/plugins/shared/charts/public/static/components/endzones.tsx",
+            "lineNumber": 171,
+            "columnNumber": 5,
             "deprecated": false,
             "trackAdoption": false,
             "isRequired": false
@@ -647,7 +721,9 @@
             "signature": [
               "boolean"
             ],
-            "path": "src/plugins/charts/public/static/components/endzones.tsx",
+            "path": "src/platform/plugins/shared/charts/public/static/components/endzones.tsx",
+            "lineNumber": 172,
+            "columnNumber": 5,
             "deprecated": false,
             "trackAdoption": false,
             "isRequired": true
@@ -673,7 +749,9 @@
           ") => ",
           "PointerUpdateListener"
         ],
-        "path": "src/plugins/charts/public/services/active_cursor/use_active_cursor.ts",
+        "path": "src/platform/plugins/shared/charts/public/services/active_cursor/use_active_cursor.ts",
+        "lineNumber": 25,
+        "columnNumber": 14,
         "deprecated": false,
         "trackAdoption": false,
         "children": [
@@ -687,7 +765,9 @@
             "signature": [
               "ActiveCursor"
             ],
-            "path": "src/plugins/charts/public/services/active_cursor/use_active_cursor.ts",
+            "path": "src/platform/plugins/shared/charts/public/services/active_cursor/use_active_cursor.ts",
+            "lineNumber": 26,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false,
             "isRequired": true
@@ -704,7 +784,9 @@
               "Chart",
               ">"
             ],
-            "path": "src/plugins/charts/public/services/active_cursor/use_active_cursor.ts",
+            "path": "src/platform/plugins/shared/charts/public/services/active_cursor/use_active_cursor.ts",
+            "lineNumber": 27,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false,
             "isRequired": true
@@ -719,7 +801,9 @@
             "signature": [
               "ActiveCursorSyncOption"
             ],
-            "path": "src/plugins/charts/public/services/active_cursor/use_active_cursor.ts",
+            "path": "src/platform/plugins/shared/charts/public/services/active_cursor/use_active_cursor.ts",
+            "lineNumber": 28,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false,
             "isRequired": true
@@ -742,7 +826,9 @@
           "SerializedStyles",
           "; }; }"
         ],
-        "path": "src/plugins/charts/public/static/components/common_chart_styles.ts",
+        "path": "src/platform/plugins/shared/charts/public/static/components/common_chart_styles.ts",
+        "lineNumber": 16,
+        "columnNumber": 14,
         "deprecated": false,
         "trackAdoption": false,
         "children": [],
@@ -759,7 +845,9 @@
         "signature": [
           "({\n  warnings,\n  compressed = false,\n  'data-test-subj': dataTestSubj = 'chart-inline-warning-button',\n}: { warnings: React.ReactNode[]; compressed?: boolean | undefined; 'data-test-subj'?: string | undefined; }) => React.JSX.Element | null"
         ],
-        "path": "src/plugins/charts/public/static/components/warnings.tsx",
+        "path": "src/platform/plugins/shared/charts/public/static/components/warnings.tsx",
+        "lineNumber": 23,
+        "columnNumber": 1,
         "deprecated": false,
         "trackAdoption": false,
         "children": [
@@ -770,7 +858,9 @@
             "tags": [],
             "label": "{\n  warnings,\n  compressed = false,\n  'data-test-subj': dataTestSubj = 'chart-inline-warning-button',\n}",
             "description": [],
-            "path": "src/plugins/charts/public/static/components/warnings.tsx",
+            "path": "src/platform/plugins/shared/charts/public/static/components/warnings.tsx",
+            "lineNumber": 27,
+            "columnNumber": 4,
             "deprecated": false,
             "trackAdoption": false,
             "children": [
@@ -784,7 +874,9 @@
                 "signature": [
                   "React.ReactNode[]"
                 ],
-                "path": "src/plugins/charts/public/static/components/warnings.tsx",
+                "path": "src/platform/plugins/shared/charts/public/static/components/warnings.tsx",
+                "lineNumber": 28,
+                "columnNumber": 3,
                 "deprecated": false,
                 "trackAdoption": false
               },
@@ -798,7 +890,9 @@
                 "signature": [
                   "boolean | undefined"
                 ],
-                "path": "src/plugins/charts/public/static/components/warnings.tsx",
+                "path": "src/platform/plugins/shared/charts/public/static/components/warnings.tsx",
+                "lineNumber": 29,
+                "columnNumber": 3,
                 "deprecated": false,
                 "trackAdoption": false
               },
@@ -812,7 +906,9 @@
                 "signature": [
                   "string | undefined"
                 ],
-                "path": "src/plugins/charts/public/static/components/warnings.tsx",
+                "path": "src/platform/plugins/shared/charts/public/static/components/warnings.tsx",
+                "lineNumber": 30,
+                "columnNumber": 3,
                 "deprecated": false,
                 "trackAdoption": false
               }
@@ -831,7 +927,9 @@
         "tags": [],
         "label": "BrushTriggerEvent",
         "description": [],
-        "path": "src/plugins/charts/public/index.ts",
+        "path": "src/platform/plugins/shared/charts/public/index.ts",
+        "lineNumber": 48,
+        "columnNumber": 1,
         "deprecated": false,
         "trackAdoption": false,
         "children": [
@@ -845,7 +943,9 @@
             "signature": [
               "\"brush\""
             ],
-            "path": "src/plugins/charts/public/index.ts",
+            "path": "src/platform/plugins/shared/charts/public/index.ts",
+            "lineNumber": 49,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           },
@@ -867,7 +967,9 @@
               },
               "; column: number; range: number[]; timeFieldName?: string | undefined; }"
             ],
-            "path": "src/plugins/charts/public/index.ts",
+            "path": "src/platform/plugins/shared/charts/public/index.ts",
+            "lineNumber": 50,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           }
@@ -881,7 +983,9 @@
         "tags": [],
         "label": "ClickTriggerEvent",
         "description": [],
-        "path": "src/plugins/charts/public/index.ts",
+        "path": "src/platform/plugins/shared/charts/public/index.ts",
+        "lineNumber": 43,
+        "columnNumber": 1,
         "deprecated": false,
         "trackAdoption": false,
         "children": [
@@ -895,7 +999,9 @@
             "signature": [
               "\"filter\""
             ],
-            "path": "src/plugins/charts/public/index.ts",
+            "path": "src/platform/plugins/shared/charts/public/index.ts",
+            "lineNumber": 44,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           },
@@ -917,7 +1023,9 @@
               },
               ", \"columns\" | \"rows\">; column: number; row: number; value: any; }[]; timeFieldName?: string | undefined; negate?: boolean | undefined; }"
             ],
-            "path": "src/plugins/charts/public/index.ts",
+            "path": "src/platform/plugins/shared/charts/public/index.ts",
+            "lineNumber": 45,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           }
@@ -931,7 +1039,9 @@
         "tags": [],
         "label": "ColorMap",
         "description": [],
-        "path": "src/plugins/charts/common/static/color_maps/color_maps.ts",
+        "path": "src/platform/plugins/shared/charts/common/static/color_maps/color_maps.ts",
+        "lineNumber": 32,
+        "columnNumber": 1,
         "deprecated": false,
         "trackAdoption": false,
         "children": [
@@ -952,7 +1062,9 @@
                 "text": "RawColorSchema"
               }
             ],
-            "path": "src/plugins/charts/common/static/color_maps/color_maps.ts",
+            "path": "src/platform/plugins/shared/charts/common/static/color_maps/color_maps.ts",
+            "lineNumber": 33,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           }
@@ -966,7 +1078,9 @@
         "tags": [],
         "label": "ColorSchema",
         "description": [],
-        "path": "src/plugins/charts/common/static/color_maps/color_maps.ts",
+        "path": "src/platform/plugins/shared/charts/common/static/color_maps/color_maps.ts",
+        "lineNumber": 21,
+        "columnNumber": 1,
         "deprecated": false,
         "trackAdoption": false,
         "children": [
@@ -986,7 +1100,9 @@
                 "text": "ColorSchemas"
               }
             ],
-            "path": "src/plugins/charts/common/static/color_maps/color_maps.ts",
+            "path": "src/platform/plugins/shared/charts/common/static/color_maps/color_maps.ts",
+            "lineNumber": 22,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           },
@@ -997,7 +1113,9 @@
             "tags": [],
             "label": "text",
             "description": [],
-            "path": "src/plugins/charts/common/static/color_maps/color_maps.ts",
+            "path": "src/platform/plugins/shared/charts/common/static/color_maps/color_maps.ts",
+            "lineNumber": 23,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           }
@@ -1011,7 +1129,9 @@
         "tags": [],
         "label": "ColorSchemaParams",
         "description": [],
-        "path": "src/plugins/charts/common/types.ts",
+        "path": "src/platform/plugins/shared/charts/common/types.ts",
+        "lineNumber": 12,
+        "columnNumber": 1,
         "deprecated": false,
         "trackAdoption": false,
         "children": [
@@ -1031,7 +1151,9 @@
                 "text": "ColorSchemas"
               }
             ],
-            "path": "src/plugins/charts/common/types.ts",
+            "path": "src/platform/plugins/shared/charts/common/types.ts",
+            "lineNumber": 13,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           },
@@ -1042,7 +1164,9 @@
             "tags": [],
             "label": "invertColors",
             "description": [],
-            "path": "src/plugins/charts/common/types.ts",
+            "path": "src/platform/plugins/shared/charts/common/types.ts",
+            "lineNumber": 14,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           }
@@ -1056,7 +1180,9 @@
         "tags": [],
         "label": "CustomPaletteArguments",
         "description": [],
-        "path": "src/plugins/charts/common/expressions/palette/types.ts",
+        "path": "src/platform/plugins/shared/charts/common/expressions/palette/types.ts",
+        "lineNumber": 19,
+        "columnNumber": 1,
         "deprecated": false,
         "trackAdoption": false,
         "children": [
@@ -1070,7 +1196,9 @@
             "signature": [
               "string[] | undefined"
             ],
-            "path": "src/plugins/charts/common/expressions/palette/types.ts",
+            "path": "src/platform/plugins/shared/charts/common/expressions/palette/types.ts",
+            "lineNumber": 20,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           },
@@ -1081,7 +1209,9 @@
             "tags": [],
             "label": "gradient",
             "description": [],
-            "path": "src/plugins/charts/common/expressions/palette/types.ts",
+            "path": "src/platform/plugins/shared/charts/common/expressions/palette/types.ts",
+            "lineNumber": 21,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           },
@@ -1095,7 +1225,9 @@
             "signature": [
               "boolean | undefined"
             ],
-            "path": "src/plugins/charts/common/expressions/palette/types.ts",
+            "path": "src/platform/plugins/shared/charts/common/expressions/palette/types.ts",
+            "lineNumber": 22,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           },
@@ -1109,7 +1241,9 @@
             "signature": [
               "number[] | undefined"
             ],
-            "path": "src/plugins/charts/common/expressions/palette/types.ts",
+            "path": "src/platform/plugins/shared/charts/common/expressions/palette/types.ts",
+            "lineNumber": 23,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           },
@@ -1123,7 +1257,9 @@
             "signature": [
               "\"number\" | \"percent\" | undefined"
             ],
-            "path": "src/plugins/charts/common/expressions/palette/types.ts",
+            "path": "src/platform/plugins/shared/charts/common/expressions/palette/types.ts",
+            "lineNumber": 24,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           },
@@ -1137,7 +1273,9 @@
             "signature": [
               "number | undefined"
             ],
-            "path": "src/plugins/charts/common/expressions/palette/types.ts",
+            "path": "src/platform/plugins/shared/charts/common/expressions/palette/types.ts",
+            "lineNumber": 25,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           },
@@ -1151,7 +1289,9 @@
             "signature": [
               "number | undefined"
             ],
-            "path": "src/plugins/charts/common/expressions/palette/types.ts",
+            "path": "src/platform/plugins/shared/charts/common/expressions/palette/types.ts",
+            "lineNumber": 26,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           },
@@ -1172,7 +1312,9 @@
               },
               " | undefined"
             ],
-            "path": "src/plugins/charts/common/expressions/palette/types.ts",
+            "path": "src/platform/plugins/shared/charts/common/expressions/palette/types.ts",
+            "lineNumber": 27,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           }
@@ -1186,7 +1328,9 @@
         "tags": [],
         "label": "CustomPaletteState",
         "description": [],
-        "path": "src/plugins/charts/common/expressions/palette/types.ts",
+        "path": "src/platform/plugins/shared/charts/common/expressions/palette/types.ts",
+        "lineNumber": 30,
+        "columnNumber": 1,
         "deprecated": false,
         "trackAdoption": false,
         "children": [
@@ -1200,7 +1344,9 @@
             "signature": [
               "string[]"
             ],
-            "path": "src/plugins/charts/common/expressions/palette/types.ts",
+            "path": "src/platform/plugins/shared/charts/common/expressions/palette/types.ts",
+            "lineNumber": 31,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           },
@@ -1211,7 +1357,9 @@
             "tags": [],
             "label": "gradient",
             "description": [],
-            "path": "src/plugins/charts/common/expressions/palette/types.ts",
+            "path": "src/platform/plugins/shared/charts/common/expressions/palette/types.ts",
+            "lineNumber": 32,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           },
@@ -1225,7 +1373,9 @@
             "signature": [
               "number[]"
             ],
-            "path": "src/plugins/charts/common/expressions/palette/types.ts",
+            "path": "src/platform/plugins/shared/charts/common/expressions/palette/types.ts",
+            "lineNumber": 33,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           },
@@ -1239,7 +1389,9 @@
             "signature": [
               "\"number\" | \"percent\""
             ],
-            "path": "src/plugins/charts/common/expressions/palette/types.ts",
+            "path": "src/platform/plugins/shared/charts/common/expressions/palette/types.ts",
+            "lineNumber": 34,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           },
@@ -1250,7 +1402,9 @@
             "tags": [],
             "label": "rangeMin",
             "description": [],
-            "path": "src/plugins/charts/common/expressions/palette/types.ts",
+            "path": "src/platform/plugins/shared/charts/common/expressions/palette/types.ts",
+            "lineNumber": 35,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           },
@@ -1261,7 +1415,9 @@
             "tags": [],
             "label": "rangeMax",
             "description": [],
-            "path": "src/plugins/charts/common/expressions/palette/types.ts",
+            "path": "src/platform/plugins/shared/charts/common/expressions/palette/types.ts",
+            "lineNumber": 36,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           },
@@ -1282,7 +1438,9 @@
               },
               " | undefined"
             ],
-            "path": "src/plugins/charts/common/expressions/palette/types.ts",
+            "path": "src/platform/plugins/shared/charts/common/expressions/palette/types.ts",
+            "lineNumber": 37,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           }
@@ -1296,7 +1454,9 @@
         "tags": [],
         "label": "Labels",
         "description": [],
-        "path": "src/plugins/charts/common/types.ts",
+        "path": "src/platform/plugins/shared/charts/common/types.ts",
+        "lineNumber": 17,
+        "columnNumber": 1,
         "deprecated": false,
         "trackAdoption": false,
         "children": [
@@ -1310,7 +1470,9 @@
             "signature": [
               "string | undefined"
             ],
-            "path": "src/plugins/charts/common/types.ts",
+            "path": "src/platform/plugins/shared/charts/common/types.ts",
+            "lineNumber": 18,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           },
@@ -1324,7 +1486,9 @@
             "signature": [
               "boolean | undefined"
             ],
-            "path": "src/plugins/charts/common/types.ts",
+            "path": "src/platform/plugins/shared/charts/common/types.ts",
+            "lineNumber": 19,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           },
@@ -1338,7 +1502,9 @@
             "signature": [
               "boolean | undefined"
             ],
-            "path": "src/plugins/charts/common/types.ts",
+            "path": "src/platform/plugins/shared/charts/common/types.ts",
+            "lineNumber": 20,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           },
@@ -1359,7 +1525,9 @@
               },
               " | undefined"
             ],
-            "path": "src/plugins/charts/common/types.ts",
+            "path": "src/platform/plugins/shared/charts/common/types.ts",
+            "lineNumber": 21,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           },
@@ -1373,7 +1541,9 @@
             "signature": [
               "boolean | undefined"
             ],
-            "path": "src/plugins/charts/common/types.ts",
+            "path": "src/platform/plugins/shared/charts/common/types.ts",
+            "lineNumber": 22,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           },
@@ -1387,7 +1557,9 @@
             "signature": [
               "number | null | undefined"
             ],
-            "path": "src/plugins/charts/common/types.ts",
+            "path": "src/platform/plugins/shared/charts/common/types.ts",
+            "lineNumber": 23,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           }
@@ -1401,7 +1573,9 @@
         "tags": [],
         "label": "MultiClickTriggerEvent",
         "description": [],
-        "path": "src/plugins/charts/public/index.ts",
+        "path": "src/platform/plugins/shared/charts/public/index.ts",
+        "lineNumber": 53,
+        "columnNumber": 1,
         "deprecated": false,
         "trackAdoption": false,
         "children": [
@@ -1415,7 +1589,9 @@
             "signature": [
               "\"multiFilter\""
             ],
-            "path": "src/plugins/charts/public/index.ts",
+            "path": "src/platform/plugins/shared/charts/public/index.ts",
+            "lineNumber": 54,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           },
@@ -1445,7 +1621,9 @@
               },
               " | undefined; }[]; timeFieldName?: string | undefined; negate?: boolean | undefined; }"
             ],
-            "path": "src/plugins/charts/public/index.ts",
+            "path": "src/platform/plugins/shared/charts/public/index.ts",
+            "lineNumber": 55,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           }
@@ -1459,7 +1637,9 @@
         "tags": [],
         "label": "RawColorSchema",
         "description": [],
-        "path": "src/plugins/charts/common/static/color_maps/color_maps.ts",
+        "path": "src/platform/plugins/shared/charts/common/static/color_maps/color_maps.ts",
+        "lineNumber": 26,
+        "columnNumber": 1,
         "deprecated": false,
         "trackAdoption": false,
         "children": [
@@ -1479,7 +1659,9 @@
                 "text": "ColorSchemas"
               }
             ],
-            "path": "src/plugins/charts/common/static/color_maps/color_maps.ts",
+            "path": "src/platform/plugins/shared/charts/common/static/color_maps/color_maps.ts",
+            "lineNumber": 27,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           },
@@ -1490,7 +1672,9 @@
             "tags": [],
             "label": "label",
             "description": [],
-            "path": "src/plugins/charts/common/static/color_maps/color_maps.ts",
+            "path": "src/platform/plugins/shared/charts/common/static/color_maps/color_maps.ts",
+            "lineNumber": 28,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           },
@@ -1504,7 +1688,9 @@
             "signature": [
               "[number, number[]][]"
             ],
-            "path": "src/plugins/charts/common/static/color_maps/color_maps.ts",
+            "path": "src/platform/plugins/shared/charts/common/static/color_maps/color_maps.ts",
+            "lineNumber": 29,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           }
@@ -1518,7 +1704,9 @@
         "tags": [],
         "label": "Style",
         "description": [],
-        "path": "src/plugins/charts/common/types.ts",
+        "path": "src/platform/plugins/shared/charts/common/types.ts",
+        "lineNumber": 26,
+        "columnNumber": 1,
         "deprecated": false,
         "trackAdoption": false,
         "children": [
@@ -1529,7 +1717,9 @@
             "tags": [],
             "label": "bgFill",
             "description": [],
-            "path": "src/plugins/charts/common/types.ts",
+            "path": "src/platform/plugins/shared/charts/common/types.ts",
+            "lineNumber": 27,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           },
@@ -1540,7 +1730,9 @@
             "tags": [],
             "label": "bgColor",
             "description": [],
-            "path": "src/plugins/charts/common/types.ts",
+            "path": "src/platform/plugins/shared/charts/common/types.ts",
+            "lineNumber": 28,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           },
@@ -1551,7 +1743,9 @@
             "tags": [],
             "label": "labelColor",
             "description": [],
-            "path": "src/plugins/charts/common/types.ts",
+            "path": "src/platform/plugins/shared/charts/common/types.ts",
+            "lineNumber": 29,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           },
@@ -1562,7 +1756,9 @@
             "tags": [],
             "label": "subText",
             "description": [],
-            "path": "src/plugins/charts/common/types.ts",
+            "path": "src/platform/plugins/shared/charts/common/types.ts",
+            "lineNumber": 30,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           },
@@ -1573,7 +1769,9 @@
             "tags": [],
             "label": "fontSize",
             "description": [],
-            "path": "src/plugins/charts/common/types.ts",
+            "path": "src/platform/plugins/shared/charts/common/types.ts",
+            "lineNumber": 31,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           }
@@ -1587,7 +1785,9 @@
         "tags": [],
         "label": "SystemPaletteArguments",
         "description": [],
-        "path": "src/plugins/charts/common/expressions/palette/types.ts",
+        "path": "src/platform/plugins/shared/charts/common/expressions/palette/types.ts",
+        "lineNumber": 47,
+        "columnNumber": 1,
         "deprecated": false,
         "trackAdoption": false,
         "children": [
@@ -1598,7 +1798,9 @@
             "tags": [],
             "label": "name",
             "description": [],
-            "path": "src/plugins/charts/common/expressions/palette/types.ts",
+            "path": "src/platform/plugins/shared/charts/common/expressions/palette/types.ts",
+            "lineNumber": 48,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           }
@@ -1614,7 +1816,9 @@
         "tags": [],
         "label": "ColorSchemas",
         "description": [],
-        "path": "src/plugins/charts/common/static/color_maps/color_maps.ts",
+        "path": "src/platform/plugins/shared/charts/common/static/color_maps/color_maps.ts",
+        "lineNumber": 12,
+        "columnNumber": 1,
         "deprecated": false,
         "trackAdoption": false,
         "initialIsOpen": false
@@ -1631,7 +1835,9 @@
         "signature": [
           "\"Background\" | \"Labels\" | \"None\""
         ],
-        "path": "src/plugins/charts/common/static/components/collections.ts",
+        "path": "src/platform/plugins/shared/charts/common/static/components/collections.ts",
+        "lineNumber": 18,
+        "columnNumber": 1,
         "deprecated": false,
         "trackAdoption": false,
         "initialIsOpen": false
@@ -1653,7 +1859,26 @@
           },
           "[]"
         ],
-        "path": "src/plugins/charts/common/static/color_maps/color_maps.ts",
+        "path": "src/platform/plugins/shared/charts/common/static/color_maps/color_maps.ts",
+        "lineNumber": 175,
+        "columnNumber": 14,
+        "deprecated": false,
+        "trackAdoption": false,
+        "initialIsOpen": false
+      },
+      {
+        "parentPluginId": "charts",
+        "id": "def-public.COMPATIBILITY_PALETTE_ID",
+        "type": "string",
+        "tags": [],
+        "label": "COMPATIBILITY_PALETTE_ID",
+        "description": [],
+        "signature": [
+          "\"kibana_palette\""
+        ],
+        "path": "src/platform/plugins/shared/charts/public/services/palettes/palettes.tsx",
+        "lineNumber": 21,
+        "columnNumber": 14,
         "deprecated": false,
         "trackAdoption": false,
         "initialIsOpen": false
@@ -1665,7 +1890,9 @@
         "tags": [],
         "label": "defaultCountLabel",
         "description": [],
-        "path": "src/plugins/charts/common/static/components/collections.ts",
+        "path": "src/platform/plugins/shared/charts/common/static/components/collections.ts",
+        "lineNumber": 28,
+        "columnNumber": 14,
         "deprecated": false,
         "trackAdoption": false,
         "initialIsOpen": false
@@ -1680,7 +1907,9 @@
         "signature": [
           "0 | 90 | 75 | 270"
         ],
-        "path": "src/plugins/charts/common/static/components/collections.ts",
+        "path": "src/platform/plugins/shared/charts/common/static/components/collections.ts",
+        "lineNumber": 26,
+        "columnNumber": 1,
         "deprecated": false,
         "trackAdoption": false,
         "initialIsOpen": false
@@ -1693,9 +1922,11 @@
         "label": "paletteIds",
         "description": [],
         "signature": [
-          "string[]"
+          "SystemPaletteId[]"
         ],
-        "path": "src/plugins/charts/common/constants.ts",
+        "path": "src/platform/plugins/shared/charts/common/constants.ts",
+        "lineNumber": 15,
+        "columnNumber": 14,
         "deprecated": false,
         "trackAdoption": false,
         "initialIsOpen": false
@@ -1712,7 +1943,9 @@
         "signature": [
           "string[]"
         ],
-        "path": "src/plugins/charts/public/static/colors/seed_colors.ts",
+        "path": "src/platform/plugins/shared/charts/public/static/colors/seed_colors.ts",
+        "lineNumber": 15,
+        "columnNumber": 14,
         "deprecated": false,
         "trackAdoption": false,
         "initialIsOpen": false
@@ -1729,7 +1962,9 @@
         "signature": [
           "{ readonly Background: \"Background\"; readonly Labels: \"Labels\"; readonly None: \"None\"; }"
         ],
-        "path": "src/plugins/charts/common/static/components/collections.ts",
+        "path": "src/platform/plugins/shared/charts/common/static/components/collections.ts",
+        "lineNumber": 13,
+        "columnNumber": 14,
         "deprecated": false,
         "trackAdoption": false,
         "initialIsOpen": false
@@ -1744,162 +1979,11 @@
         "signature": [
           "{ readonly Horizontal: 0; readonly Vertical: 90; readonly Angled: 75; readonly VerticalRotation: 270; }"
         ],
-        "path": "src/plugins/charts/common/static/components/collections.ts",
+        "path": "src/platform/plugins/shared/charts/common/static/components/collections.ts",
+        "lineNumber": 20,
+        "columnNumber": 14,
         "deprecated": false,
         "trackAdoption": false,
-        "initialIsOpen": false
-      },
-      {
-        "parentPluginId": "charts",
-        "id": "def-public.MULTILAYER_TIME_AXIS_STYLE",
-        "type": "Object",
-        "tags": [],
-        "label": "MULTILAYER_TIME_AXIS_STYLE",
-        "description": [],
-        "path": "src/plugins/charts/common/static/styles/multilayer_timeaxis.ts",
-        "deprecated": false,
-        "trackAdoption": false,
-        "children": [
-          {
-            "parentPluginId": "charts",
-            "id": "def-public.MULTILAYER_TIME_AXIS_STYLE.tickLabel",
-            "type": "Object",
-            "tags": [],
-            "label": "tickLabel",
-            "description": [],
-            "path": "src/plugins/charts/common/static/styles/multilayer_timeaxis.ts",
-            "deprecated": false,
-            "trackAdoption": false,
-            "children": [
-              {
-                "parentPluginId": "charts",
-                "id": "def-public.MULTILAYER_TIME_AXIS_STYLE.tickLabel.visible",
-                "type": "boolean",
-                "tags": [],
-                "label": "visible",
-                "description": [],
-                "signature": [
-                  "true"
-                ],
-                "path": "src/plugins/charts/common/static/styles/multilayer_timeaxis.ts",
-                "deprecated": false,
-                "trackAdoption": false
-              },
-              {
-                "parentPluginId": "charts",
-                "id": "def-public.MULTILAYER_TIME_AXIS_STYLE.tickLabel.padding",
-                "type": "number",
-                "tags": [],
-                "label": "padding",
-                "description": [],
-                "path": "src/plugins/charts/common/static/styles/multilayer_timeaxis.ts",
-                "deprecated": false,
-                "trackAdoption": false
-              },
-              {
-                "parentPluginId": "charts",
-                "id": "def-public.MULTILAYER_TIME_AXIS_STYLE.tickLabel.rotation",
-                "type": "number",
-                "tags": [],
-                "label": "rotation",
-                "description": [],
-                "path": "src/plugins/charts/common/static/styles/multilayer_timeaxis.ts",
-                "deprecated": false,
-                "trackAdoption": false
-              },
-              {
-                "parentPluginId": "charts",
-                "id": "def-public.MULTILAYER_TIME_AXIS_STYLE.tickLabel.alignment",
-                "type": "Object",
-                "tags": [],
-                "label": "alignment",
-                "description": [],
-                "path": "src/plugins/charts/common/static/styles/multilayer_timeaxis.ts",
-                "deprecated": false,
-                "trackAdoption": false,
-                "children": [
-                  {
-                    "parentPluginId": "charts",
-                    "id": "def-public.MULTILAYER_TIME_AXIS_STYLE.tickLabel.alignment.vertical",
-                    "type": "string",
-                    "tags": [],
-                    "label": "vertical",
-                    "description": [],
-                    "signature": [
-                      "\"bottom\""
-                    ],
-                    "path": "src/plugins/charts/common/static/styles/multilayer_timeaxis.ts",
-                    "deprecated": false,
-                    "trackAdoption": false
-                  },
-                  {
-                    "parentPluginId": "charts",
-                    "id": "def-public.MULTILAYER_TIME_AXIS_STYLE.tickLabel.alignment.horizontal",
-                    "type": "string",
-                    "tags": [],
-                    "label": "horizontal",
-                    "description": [],
-                    "signature": [
-                      "\"left\""
-                    ],
-                    "path": "src/plugins/charts/common/static/styles/multilayer_timeaxis.ts",
-                    "deprecated": false,
-                    "trackAdoption": false
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "parentPluginId": "charts",
-            "id": "def-public.MULTILAYER_TIME_AXIS_STYLE.tickLine",
-            "type": "Object",
-            "tags": [],
-            "label": "tickLine",
-            "description": [],
-            "path": "src/plugins/charts/common/static/styles/multilayer_timeaxis.ts",
-            "deprecated": false,
-            "trackAdoption": false,
-            "children": [
-              {
-                "parentPluginId": "charts",
-                "id": "def-public.MULTILAYER_TIME_AXIS_STYLE.tickLine.visible",
-                "type": "boolean",
-                "tags": [],
-                "label": "visible",
-                "description": [],
-                "signature": [
-                  "true"
-                ],
-                "path": "src/plugins/charts/common/static/styles/multilayer_timeaxis.ts",
-                "deprecated": false,
-                "trackAdoption": false
-              },
-              {
-                "parentPluginId": "charts",
-                "id": "def-public.MULTILAYER_TIME_AXIS_STYLE.tickLine.size",
-                "type": "number",
-                "tags": [],
-                "label": "size",
-                "description": [],
-                "path": "src/plugins/charts/common/static/styles/multilayer_timeaxis.ts",
-                "deprecated": false,
-                "trackAdoption": false
-              },
-              {
-                "parentPluginId": "charts",
-                "id": "def-public.MULTILAYER_TIME_AXIS_STYLE.tickLine.padding",
-                "type": "number",
-                "tags": [],
-                "label": "padding",
-                "description": [],
-                "path": "src/plugins/charts/common/static/styles/multilayer_timeaxis.ts",
-                "deprecated": false,
-                "trackAdoption": false
-              }
-            ]
-          }
-        ],
         "initialIsOpen": false
       },
       {
@@ -1909,7 +1993,9 @@
         "tags": [],
         "label": "vislibColorMaps",
         "description": [],
-        "path": "src/plugins/charts/common/static/color_maps/color_maps.ts",
+        "path": "src/platform/plugins/shared/charts/common/static/color_maps/color_maps.ts",
+        "lineNumber": 36,
+        "columnNumber": 14,
         "deprecated": false,
         "trackAdoption": false,
         "children": [
@@ -1922,7 +2008,9 @@
             "description": [
               "// Sequential"
             ],
-            "path": "src/plugins/charts/common/static/color_maps/color_maps.ts",
+            "path": "src/platform/plugins/shared/charts/common/static/color_maps/color_maps.ts",
+            "lineNumber": 38,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false,
             "children": [
@@ -1943,7 +2031,9 @@
                   },
                   ".Blues"
                 ],
-                "path": "src/plugins/charts/common/static/color_maps/color_maps.ts",
+                "path": "src/platform/plugins/shared/charts/common/static/color_maps/color_maps.ts",
+                "lineNumber": 39,
+                "columnNumber": 5,
                 "deprecated": false,
                 "trackAdoption": false
               },
@@ -1954,7 +2044,9 @@
                 "tags": [],
                 "label": "label",
                 "description": [],
-                "path": "src/plugins/charts/common/static/color_maps/color_maps.ts",
+                "path": "src/platform/plugins/shared/charts/common/static/color_maps/color_maps.ts",
+                "lineNumber": 40,
+                "columnNumber": 5,
                 "deprecated": false,
                 "trackAdoption": false
               },
@@ -1968,7 +2060,9 @@
                 "signature": [
                   "[number, number[]][]"
                 ],
-                "path": "src/plugins/charts/common/static/color_maps/color_maps.ts",
+                "path": "src/platform/plugins/shared/charts/common/static/color_maps/color_maps.ts",
+                "lineNumber": 43,
+                "columnNumber": 5,
                 "deprecated": false,
                 "trackAdoption": false
               }
@@ -1981,7 +2075,9 @@
             "tags": [],
             "label": "[ColorSchemas.Greens]",
             "description": [],
-            "path": "src/plugins/charts/common/static/color_maps/color_maps.ts",
+            "path": "src/platform/plugins/shared/charts/common/static/color_maps/color_maps.ts",
+            "lineNumber": 56,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false,
             "children": [
@@ -2002,7 +2098,9 @@
                   },
                   ".Greens"
                 ],
-                "path": "src/plugins/charts/common/static/color_maps/color_maps.ts",
+                "path": "src/platform/plugins/shared/charts/common/static/color_maps/color_maps.ts",
+                "lineNumber": 57,
+                "columnNumber": 5,
                 "deprecated": false,
                 "trackAdoption": false
               },
@@ -2013,7 +2111,9 @@
                 "tags": [],
                 "label": "label",
                 "description": [],
-                "path": "src/plugins/charts/common/static/color_maps/color_maps.ts",
+                "path": "src/platform/plugins/shared/charts/common/static/color_maps/color_maps.ts",
+                "lineNumber": 58,
+                "columnNumber": 5,
                 "deprecated": false,
                 "trackAdoption": false
               },
@@ -2027,7 +2127,9 @@
                 "signature": [
                   "[number, number[]][]"
                 ],
-                "path": "src/plugins/charts/common/static/color_maps/color_maps.ts",
+                "path": "src/platform/plugins/shared/charts/common/static/color_maps/color_maps.ts",
+                "lineNumber": 61,
+                "columnNumber": 5,
                 "deprecated": false,
                 "trackAdoption": false
               }
@@ -2040,7 +2142,9 @@
             "tags": [],
             "label": "[ColorSchemas.Greys]",
             "description": [],
-            "path": "src/plugins/charts/common/static/color_maps/color_maps.ts",
+            "path": "src/platform/plugins/shared/charts/common/static/color_maps/color_maps.ts",
+            "lineNumber": 74,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false,
             "children": [
@@ -2061,7 +2165,9 @@
                   },
                   ".Greys"
                 ],
-                "path": "src/plugins/charts/common/static/color_maps/color_maps.ts",
+                "path": "src/platform/plugins/shared/charts/common/static/color_maps/color_maps.ts",
+                "lineNumber": 75,
+                "columnNumber": 5,
                 "deprecated": false,
                 "trackAdoption": false
               },
@@ -2072,7 +2178,9 @@
                 "tags": [],
                 "label": "label",
                 "description": [],
-                "path": "src/plugins/charts/common/static/color_maps/color_maps.ts",
+                "path": "src/platform/plugins/shared/charts/common/static/color_maps/color_maps.ts",
+                "lineNumber": 76,
+                "columnNumber": 5,
                 "deprecated": false,
                 "trackAdoption": false
               },
@@ -2086,7 +2194,9 @@
                 "signature": [
                   "[number, number[]][]"
                 ],
-                "path": "src/plugins/charts/common/static/color_maps/color_maps.ts",
+                "path": "src/platform/plugins/shared/charts/common/static/color_maps/color_maps.ts",
+                "lineNumber": 79,
+                "columnNumber": 5,
                 "deprecated": false,
                 "trackAdoption": false
               }
@@ -2099,7 +2209,9 @@
             "tags": [],
             "label": "[ColorSchemas.Reds]",
             "description": [],
-            "path": "src/plugins/charts/common/static/color_maps/color_maps.ts",
+            "path": "src/platform/plugins/shared/charts/common/static/color_maps/color_maps.ts",
+            "lineNumber": 92,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false,
             "children": [
@@ -2120,7 +2232,9 @@
                   },
                   ".Reds"
                 ],
-                "path": "src/plugins/charts/common/static/color_maps/color_maps.ts",
+                "path": "src/platform/plugins/shared/charts/common/static/color_maps/color_maps.ts",
+                "lineNumber": 93,
+                "columnNumber": 5,
                 "deprecated": false,
                 "trackAdoption": false
               },
@@ -2131,7 +2245,9 @@
                 "tags": [],
                 "label": "label",
                 "description": [],
-                "path": "src/plugins/charts/common/static/color_maps/color_maps.ts",
+                "path": "src/platform/plugins/shared/charts/common/static/color_maps/color_maps.ts",
+                "lineNumber": 94,
+                "columnNumber": 5,
                 "deprecated": false,
                 "trackAdoption": false
               },
@@ -2145,7 +2261,9 @@
                 "signature": [
                   "[number, number[]][]"
                 ],
-                "path": "src/plugins/charts/common/static/color_maps/color_maps.ts",
+                "path": "src/platform/plugins/shared/charts/common/static/color_maps/color_maps.ts",
+                "lineNumber": 97,
+                "columnNumber": 5,
                 "deprecated": false,
                 "trackAdoption": false
               }
@@ -2158,7 +2276,9 @@
             "tags": [],
             "label": "[ColorSchemas.YellowToRed]",
             "description": [],
-            "path": "src/plugins/charts/common/static/color_maps/color_maps.ts",
+            "path": "src/platform/plugins/shared/charts/common/static/color_maps/color_maps.ts",
+            "lineNumber": 110,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false,
             "children": [
@@ -2179,7 +2299,9 @@
                   },
                   ".YellowToRed"
                 ],
-                "path": "src/plugins/charts/common/static/color_maps/color_maps.ts",
+                "path": "src/platform/plugins/shared/charts/common/static/color_maps/color_maps.ts",
+                "lineNumber": 111,
+                "columnNumber": 5,
                 "deprecated": false,
                 "trackAdoption": false
               },
@@ -2190,7 +2312,9 @@
                 "tags": [],
                 "label": "label",
                 "description": [],
-                "path": "src/plugins/charts/common/static/color_maps/color_maps.ts",
+                "path": "src/platform/plugins/shared/charts/common/static/color_maps/color_maps.ts",
+                "lineNumber": 112,
+                "columnNumber": 5,
                 "deprecated": false,
                 "trackAdoption": false
               },
@@ -2204,7 +2328,9 @@
                 "signature": [
                   "[number, number[]][]"
                 ],
-                "path": "src/plugins/charts/common/static/color_maps/color_maps.ts",
+                "path": "src/platform/plugins/shared/charts/common/static/color_maps/color_maps.ts",
+                "lineNumber": 115,
+                "columnNumber": 5,
                 "deprecated": false,
                 "trackAdoption": false
               }
@@ -2217,7 +2343,9 @@
             "tags": [],
             "label": "[ColorSchemas.GreenToRed]",
             "description": [],
-            "path": "src/plugins/charts/common/static/color_maps/color_maps.ts",
+            "path": "src/platform/plugins/shared/charts/common/static/color_maps/color_maps.ts",
+            "lineNumber": 129,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false,
             "children": [
@@ -2238,7 +2366,9 @@
                   },
                   ".GreenToRed"
                 ],
-                "path": "src/plugins/charts/common/static/color_maps/color_maps.ts",
+                "path": "src/platform/plugins/shared/charts/common/static/color_maps/color_maps.ts",
+                "lineNumber": 130,
+                "columnNumber": 5,
                 "deprecated": false,
                 "trackAdoption": false
               },
@@ -2249,7 +2379,9 @@
                 "tags": [],
                 "label": "label",
                 "description": [],
-                "path": "src/plugins/charts/common/static/color_maps/color_maps.ts",
+                "path": "src/platform/plugins/shared/charts/common/static/color_maps/color_maps.ts",
+                "lineNumber": 131,
+                "columnNumber": 5,
                 "deprecated": false,
                 "trackAdoption": false
               },
@@ -2263,7 +2395,9 @@
                 "signature": [
                   "[number, number[]][]"
                 ],
-                "path": "src/plugins/charts/common/static/color_maps/color_maps.ts",
+                "path": "src/platform/plugins/shared/charts/common/static/color_maps/color_maps.ts",
+                "lineNumber": 134,
+                "columnNumber": 5,
                 "deprecated": false,
                 "trackAdoption": false
               }
@@ -2280,7 +2414,9 @@
       "tags": [],
       "label": "ChartsPluginSetup",
       "description": [],
-      "path": "src/plugins/charts/public/plugin.ts",
+      "path": "src/platform/plugins/shared/charts/public/plugin.ts",
+      "lineNumber": 22,
+      "columnNumber": 1,
       "deprecated": false,
       "trackAdoption": false,
       "children": [
@@ -2301,13 +2437,7 @@
             ">; readonly darkModeEnabled$: ",
             "Observable",
             "<",
-            {
-              "pluginId": "@kbn/core-theme-browser",
-              "scope": "public",
-              "docId": "kibKbnCoreThemeBrowserPluginApi",
-              "section": "def-public.CoreTheme",
-              "text": "CoreTheme"
-            },
+            "CoreTheme",
             ">; useDarkMode: () => boolean; useChartsTheme: () => ",
             "RecursivePartial",
             "<",
@@ -2320,7 +2450,9 @@
             "Theme",
             "; }"
           ],
-          "path": "src/plugins/charts/public/plugin.ts",
+          "path": "src/platform/plugins/shared/charts/public/plugin.ts",
+          "lineNumber": 24,
+          "columnNumber": 3,
           "deprecated": false,
           "trackAdoption": false
         },
@@ -2342,7 +2474,9 @@
             },
             ">; }"
           ],
-          "path": "src/plugins/charts/public/plugin.ts",
+          "path": "src/platform/plugins/shared/charts/public/plugin.ts",
+          "lineNumber": 25,
+          "columnNumber": 3,
           "deprecated": false,
           "trackAdoption": false
         }
@@ -2369,7 +2503,9 @@
         "ActiveCursor",
         "; }"
       ],
-      "path": "src/plugins/charts/public/plugin.ts",
+      "path": "src/platform/plugins/shared/charts/public/plugin.ts",
+      "lineNumber": 28,
+      "columnNumber": 1,
       "deprecated": false,
       "trackAdoption": false,
       "lifecycle": "start",
@@ -2387,7 +2523,9 @@
         "tags": [],
         "label": "CustomPaletteArguments",
         "description": [],
-        "path": "src/plugins/charts/common/expressions/palette/types.ts",
+        "path": "src/platform/plugins/shared/charts/common/expressions/palette/types.ts",
+        "lineNumber": 19,
+        "columnNumber": 1,
         "deprecated": false,
         "trackAdoption": false,
         "children": [
@@ -2401,7 +2539,9 @@
             "signature": [
               "string[] | undefined"
             ],
-            "path": "src/plugins/charts/common/expressions/palette/types.ts",
+            "path": "src/platform/plugins/shared/charts/common/expressions/palette/types.ts",
+            "lineNumber": 20,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           },
@@ -2412,7 +2552,9 @@
             "tags": [],
             "label": "gradient",
             "description": [],
-            "path": "src/plugins/charts/common/expressions/palette/types.ts",
+            "path": "src/platform/plugins/shared/charts/common/expressions/palette/types.ts",
+            "lineNumber": 21,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           },
@@ -2426,7 +2568,9 @@
             "signature": [
               "boolean | undefined"
             ],
-            "path": "src/plugins/charts/common/expressions/palette/types.ts",
+            "path": "src/platform/plugins/shared/charts/common/expressions/palette/types.ts",
+            "lineNumber": 22,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           },
@@ -2440,7 +2584,9 @@
             "signature": [
               "number[] | undefined"
             ],
-            "path": "src/plugins/charts/common/expressions/palette/types.ts",
+            "path": "src/platform/plugins/shared/charts/common/expressions/palette/types.ts",
+            "lineNumber": 23,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           },
@@ -2454,7 +2600,9 @@
             "signature": [
               "\"number\" | \"percent\" | undefined"
             ],
-            "path": "src/plugins/charts/common/expressions/palette/types.ts",
+            "path": "src/platform/plugins/shared/charts/common/expressions/palette/types.ts",
+            "lineNumber": 24,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           },
@@ -2468,7 +2616,9 @@
             "signature": [
               "number | undefined"
             ],
-            "path": "src/plugins/charts/common/expressions/palette/types.ts",
+            "path": "src/platform/plugins/shared/charts/common/expressions/palette/types.ts",
+            "lineNumber": 25,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           },
@@ -2482,7 +2632,9 @@
             "signature": [
               "number | undefined"
             ],
-            "path": "src/plugins/charts/common/expressions/palette/types.ts",
+            "path": "src/platform/plugins/shared/charts/common/expressions/palette/types.ts",
+            "lineNumber": 26,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           },
@@ -2503,7 +2655,9 @@
               },
               " | undefined"
             ],
-            "path": "src/plugins/charts/common/expressions/palette/types.ts",
+            "path": "src/platform/plugins/shared/charts/common/expressions/palette/types.ts",
+            "lineNumber": 27,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           }
@@ -2517,7 +2671,9 @@
         "tags": [],
         "label": "CustomPaletteState",
         "description": [],
-        "path": "src/plugins/charts/common/expressions/palette/types.ts",
+        "path": "src/platform/plugins/shared/charts/common/expressions/palette/types.ts",
+        "lineNumber": 30,
+        "columnNumber": 1,
         "deprecated": false,
         "trackAdoption": false,
         "children": [
@@ -2531,7 +2687,9 @@
             "signature": [
               "string[]"
             ],
-            "path": "src/plugins/charts/common/expressions/palette/types.ts",
+            "path": "src/platform/plugins/shared/charts/common/expressions/palette/types.ts",
+            "lineNumber": 31,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           },
@@ -2542,7 +2700,9 @@
             "tags": [],
             "label": "gradient",
             "description": [],
-            "path": "src/plugins/charts/common/expressions/palette/types.ts",
+            "path": "src/platform/plugins/shared/charts/common/expressions/palette/types.ts",
+            "lineNumber": 32,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           },
@@ -2556,7 +2716,9 @@
             "signature": [
               "number[]"
             ],
-            "path": "src/plugins/charts/common/expressions/palette/types.ts",
+            "path": "src/platform/plugins/shared/charts/common/expressions/palette/types.ts",
+            "lineNumber": 33,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           },
@@ -2570,7 +2732,9 @@
             "signature": [
               "\"number\" | \"percent\""
             ],
-            "path": "src/plugins/charts/common/expressions/palette/types.ts",
+            "path": "src/platform/plugins/shared/charts/common/expressions/palette/types.ts",
+            "lineNumber": 34,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           },
@@ -2581,7 +2745,9 @@
             "tags": [],
             "label": "rangeMin",
             "description": [],
-            "path": "src/plugins/charts/common/expressions/palette/types.ts",
+            "path": "src/platform/plugins/shared/charts/common/expressions/palette/types.ts",
+            "lineNumber": 35,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           },
@@ -2592,7 +2758,9 @@
             "tags": [],
             "label": "rangeMax",
             "description": [],
-            "path": "src/plugins/charts/common/expressions/palette/types.ts",
+            "path": "src/platform/plugins/shared/charts/common/expressions/palette/types.ts",
+            "lineNumber": 36,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           },
@@ -2613,7 +2781,9 @@
               },
               " | undefined"
             ],
-            "path": "src/plugins/charts/common/expressions/palette/types.ts",
+            "path": "src/platform/plugins/shared/charts/common/expressions/palette/types.ts",
+            "lineNumber": 37,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           }
@@ -2627,7 +2797,9 @@
         "tags": [],
         "label": "SystemPaletteArguments",
         "description": [],
-        "path": "src/plugins/charts/common/expressions/palette/types.ts",
+        "path": "src/platform/plugins/shared/charts/common/expressions/palette/types.ts",
+        "lineNumber": 47,
+        "columnNumber": 1,
         "deprecated": false,
         "trackAdoption": false,
         "children": [
@@ -2638,7 +2810,9 @@
             "tags": [],
             "label": "name",
             "description": [],
-            "path": "src/plugins/charts/common/expressions/palette/types.ts",
+            "path": "src/platform/plugins/shared/charts/common/expressions/palette/types.ts",
+            "lineNumber": 48,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           }
@@ -2656,9 +2830,11 @@
         "label": "paletteIds",
         "description": [],
         "signature": [
-          "string[]"
+          "SystemPaletteId[]"
         ],
-        "path": "src/plugins/charts/common/constants.ts",
+        "path": "src/platform/plugins/shared/charts/common/constants.ts",
+        "lineNumber": 15,
+        "columnNumber": 14,
         "deprecated": false,
         "trackAdoption": false,
         "initialIsOpen": false
@@ -2679,7 +2855,9 @@
         "signature": [
           "(value: any, colorSchemaName: string) => string"
         ],
-        "path": "src/plugins/charts/common/static/color_maps/heatmap_color.ts",
+        "path": "src/platform/plugins/shared/charts/common/static/color_maps/heatmap_color.ts",
+        "lineNumber": 39,
+        "columnNumber": 1,
         "deprecated": false,
         "trackAdoption": false,
         "children": [
@@ -2693,7 +2871,9 @@
             "signature": [
               "any"
             ],
-            "path": "src/plugins/charts/common/static/color_maps/heatmap_color.ts",
+            "path": "src/platform/plugins/shared/charts/common/static/color_maps/heatmap_color.ts",
+            "lineNumber": 39,
+            "columnNumber": 34,
             "deprecated": false,
             "trackAdoption": false,
             "isRequired": true
@@ -2708,7 +2888,9 @@
             "signature": [
               "string"
             ],
-            "path": "src/plugins/charts/common/static/color_maps/heatmap_color.ts",
+            "path": "src/platform/plugins/shared/charts/common/static/color_maps/heatmap_color.ts",
+            "lineNumber": 39,
+            "columnNumber": 46,
             "deprecated": false,
             "trackAdoption": false,
             "isRequired": true
@@ -2728,7 +2910,9 @@
           "() => ",
           "PaletteExpressionFunctionDefinition"
         ],
-        "path": "src/plugins/charts/common/expressions/palette/palette.ts",
+        "path": "src/platform/plugins/shared/charts/common/expressions/palette/palette.ts",
+        "lineNumber": 13,
+        "columnNumber": 1,
         "deprecated": false,
         "trackAdoption": false,
         "children": [],
@@ -2752,7 +2936,9 @@
             "text": "SystemPaletteExpressionFunctionDefinition"
           }
         ],
-        "path": "src/plugins/charts/common/expressions/palette/system_palette.ts",
+        "path": "src/platform/plugins/shared/charts/common/expressions/palette/system_palette.ts",
+        "lineNumber": 14,
+        "columnNumber": 1,
         "deprecated": false,
         "trackAdoption": false,
         "children": [],
@@ -2768,7 +2954,9 @@
         "tags": [],
         "label": "ColorMap",
         "description": [],
-        "path": "src/plugins/charts/common/static/color_maps/color_maps.ts",
+        "path": "src/platform/plugins/shared/charts/common/static/color_maps/color_maps.ts",
+        "lineNumber": 32,
+        "columnNumber": 1,
         "deprecated": false,
         "trackAdoption": false,
         "children": [
@@ -2789,7 +2977,9 @@
                 "text": "RawColorSchema"
               }
             ],
-            "path": "src/plugins/charts/common/static/color_maps/color_maps.ts",
+            "path": "src/platform/plugins/shared/charts/common/static/color_maps/color_maps.ts",
+            "lineNumber": 33,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           }
@@ -2803,7 +2993,9 @@
         "tags": [],
         "label": "ColorSchema",
         "description": [],
-        "path": "src/plugins/charts/common/static/color_maps/color_maps.ts",
+        "path": "src/platform/plugins/shared/charts/common/static/color_maps/color_maps.ts",
+        "lineNumber": 21,
+        "columnNumber": 1,
         "deprecated": false,
         "trackAdoption": false,
         "children": [
@@ -2823,7 +3015,9 @@
                 "text": "ColorSchemas"
               }
             ],
-            "path": "src/plugins/charts/common/static/color_maps/color_maps.ts",
+            "path": "src/platform/plugins/shared/charts/common/static/color_maps/color_maps.ts",
+            "lineNumber": 22,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           },
@@ -2834,7 +3028,9 @@
             "tags": [],
             "label": "text",
             "description": [],
-            "path": "src/plugins/charts/common/static/color_maps/color_maps.ts",
+            "path": "src/platform/plugins/shared/charts/common/static/color_maps/color_maps.ts",
+            "lineNumber": 23,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           }
@@ -2848,7 +3044,9 @@
         "tags": [],
         "label": "ColorSchemaParams",
         "description": [],
-        "path": "src/plugins/charts/common/types.ts",
+        "path": "src/platform/plugins/shared/charts/common/types.ts",
+        "lineNumber": 12,
+        "columnNumber": 1,
         "deprecated": false,
         "trackAdoption": false,
         "children": [
@@ -2868,7 +3066,9 @@
                 "text": "ColorSchemas"
               }
             ],
-            "path": "src/plugins/charts/common/types.ts",
+            "path": "src/platform/plugins/shared/charts/common/types.ts",
+            "lineNumber": 13,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           },
@@ -2879,7 +3079,9 @@
             "tags": [],
             "label": "invertColors",
             "description": [],
-            "path": "src/plugins/charts/common/types.ts",
+            "path": "src/platform/plugins/shared/charts/common/types.ts",
+            "lineNumber": 14,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           }
@@ -2893,7 +3095,9 @@
         "tags": [],
         "label": "CustomPaletteArguments",
         "description": [],
-        "path": "src/plugins/charts/common/expressions/palette/types.ts",
+        "path": "src/platform/plugins/shared/charts/common/expressions/palette/types.ts",
+        "lineNumber": 19,
+        "columnNumber": 1,
         "deprecated": false,
         "trackAdoption": false,
         "children": [
@@ -2907,7 +3111,9 @@
             "signature": [
               "string[] | undefined"
             ],
-            "path": "src/plugins/charts/common/expressions/palette/types.ts",
+            "path": "src/platform/plugins/shared/charts/common/expressions/palette/types.ts",
+            "lineNumber": 20,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           },
@@ -2918,7 +3124,9 @@
             "tags": [],
             "label": "gradient",
             "description": [],
-            "path": "src/plugins/charts/common/expressions/palette/types.ts",
+            "path": "src/platform/plugins/shared/charts/common/expressions/palette/types.ts",
+            "lineNumber": 21,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           },
@@ -2932,7 +3140,9 @@
             "signature": [
               "boolean | undefined"
             ],
-            "path": "src/plugins/charts/common/expressions/palette/types.ts",
+            "path": "src/platform/plugins/shared/charts/common/expressions/palette/types.ts",
+            "lineNumber": 22,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           },
@@ -2946,7 +3156,9 @@
             "signature": [
               "number[] | undefined"
             ],
-            "path": "src/plugins/charts/common/expressions/palette/types.ts",
+            "path": "src/platform/plugins/shared/charts/common/expressions/palette/types.ts",
+            "lineNumber": 23,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           },
@@ -2960,7 +3172,9 @@
             "signature": [
               "\"number\" | \"percent\" | undefined"
             ],
-            "path": "src/plugins/charts/common/expressions/palette/types.ts",
+            "path": "src/platform/plugins/shared/charts/common/expressions/palette/types.ts",
+            "lineNumber": 24,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           },
@@ -2974,7 +3188,9 @@
             "signature": [
               "number | undefined"
             ],
-            "path": "src/plugins/charts/common/expressions/palette/types.ts",
+            "path": "src/platform/plugins/shared/charts/common/expressions/palette/types.ts",
+            "lineNumber": 25,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           },
@@ -2988,7 +3204,9 @@
             "signature": [
               "number | undefined"
             ],
-            "path": "src/plugins/charts/common/expressions/palette/types.ts",
+            "path": "src/platform/plugins/shared/charts/common/expressions/palette/types.ts",
+            "lineNumber": 26,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           },
@@ -3009,7 +3227,9 @@
               },
               " | undefined"
             ],
-            "path": "src/plugins/charts/common/expressions/palette/types.ts",
+            "path": "src/platform/plugins/shared/charts/common/expressions/palette/types.ts",
+            "lineNumber": 27,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           }
@@ -3023,7 +3243,9 @@
         "tags": [],
         "label": "CustomPaletteState",
         "description": [],
-        "path": "src/plugins/charts/common/expressions/palette/types.ts",
+        "path": "src/platform/plugins/shared/charts/common/expressions/palette/types.ts",
+        "lineNumber": 30,
+        "columnNumber": 1,
         "deprecated": false,
         "trackAdoption": false,
         "children": [
@@ -3037,7 +3259,9 @@
             "signature": [
               "string[]"
             ],
-            "path": "src/plugins/charts/common/expressions/palette/types.ts",
+            "path": "src/platform/plugins/shared/charts/common/expressions/palette/types.ts",
+            "lineNumber": 31,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           },
@@ -3048,7 +3272,9 @@
             "tags": [],
             "label": "gradient",
             "description": [],
-            "path": "src/plugins/charts/common/expressions/palette/types.ts",
+            "path": "src/platform/plugins/shared/charts/common/expressions/palette/types.ts",
+            "lineNumber": 32,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           },
@@ -3062,7 +3288,9 @@
             "signature": [
               "number[]"
             ],
-            "path": "src/plugins/charts/common/expressions/palette/types.ts",
+            "path": "src/platform/plugins/shared/charts/common/expressions/palette/types.ts",
+            "lineNumber": 33,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           },
@@ -3076,7 +3304,9 @@
             "signature": [
               "\"number\" | \"percent\""
             ],
-            "path": "src/plugins/charts/common/expressions/palette/types.ts",
+            "path": "src/platform/plugins/shared/charts/common/expressions/palette/types.ts",
+            "lineNumber": 34,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           },
@@ -3087,7 +3317,9 @@
             "tags": [],
             "label": "rangeMin",
             "description": [],
-            "path": "src/plugins/charts/common/expressions/palette/types.ts",
+            "path": "src/platform/plugins/shared/charts/common/expressions/palette/types.ts",
+            "lineNumber": 35,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           },
@@ -3098,7 +3330,9 @@
             "tags": [],
             "label": "rangeMax",
             "description": [],
-            "path": "src/plugins/charts/common/expressions/palette/types.ts",
+            "path": "src/platform/plugins/shared/charts/common/expressions/palette/types.ts",
+            "lineNumber": 36,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           },
@@ -3119,7 +3353,9 @@
               },
               " | undefined"
             ],
-            "path": "src/plugins/charts/common/expressions/palette/types.ts",
+            "path": "src/platform/plugins/shared/charts/common/expressions/palette/types.ts",
+            "lineNumber": 37,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           }
@@ -3133,7 +3369,9 @@
         "tags": [],
         "label": "Labels",
         "description": [],
-        "path": "src/plugins/charts/common/types.ts",
+        "path": "src/platform/plugins/shared/charts/common/types.ts",
+        "lineNumber": 17,
+        "columnNumber": 1,
         "deprecated": false,
         "trackAdoption": false,
         "children": [
@@ -3147,7 +3385,9 @@
             "signature": [
               "string | undefined"
             ],
-            "path": "src/plugins/charts/common/types.ts",
+            "path": "src/platform/plugins/shared/charts/common/types.ts",
+            "lineNumber": 18,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           },
@@ -3161,7 +3401,9 @@
             "signature": [
               "boolean | undefined"
             ],
-            "path": "src/plugins/charts/common/types.ts",
+            "path": "src/platform/plugins/shared/charts/common/types.ts",
+            "lineNumber": 19,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           },
@@ -3175,7 +3417,9 @@
             "signature": [
               "boolean | undefined"
             ],
-            "path": "src/plugins/charts/common/types.ts",
+            "path": "src/platform/plugins/shared/charts/common/types.ts",
+            "lineNumber": 20,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           },
@@ -3196,7 +3440,9 @@
               },
               " | undefined"
             ],
-            "path": "src/plugins/charts/common/types.ts",
+            "path": "src/platform/plugins/shared/charts/common/types.ts",
+            "lineNumber": 21,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           },
@@ -3210,7 +3456,9 @@
             "signature": [
               "boolean | undefined"
             ],
-            "path": "src/plugins/charts/common/types.ts",
+            "path": "src/platform/plugins/shared/charts/common/types.ts",
+            "lineNumber": 22,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           },
@@ -3224,7 +3472,9 @@
             "signature": [
               "number | null | undefined"
             ],
-            "path": "src/plugins/charts/common/types.ts",
+            "path": "src/platform/plugins/shared/charts/common/types.ts",
+            "lineNumber": 23,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           }
@@ -3238,7 +3488,9 @@
         "tags": [],
         "label": "RawColorSchema",
         "description": [],
-        "path": "src/plugins/charts/common/static/color_maps/color_maps.ts",
+        "path": "src/platform/plugins/shared/charts/common/static/color_maps/color_maps.ts",
+        "lineNumber": 26,
+        "columnNumber": 1,
         "deprecated": false,
         "trackAdoption": false,
         "children": [
@@ -3258,7 +3510,9 @@
                 "text": "ColorSchemas"
               }
             ],
-            "path": "src/plugins/charts/common/static/color_maps/color_maps.ts",
+            "path": "src/platform/plugins/shared/charts/common/static/color_maps/color_maps.ts",
+            "lineNumber": 27,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           },
@@ -3269,7 +3523,9 @@
             "tags": [],
             "label": "label",
             "description": [],
-            "path": "src/plugins/charts/common/static/color_maps/color_maps.ts",
+            "path": "src/platform/plugins/shared/charts/common/static/color_maps/color_maps.ts",
+            "lineNumber": 28,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           },
@@ -3283,7 +3539,9 @@
             "signature": [
               "[number, number[]][]"
             ],
-            "path": "src/plugins/charts/common/static/color_maps/color_maps.ts",
+            "path": "src/platform/plugins/shared/charts/common/static/color_maps/color_maps.ts",
+            "lineNumber": 29,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           }
@@ -3297,7 +3555,9 @@
         "tags": [],
         "label": "Style",
         "description": [],
-        "path": "src/plugins/charts/common/types.ts",
+        "path": "src/platform/plugins/shared/charts/common/types.ts",
+        "lineNumber": 26,
+        "columnNumber": 1,
         "deprecated": false,
         "trackAdoption": false,
         "children": [
@@ -3308,7 +3568,9 @@
             "tags": [],
             "label": "bgFill",
             "description": [],
-            "path": "src/plugins/charts/common/types.ts",
+            "path": "src/platform/plugins/shared/charts/common/types.ts",
+            "lineNumber": 27,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           },
@@ -3319,7 +3581,9 @@
             "tags": [],
             "label": "bgColor",
             "description": [],
-            "path": "src/plugins/charts/common/types.ts",
+            "path": "src/platform/plugins/shared/charts/common/types.ts",
+            "lineNumber": 28,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           },
@@ -3330,7 +3594,9 @@
             "tags": [],
             "label": "labelColor",
             "description": [],
-            "path": "src/plugins/charts/common/types.ts",
+            "path": "src/platform/plugins/shared/charts/common/types.ts",
+            "lineNumber": 29,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           },
@@ -3341,7 +3607,9 @@
             "tags": [],
             "label": "subText",
             "description": [],
-            "path": "src/plugins/charts/common/types.ts",
+            "path": "src/platform/plugins/shared/charts/common/types.ts",
+            "lineNumber": 30,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           },
@@ -3352,7 +3620,9 @@
             "tags": [],
             "label": "fontSize",
             "description": [],
-            "path": "src/plugins/charts/common/types.ts",
+            "path": "src/platform/plugins/shared/charts/common/types.ts",
+            "lineNumber": 31,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           }
@@ -3366,7 +3636,9 @@
         "tags": [],
         "label": "SystemPaletteArguments",
         "description": [],
-        "path": "src/plugins/charts/common/expressions/palette/types.ts",
+        "path": "src/platform/plugins/shared/charts/common/expressions/palette/types.ts",
+        "lineNumber": 47,
+        "columnNumber": 1,
         "deprecated": false,
         "trackAdoption": false,
         "children": [
@@ -3377,7 +3649,9 @@
             "tags": [],
             "label": "name",
             "description": [],
-            "path": "src/plugins/charts/common/expressions/palette/types.ts",
+            "path": "src/platform/plugins/shared/charts/common/expressions/palette/types.ts",
+            "lineNumber": 48,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           }
@@ -3393,7 +3667,9 @@
         "tags": [],
         "label": "ColorSchemas",
         "description": [],
-        "path": "src/plugins/charts/common/static/color_maps/color_maps.ts",
+        "path": "src/platform/plugins/shared/charts/common/static/color_maps/color_maps.ts",
+        "lineNumber": 12,
+        "columnNumber": 1,
         "deprecated": false,
         "trackAdoption": false,
         "initialIsOpen": false
@@ -3408,9 +3684,11 @@
         "label": "AllowedChartOverrides",
         "description": [],
         "signature": [
-          "{ chart?: { title?: string | undefined; description?: string | undefined; } | undefined; }"
+          "{ chart?: { description?: string | undefined; title?: string | undefined; } | undefined; }"
         ],
-        "path": "src/plugins/charts/common/static/overrides/settings.ts",
+        "path": "src/platform/plugins/shared/charts/common/static/overrides/settings.ts",
+        "lineNumber": 31,
+        "columnNumber": 1,
         "deprecated": false,
         "trackAdoption": false,
         "initialIsOpen": false
@@ -3423,7 +3701,7 @@
         "label": "AllowedSettingsOverrides",
         "description": [],
         "signature": [
-          "{ settings?: { onResize?: \"ignore\" | undefined; theme?: ",
+          "{ settings?: { locale?: string | undefined; onResize?: \"ignore\" | undefined; theme?: ",
           "MakeOverridesSerializable",
           "<",
           "RecursivePartial",
@@ -3433,19 +3711,19 @@
           "RecursivePartial",
           "<",
           "Theme",
-          ">[] | undefined>; showLegend?: boolean | undefined; legendPosition?: ",
+          ">[] | undefined>; rendering?: ",
+          "Rendering",
+          " | undefined; showLegend?: boolean | undefined; legendPosition?: ",
           "Position",
           " | ",
           "LegendPositionConfig",
           " | undefined; rotation?: ",
           "Rotation",
-          " | undefined; debug?: boolean | undefined; locale?: string | undefined; rendering?: ",
-          "Rendering",
           " | undefined; animateData?: boolean | undefined; externalPointerEvents?: ",
           "MakeOverridesSerializable",
           "<",
           "ExternalPointerEventsSettings",
-          " | undefined>; pointBuffer?: ",
+          " | undefined>; debug?: boolean | undefined; pointBuffer?: ",
           "MarkBuffer",
           " | undefined; pointerUpdateTrigger?: ",
           "PointerUpdateTrigger",
@@ -3455,30 +3733,19 @@
           "MakeOverridesSerializable",
           "<",
           "LegendValue",
-          "[] | undefined>; legendMaxDepth?: number | undefined; legendSize?: number | undefined; flatLegend?: boolean | undefined; ariaDescription?: string | undefined; ariaLabel?: string | undefined; xDomain?: ",
+          "[] | undefined>; legendMaxDepth?: number | undefined; legendSize?: number | undefined; flatLegend?: boolean | undefined; legendActionOnHover?: boolean | undefined; debugState?: boolean | undefined; onProjectionClick?: \"ignore\" | undefined; onElementClick?: \"ignore\" | undefined; onElementOver?: \"ignore\" | undefined; onElementOut?: \"ignore\" | undefined; onBrushEnd?: \"ignore\" | undefined; onWillRender?: \"ignore\" | undefined; onProjectionAreaChange?: \"ignore\" | undefined; xDomain?: ",
           "MakeOverridesSerializable",
           "<",
           "CustomXDomain",
-          " | undefined>; debugState?: boolean | undefined; onProjectionClick?: \"ignore\" | undefined; onElementClick?: \"ignore\" | undefined; onElementOver?: \"ignore\" | undefined; onElementOut?: \"ignore\" | undefined; onBrushEnd?: \"ignore\" | undefined; onWillRender?: \"ignore\" | undefined; onProjectionAreaChange?: \"ignore\" | undefined; onAnnotationClick?: \"ignore\" | undefined; resizeDebounce?: number | undefined; pointerUpdateDebounce?: number | undefined; roundHistogramBrushValues?: boolean | undefined; renderingSort?: \"ignore\" | undefined; noResults?: React.ComponentType<{}> | React.ReactChild | undefined; ariaLabelledBy?: string | undefined; ariaDescribedBy?: string | undefined; ariaTableCaption?: string | undefined; legendStrategy?: ",
+          " | undefined>; onAnnotationClick?: \"ignore\" | undefined; resizeDebounce?: number | undefined; pointerUpdateDebounce?: number | undefined; roundHistogramBrushValues?: boolean | undefined; renderingSort?: \"ignore\" | undefined; noResults?: string | number | boolean | React.ReactElement<any> | Iterable<React.ReactNode> | React.ReactPortal | React.ComponentType | undefined; ariaLabel?: string | undefined; ariaLabelledBy?: string | undefined; ariaDescription?: string | undefined; ariaDescribedBy?: string | undefined; ariaTableCaption?: string | undefined; legendLayout?: ",
+          "LegendLayout",
+          " | undefined; legendStrategy?: ",
           "LegendStrategy",
           " | undefined; onLegendItemOver?: \"ignore\" | undefined; onLegendItemOut?: \"ignore\" | undefined; onLegendItemClick?: \"ignore\" | undefined; onLegendItemPlusClick?: \"ignore\" | undefined; onLegendItemMinusClick?: \"ignore\" | undefined; legendAction?: \"ignore\" | undefined; legendSort?: \"ignore\" | undefined; customLegend?: \"ignore\" | undefined; legendTitle?: string | undefined; } | undefined; }"
         ],
-        "path": "src/plugins/charts/common/static/overrides/settings.ts",
-        "deprecated": false,
-        "trackAdoption": false,
-        "initialIsOpen": false
-      },
-      {
-        "parentPluginId": "charts",
-        "id": "def-common.COLOR_MAPPING_SETTING",
-        "type": "string",
-        "tags": [],
-        "label": "COLOR_MAPPING_SETTING",
-        "description": [],
-        "signature": [
-          "\"visualization:colorMapping\""
-        ],
-        "path": "src/plugins/charts/common/index.ts",
+        "path": "src/platform/plugins/shared/charts/common/static/overrides/settings.ts",
+        "lineNumber": 35,
+        "columnNumber": 1,
         "deprecated": false,
         "trackAdoption": false,
         "initialIsOpen": false
@@ -3493,7 +3760,9 @@
         "signature": [
           "\"Background\" | \"Labels\" | \"None\""
         ],
-        "path": "src/plugins/charts/common/static/components/collections.ts",
+        "path": "src/platform/plugins/shared/charts/common/static/components/collections.ts",
+        "lineNumber": 18,
+        "columnNumber": 1,
         "deprecated": false,
         "trackAdoption": false,
         "initialIsOpen": false
@@ -3515,7 +3784,9 @@
           },
           "[]"
         ],
-        "path": "src/plugins/charts/common/static/color_maps/color_maps.ts",
+        "path": "src/platform/plugins/shared/charts/common/static/color_maps/color_maps.ts",
+        "lineNumber": 175,
+        "columnNumber": 14,
         "deprecated": false,
         "trackAdoption": false,
         "initialIsOpen": false
@@ -3527,7 +3798,9 @@
         "tags": [],
         "label": "defaultCountLabel",
         "description": [],
-        "path": "src/plugins/charts/common/static/components/collections.ts",
+        "path": "src/platform/plugins/shared/charts/common/static/components/collections.ts",
+        "lineNumber": 28,
+        "columnNumber": 14,
         "deprecated": false,
         "trackAdoption": false,
         "initialIsOpen": false
@@ -3542,7 +3815,9 @@
         "signature": [
           "string[]"
         ],
-        "path": "src/plugins/charts/common/constants.ts",
+        "path": "src/platform/plugins/shared/charts/common/constants.ts",
+        "lineNumber": 33,
+        "columnNumber": 14,
         "deprecated": false,
         "trackAdoption": false,
         "initialIsOpen": false
@@ -3557,22 +3832,9 @@
         "signature": [
           "0 | 90 | 75 | 270"
         ],
-        "path": "src/plugins/charts/common/static/components/collections.ts",
-        "deprecated": false,
-        "trackAdoption": false,
-        "initialIsOpen": false
-      },
-      {
-        "parentPluginId": "charts",
-        "id": "def-common.LEGACY_TIME_AXIS",
-        "type": "string",
-        "tags": [],
-        "label": "LEGACY_TIME_AXIS",
-        "description": [],
-        "signature": [
-          "\"visualization:useLegacyTimeAxis\""
-        ],
-        "path": "src/plugins/charts/common/index.ts",
+        "path": "src/platform/plugins/shared/charts/common/static/components/collections.ts",
+        "lineNumber": 26,
+        "columnNumber": 1,
         "deprecated": false,
         "trackAdoption": false,
         "initialIsOpen": false
@@ -3585,9 +3847,11 @@
         "label": "paletteIds",
         "description": [],
         "signature": [
-          "string[]"
+          "SystemPaletteId[]"
         ],
-        "path": "src/plugins/charts/common/constants.ts",
+        "path": "src/platform/plugins/shared/charts/common/constants.ts",
+        "lineNumber": 15,
+        "columnNumber": 14,
         "deprecated": false,
         "trackAdoption": false,
         "initialIsOpen": false
@@ -3635,7 +3899,9 @@
           },
           ">>"
         ],
-        "path": "src/plugins/charts/common/expressions/palette/types.ts",
+        "path": "src/platform/plugins/shared/charts/common/expressions/palette/types.ts",
+        "lineNumber": 51,
+        "columnNumber": 1,
         "deprecated": false,
         "trackAdoption": false,
         "initialIsOpen": false
@@ -3652,7 +3918,9 @@
         "signature": [
           "{ readonly Background: \"Background\"; readonly Labels: \"Labels\"; readonly None: \"None\"; }"
         ],
-        "path": "src/plugins/charts/common/static/components/collections.ts",
+        "path": "src/platform/plugins/shared/charts/common/static/components/collections.ts",
+        "lineNumber": 13,
+        "columnNumber": 14,
         "deprecated": false,
         "trackAdoption": false,
         "initialIsOpen": false
@@ -3667,162 +3935,11 @@
         "signature": [
           "{ readonly Horizontal: 0; readonly Vertical: 90; readonly Angled: 75; readonly VerticalRotation: 270; }"
         ],
-        "path": "src/plugins/charts/common/static/components/collections.ts",
+        "path": "src/platform/plugins/shared/charts/common/static/components/collections.ts",
+        "lineNumber": 20,
+        "columnNumber": 14,
         "deprecated": false,
         "trackAdoption": false,
-        "initialIsOpen": false
-      },
-      {
-        "parentPluginId": "charts",
-        "id": "def-common.MULTILAYER_TIME_AXIS_STYLE",
-        "type": "Object",
-        "tags": [],
-        "label": "MULTILAYER_TIME_AXIS_STYLE",
-        "description": [],
-        "path": "src/plugins/charts/common/static/styles/multilayer_timeaxis.ts",
-        "deprecated": false,
-        "trackAdoption": false,
-        "children": [
-          {
-            "parentPluginId": "charts",
-            "id": "def-common.MULTILAYER_TIME_AXIS_STYLE.tickLabel",
-            "type": "Object",
-            "tags": [],
-            "label": "tickLabel",
-            "description": [],
-            "path": "src/plugins/charts/common/static/styles/multilayer_timeaxis.ts",
-            "deprecated": false,
-            "trackAdoption": false,
-            "children": [
-              {
-                "parentPluginId": "charts",
-                "id": "def-common.MULTILAYER_TIME_AXIS_STYLE.tickLabel.visible",
-                "type": "boolean",
-                "tags": [],
-                "label": "visible",
-                "description": [],
-                "signature": [
-                  "true"
-                ],
-                "path": "src/plugins/charts/common/static/styles/multilayer_timeaxis.ts",
-                "deprecated": false,
-                "trackAdoption": false
-              },
-              {
-                "parentPluginId": "charts",
-                "id": "def-common.MULTILAYER_TIME_AXIS_STYLE.tickLabel.padding",
-                "type": "number",
-                "tags": [],
-                "label": "padding",
-                "description": [],
-                "path": "src/plugins/charts/common/static/styles/multilayer_timeaxis.ts",
-                "deprecated": false,
-                "trackAdoption": false
-              },
-              {
-                "parentPluginId": "charts",
-                "id": "def-common.MULTILAYER_TIME_AXIS_STYLE.tickLabel.rotation",
-                "type": "number",
-                "tags": [],
-                "label": "rotation",
-                "description": [],
-                "path": "src/plugins/charts/common/static/styles/multilayer_timeaxis.ts",
-                "deprecated": false,
-                "trackAdoption": false
-              },
-              {
-                "parentPluginId": "charts",
-                "id": "def-common.MULTILAYER_TIME_AXIS_STYLE.tickLabel.alignment",
-                "type": "Object",
-                "tags": [],
-                "label": "alignment",
-                "description": [],
-                "path": "src/plugins/charts/common/static/styles/multilayer_timeaxis.ts",
-                "deprecated": false,
-                "trackAdoption": false,
-                "children": [
-                  {
-                    "parentPluginId": "charts",
-                    "id": "def-common.MULTILAYER_TIME_AXIS_STYLE.tickLabel.alignment.vertical",
-                    "type": "string",
-                    "tags": [],
-                    "label": "vertical",
-                    "description": [],
-                    "signature": [
-                      "\"bottom\""
-                    ],
-                    "path": "src/plugins/charts/common/static/styles/multilayer_timeaxis.ts",
-                    "deprecated": false,
-                    "trackAdoption": false
-                  },
-                  {
-                    "parentPluginId": "charts",
-                    "id": "def-common.MULTILAYER_TIME_AXIS_STYLE.tickLabel.alignment.horizontal",
-                    "type": "string",
-                    "tags": [],
-                    "label": "horizontal",
-                    "description": [],
-                    "signature": [
-                      "\"left\""
-                    ],
-                    "path": "src/plugins/charts/common/static/styles/multilayer_timeaxis.ts",
-                    "deprecated": false,
-                    "trackAdoption": false
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "parentPluginId": "charts",
-            "id": "def-common.MULTILAYER_TIME_AXIS_STYLE.tickLine",
-            "type": "Object",
-            "tags": [],
-            "label": "tickLine",
-            "description": [],
-            "path": "src/plugins/charts/common/static/styles/multilayer_timeaxis.ts",
-            "deprecated": false,
-            "trackAdoption": false,
-            "children": [
-              {
-                "parentPluginId": "charts",
-                "id": "def-common.MULTILAYER_TIME_AXIS_STYLE.tickLine.visible",
-                "type": "boolean",
-                "tags": [],
-                "label": "visible",
-                "description": [],
-                "signature": [
-                  "true"
-                ],
-                "path": "src/plugins/charts/common/static/styles/multilayer_timeaxis.ts",
-                "deprecated": false,
-                "trackAdoption": false
-              },
-              {
-                "parentPluginId": "charts",
-                "id": "def-common.MULTILAYER_TIME_AXIS_STYLE.tickLine.size",
-                "type": "number",
-                "tags": [],
-                "label": "size",
-                "description": [],
-                "path": "src/plugins/charts/common/static/styles/multilayer_timeaxis.ts",
-                "deprecated": false,
-                "trackAdoption": false
-              },
-              {
-                "parentPluginId": "charts",
-                "id": "def-common.MULTILAYER_TIME_AXIS_STYLE.tickLine.padding",
-                "type": "number",
-                "tags": [],
-                "label": "padding",
-                "description": [],
-                "path": "src/plugins/charts/common/static/styles/multilayer_timeaxis.ts",
-                "deprecated": false,
-                "trackAdoption": false
-              }
-            ]
-          }
-        ],
         "initialIsOpen": false
       },
       {
@@ -3832,7 +3949,9 @@
         "tags": [],
         "label": "vislibColorMaps",
         "description": [],
-        "path": "src/plugins/charts/common/static/color_maps/color_maps.ts",
+        "path": "src/platform/plugins/shared/charts/common/static/color_maps/color_maps.ts",
+        "lineNumber": 36,
+        "columnNumber": 14,
         "deprecated": false,
         "trackAdoption": false,
         "children": [
@@ -3845,7 +3964,9 @@
             "description": [
               "// Sequential"
             ],
-            "path": "src/plugins/charts/common/static/color_maps/color_maps.ts",
+            "path": "src/platform/plugins/shared/charts/common/static/color_maps/color_maps.ts",
+            "lineNumber": 38,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false,
             "children": [
@@ -3866,7 +3987,9 @@
                   },
                   ".Blues"
                 ],
-                "path": "src/plugins/charts/common/static/color_maps/color_maps.ts",
+                "path": "src/platform/plugins/shared/charts/common/static/color_maps/color_maps.ts",
+                "lineNumber": 39,
+                "columnNumber": 5,
                 "deprecated": false,
                 "trackAdoption": false
               },
@@ -3877,7 +4000,9 @@
                 "tags": [],
                 "label": "label",
                 "description": [],
-                "path": "src/plugins/charts/common/static/color_maps/color_maps.ts",
+                "path": "src/platform/plugins/shared/charts/common/static/color_maps/color_maps.ts",
+                "lineNumber": 40,
+                "columnNumber": 5,
                 "deprecated": false,
                 "trackAdoption": false
               },
@@ -3891,7 +4016,9 @@
                 "signature": [
                   "[number, number[]][]"
                 ],
-                "path": "src/plugins/charts/common/static/color_maps/color_maps.ts",
+                "path": "src/platform/plugins/shared/charts/common/static/color_maps/color_maps.ts",
+                "lineNumber": 43,
+                "columnNumber": 5,
                 "deprecated": false,
                 "trackAdoption": false
               }
@@ -3904,7 +4031,9 @@
             "tags": [],
             "label": "[ColorSchemas.Greens]",
             "description": [],
-            "path": "src/plugins/charts/common/static/color_maps/color_maps.ts",
+            "path": "src/platform/plugins/shared/charts/common/static/color_maps/color_maps.ts",
+            "lineNumber": 56,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false,
             "children": [
@@ -3925,7 +4054,9 @@
                   },
                   ".Greens"
                 ],
-                "path": "src/plugins/charts/common/static/color_maps/color_maps.ts",
+                "path": "src/platform/plugins/shared/charts/common/static/color_maps/color_maps.ts",
+                "lineNumber": 57,
+                "columnNumber": 5,
                 "deprecated": false,
                 "trackAdoption": false
               },
@@ -3936,7 +4067,9 @@
                 "tags": [],
                 "label": "label",
                 "description": [],
-                "path": "src/plugins/charts/common/static/color_maps/color_maps.ts",
+                "path": "src/platform/plugins/shared/charts/common/static/color_maps/color_maps.ts",
+                "lineNumber": 58,
+                "columnNumber": 5,
                 "deprecated": false,
                 "trackAdoption": false
               },
@@ -3950,7 +4083,9 @@
                 "signature": [
                   "[number, number[]][]"
                 ],
-                "path": "src/plugins/charts/common/static/color_maps/color_maps.ts",
+                "path": "src/platform/plugins/shared/charts/common/static/color_maps/color_maps.ts",
+                "lineNumber": 61,
+                "columnNumber": 5,
                 "deprecated": false,
                 "trackAdoption": false
               }
@@ -3963,7 +4098,9 @@
             "tags": [],
             "label": "[ColorSchemas.Greys]",
             "description": [],
-            "path": "src/plugins/charts/common/static/color_maps/color_maps.ts",
+            "path": "src/platform/plugins/shared/charts/common/static/color_maps/color_maps.ts",
+            "lineNumber": 74,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false,
             "children": [
@@ -3984,7 +4121,9 @@
                   },
                   ".Greys"
                 ],
-                "path": "src/plugins/charts/common/static/color_maps/color_maps.ts",
+                "path": "src/platform/plugins/shared/charts/common/static/color_maps/color_maps.ts",
+                "lineNumber": 75,
+                "columnNumber": 5,
                 "deprecated": false,
                 "trackAdoption": false
               },
@@ -3995,7 +4134,9 @@
                 "tags": [],
                 "label": "label",
                 "description": [],
-                "path": "src/plugins/charts/common/static/color_maps/color_maps.ts",
+                "path": "src/platform/plugins/shared/charts/common/static/color_maps/color_maps.ts",
+                "lineNumber": 76,
+                "columnNumber": 5,
                 "deprecated": false,
                 "trackAdoption": false
               },
@@ -4009,7 +4150,9 @@
                 "signature": [
                   "[number, number[]][]"
                 ],
-                "path": "src/plugins/charts/common/static/color_maps/color_maps.ts",
+                "path": "src/platform/plugins/shared/charts/common/static/color_maps/color_maps.ts",
+                "lineNumber": 79,
+                "columnNumber": 5,
                 "deprecated": false,
                 "trackAdoption": false
               }
@@ -4022,7 +4165,9 @@
             "tags": [],
             "label": "[ColorSchemas.Reds]",
             "description": [],
-            "path": "src/plugins/charts/common/static/color_maps/color_maps.ts",
+            "path": "src/platform/plugins/shared/charts/common/static/color_maps/color_maps.ts",
+            "lineNumber": 92,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false,
             "children": [
@@ -4043,7 +4188,9 @@
                   },
                   ".Reds"
                 ],
-                "path": "src/plugins/charts/common/static/color_maps/color_maps.ts",
+                "path": "src/platform/plugins/shared/charts/common/static/color_maps/color_maps.ts",
+                "lineNumber": 93,
+                "columnNumber": 5,
                 "deprecated": false,
                 "trackAdoption": false
               },
@@ -4054,7 +4201,9 @@
                 "tags": [],
                 "label": "label",
                 "description": [],
-                "path": "src/plugins/charts/common/static/color_maps/color_maps.ts",
+                "path": "src/platform/plugins/shared/charts/common/static/color_maps/color_maps.ts",
+                "lineNumber": 94,
+                "columnNumber": 5,
                 "deprecated": false,
                 "trackAdoption": false
               },
@@ -4068,7 +4217,9 @@
                 "signature": [
                   "[number, number[]][]"
                 ],
-                "path": "src/plugins/charts/common/static/color_maps/color_maps.ts",
+                "path": "src/platform/plugins/shared/charts/common/static/color_maps/color_maps.ts",
+                "lineNumber": 97,
+                "columnNumber": 5,
                 "deprecated": false,
                 "trackAdoption": false
               }
@@ -4081,7 +4232,9 @@
             "tags": [],
             "label": "[ColorSchemas.YellowToRed]",
             "description": [],
-            "path": "src/plugins/charts/common/static/color_maps/color_maps.ts",
+            "path": "src/platform/plugins/shared/charts/common/static/color_maps/color_maps.ts",
+            "lineNumber": 110,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false,
             "children": [
@@ -4102,7 +4255,9 @@
                   },
                   ".YellowToRed"
                 ],
-                "path": "src/plugins/charts/common/static/color_maps/color_maps.ts",
+                "path": "src/platform/plugins/shared/charts/common/static/color_maps/color_maps.ts",
+                "lineNumber": 111,
+                "columnNumber": 5,
                 "deprecated": false,
                 "trackAdoption": false
               },
@@ -4113,7 +4268,9 @@
                 "tags": [],
                 "label": "label",
                 "description": [],
-                "path": "src/plugins/charts/common/static/color_maps/color_maps.ts",
+                "path": "src/platform/plugins/shared/charts/common/static/color_maps/color_maps.ts",
+                "lineNumber": 112,
+                "columnNumber": 5,
                 "deprecated": false,
                 "trackAdoption": false
               },
@@ -4127,7 +4284,9 @@
                 "signature": [
                   "[number, number[]][]"
                 ],
-                "path": "src/plugins/charts/common/static/color_maps/color_maps.ts",
+                "path": "src/platform/plugins/shared/charts/common/static/color_maps/color_maps.ts",
+                "lineNumber": 115,
+                "columnNumber": 5,
                 "deprecated": false,
                 "trackAdoption": false
               }
@@ -4140,7 +4299,9 @@
             "tags": [],
             "label": "[ColorSchemas.GreenToRed]",
             "description": [],
-            "path": "src/plugins/charts/common/static/color_maps/color_maps.ts",
+            "path": "src/platform/plugins/shared/charts/common/static/color_maps/color_maps.ts",
+            "lineNumber": 129,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false,
             "children": [
@@ -4161,7 +4322,9 @@
                   },
                   ".GreenToRed"
                 ],
-                "path": "src/plugins/charts/common/static/color_maps/color_maps.ts",
+                "path": "src/platform/plugins/shared/charts/common/static/color_maps/color_maps.ts",
+                "lineNumber": 130,
+                "columnNumber": 5,
                 "deprecated": false,
                 "trackAdoption": false
               },
@@ -4172,7 +4335,9 @@
                 "tags": [],
                 "label": "label",
                 "description": [],
-                "path": "src/plugins/charts/common/static/color_maps/color_maps.ts",
+                "path": "src/platform/plugins/shared/charts/common/static/color_maps/color_maps.ts",
+                "lineNumber": 131,
+                "columnNumber": 5,
                 "deprecated": false,
                 "trackAdoption": false
               },
@@ -4186,7 +4351,9 @@
                 "signature": [
                   "[number, number[]][]"
                 ],
-                "path": "src/plugins/charts/common/static/color_maps/color_maps.ts",
+                "path": "src/platform/plugins/shared/charts/common/static/color_maps/color_maps.ts",
+                "lineNumber": 134,
+                "columnNumber": 5,
                 "deprecated": false,
                 "trackAdoption": false
               }

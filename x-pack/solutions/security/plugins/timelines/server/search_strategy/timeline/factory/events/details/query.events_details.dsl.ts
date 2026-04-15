@@ -5,8 +5,9 @@
  * 2.0.
  */
 
-import { JsonObject } from '@kbn/utility-types';
-import { RunTimeMappings } from '../../../../../../common/api/search_strategy/model/runtime_mappings';
+import type { MappingRuntimeFields } from '@elastic/elasticsearch/lib/api/types';
+import type { JsonObject } from '@kbn/utility-types';
+import type { RunTimeMappings } from '../../../../../../common/api/search_strategy/model/runtime_mappings';
 
 export const buildTimelineDetailsQuery = ({
   authFilter,
@@ -41,28 +42,26 @@ export const buildTimelineDetailsQuery = ({
     allow_no_indices: true,
     index: indexName,
     ignore_unavailable: true,
-    body: {
-      query,
-      fields: [
-        { field: '*', include_unmapped: true },
-        {
-          field: '@timestamp',
-          format: 'strict_date_optional_time',
-        },
-        {
-          field: 'code_signature.timestamp',
-          format: 'strict_date_optional_time',
-        },
-        {
-          field: 'dll.code_signature.timestamp',
-          format: 'strict_date_optional_time',
-        },
-      ],
-      // Remove and instead pass index_pattern.id once issue resolved: https://github.com/elastic/kibana/issues/111762
-      runtime_mappings: runtimeMappings,
-      stored_fields: ['*'],
-      _source: true,
-    },
+    query,
+    fields: [
+      { field: '*', include_unmapped: true },
+      {
+        field: '@timestamp',
+        format: 'strict_date_optional_time',
+      },
+      {
+        field: 'code_signature.timestamp',
+        format: 'strict_date_optional_time',
+      },
+      {
+        field: 'dll.code_signature.timestamp',
+        format: 'strict_date_optional_time',
+      },
+    ],
+    // Remove and instead pass index_pattern.id once issue resolved: https://github.com/elastic/kibana/issues/111762
+    runtime_mappings: runtimeMappings as MappingRuntimeFields | undefined,
+    stored_fields: ['*'],
+    _source: true,
     size: 1,
   };
 };

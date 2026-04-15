@@ -8,13 +8,14 @@
 import moment from 'moment';
 import React, { useCallback } from 'react';
 import { fromQuery, toQuery } from '@kbn/observability-plugin/public';
-import { useTheme } from '@kbn/observability-shared-plugin/public';
-import { AllSeries, RECORDS_FIELD } from '@kbn/exploratory-view-plugin/public';
+import { useEuiTheme } from '@elastic/eui';
+import type { AllSeries } from '@kbn/exploratory-view-plugin/public';
+import { RECORDS_FIELD } from '@kbn/exploratory-view-plugin/public';
 import { useHistory } from 'react-router-dom';
 
 import { getExploratoryViewFilter } from '../../../../services/data/get_exp_view_filter';
 import { useLegacyUrlParams } from '../../../../context/url_params_context/use_url_params';
-import { BreakdownItem } from '../../../../../typings/ui_filters';
+import type { BreakdownItem } from '../../../../../typings/ui_filters';
 import { useKibanaServices } from '../../../../hooks/use_kibana_services';
 import { useDataView } from '../local_uifilters/use_data_view';
 import { useExpViewAttributes } from './use_exp_view_attrs';
@@ -31,7 +32,7 @@ export function PageViewsChart({ breakdown }: Props) {
 
   const { uxUiFilters, urlParams } = useLegacyUrlParams();
 
-  const theme = useTheme();
+  const { euiTheme } = useEuiTheme();
 
   const { reportDefinitions, time } = useExpViewAttributes();
 
@@ -43,7 +44,7 @@ export function PageViewsChart({ breakdown }: Props) {
       name: 'ux-series-1',
       selectedMetricField: RECORDS_FIELD,
       breakdown: breakdown?.fieldName,
-      color: theme.eui.euiColorVis1,
+      color: euiTheme.colors.vis.euiColorVis1,
       filters: getExploratoryViewFilter(uxUiFilters, urlParams),
     },
   ];

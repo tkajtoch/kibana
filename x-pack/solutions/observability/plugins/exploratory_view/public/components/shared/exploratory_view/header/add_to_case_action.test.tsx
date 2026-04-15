@@ -122,6 +122,8 @@ describe('AddToCaseAction', function () {
           settings: false,
           createComment: false,
           reopenCase: false,
+          assign: false,
+          manageTemplates: false,
         },
       })
     );

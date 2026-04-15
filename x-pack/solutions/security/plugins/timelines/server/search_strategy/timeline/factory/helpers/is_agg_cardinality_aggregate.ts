@@ -4,10 +4,10 @@
  * 2.0; you may not use this file except in compliance with the Elastic License
  * 2.0.
  */
-import {
+import type {
   AggregationsAggregate,
   AggregationsCardinalityAggregate,
-} from '@elastic/elasticsearch/lib/api/typesWithBodyKey';
+} from '@elastic/elasticsearch/lib/api/types';
 
 // type guard for checking if the Aggregation for a given field is a Cardinality
 // Agregate with valid value

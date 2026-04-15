@@ -7,63 +7,136 @@
  * License v3.0 only", or the "Server Side Public License, v 1".
  */
 
-import type { Plugin, CoreStart, CoreSetup } from '@kbn/core/public';
-import type { DataViewsPublicPluginStart } from '@kbn/data-views-plugin/public';
-import type { ExpressionsStart } from '@kbn/expressions-plugin/public';
+import type { CoreSetup, CoreStart, Plugin, PluginInitializerContext } from '@kbn/core/public';
+import type { LicensingPluginStart } from '@kbn/licensing-plugin/public';
 import type { DataPublicPluginStart } from '@kbn/data-plugin/public';
-import type { IndexManagementPluginSetup } from '@kbn/index-management-shared-types';
 import type { UiActionsSetup, UiActionsStart } from '@kbn/ui-actions-plugin/public';
 import type { FieldsMetadataPublicStart } from '@kbn/fields-metadata-plugin/public';
 import type { UsageCollectionStart } from '@kbn/usage-collection-plugin/public';
+import type { KqlPluginStart } from '@kbn/kql/public';
+import type { CPSPluginStart } from '@kbn/cps/public';
 import { Storage } from '@kbn/kibana-utils-plugin/public';
+import { registerESQLEditorAnalyticsEvents } from '@kbn/esql-editor';
+import { registerIndexEditorActions, registerIndexEditorAnalyticsEvents } from '@kbn/index-editor';
+import type { SharePluginStart } from '@kbn/share-plugin/public';
+import type { FieldFormatsStart } from '@kbn/field-formats-plugin/public';
+import type { FileUploadPluginStart } from '@kbn/file-upload-plugin/public';
 import {
-  updateESQLQueryTrigger,
-  UpdateESQLQueryAction,
+  ESQL_CONTROL_TRIGGER,
   UPDATE_ESQL_QUERY_TRIGGER,
-} from './triggers';
+} from '@kbn/ui-actions-plugin/common/trigger_ids';
+import { ACTION_CREATE_ESQL_CONTROL, ACTION_UPDATE_ESQL_QUERY } from './triggers/constants';
 import { setKibanaServices } from './kibana_services';
+import { EsqlVariablesService } from './variables_service';
 
-interface EsqlPluginStart {
-  dataViews: DataViewsPublicPluginStart;
-  expressions: ExpressionsStart;
-  uiActions: UiActionsStart;
-  data: DataPublicPluginStart;
-  fieldsMetadata: FieldsMetadataPublicStart;
-  usageCollection?: UsageCollectionStart;
-}
-
-interface EsqlPluginSetup {
-  indexManagement: IndexManagementPluginSetup;
+interface EsqlPluginSetupDependencies {
   uiActions: UiActionsSetup;
 }
 
-export class EsqlPlugin implements Plugin<{}, void> {
-  private indexManagement?: IndexManagementPluginSetup;
+interface EsqlPluginStartDependencies {
+  uiActions: UiActionsStart;
+  fieldsMetadata: FieldsMetadataPublicStart;
+  licensing?: LicensingPluginStart;
+  usageCollection?: UsageCollectionStart;
+  cps?: CPSPluginStart;
+  // LOOKUP JOIN deps
+  share: SharePluginStart;
+  data: DataPublicPluginStart;
+  fieldFormats: FieldFormatsStart;
+  fileUpload: FileUploadPluginStart;
+  kql: KqlPluginStart;
+}
 
-  public setup(_: CoreSetup, { indexManagement, uiActions }: EsqlPluginSetup) {
-    this.indexManagement = indexManagement;
+export interface EsqlPluginStart {
+  variablesService: EsqlVariablesService;
+  isServerless: boolean;
+}
 
-    uiActions.registerTrigger(updateESQLQueryTrigger);
+export class EsqlPlugin implements Plugin<{}, EsqlPluginStart> {
+  constructor(private readonly initContext: PluginInitializerContext) {}
+
+  public setup(core: CoreSetup, { uiActions }: EsqlPluginSetupDependencies) {
+    registerESQLEditorAnalyticsEvents(core.analytics);
+    registerIndexEditorAnalyticsEvents(core.analytics);
 
     return {};
   }
 
   public start(
     core: CoreStart,
-    { dataViews, expressions, data, uiActions, fieldsMetadata, usageCollection }: EsqlPluginStart
-  ): void {
-    const storage = new Storage(localStorage);
-    const appendESQLAction = new UpdateESQLQueryAction(data);
-    uiActions.addTriggerAction(UPDATE_ESQL_QUERY_TRIGGER, appendESQLAction);
-    setKibanaServices(
-      core,
-      dataViews,
-      expressions,
-      storage,
-      this.indexManagement,
+    {
+      data,
+      uiActions,
       fieldsMetadata,
-      usageCollection
+      usageCollection,
+      cps,
+      licensing,
+      fileUpload,
+      fieldFormats,
+      share,
+      kql,
+    }: EsqlPluginStartDependencies
+  ): EsqlPluginStart {
+    const isServerless = this.initContext.env.packageInfo.buildFlavor === 'serverless';
+
+    const storage = new Storage(localStorage);
+
+    // Register triggers
+    uiActions.addTriggerActionAsync(
+      UPDATE_ESQL_QUERY_TRIGGER,
+      ACTION_UPDATE_ESQL_QUERY,
+      async () => {
+        const { UpdateESQLQueryAction } = await import(
+          './triggers/update_esql_query/update_esql_query_actions'
+        );
+        const appendESQLAction = new UpdateESQLQueryAction(data);
+        return appendESQLAction;
+      }
     );
+
+    uiActions.addTriggerActionAsync(ESQL_CONTROL_TRIGGER, ACTION_CREATE_ESQL_CONTROL, async () => {
+      const { CreateESQLControlAction } = await import(
+        './triggers/esql_controls/esql_control_action'
+      );
+      const createESQLControlAction = new CreateESQLControlAction(
+        core,
+        data.search.search,
+        data.query.timefilter.timefilter
+      );
+      return createESQLControlAction;
+    });
+
+    /** Async register the index editor UI actions */
+    registerIndexEditorActions({
+      data,
+      coreStart: core,
+      share,
+      uiActions,
+      fieldFormats,
+      fileUpload,
+    });
+
+    const variablesService = new EsqlVariablesService();
+
+    const start = {
+      isServerless,
+      variablesService,
+      getLicense: async () => await licensing?.getLicense(),
+    };
+
+    setKibanaServices(
+      start,
+      core,
+      data,
+      storage,
+      uiActions,
+      kql,
+      fieldsMetadata,
+      usageCollection,
+      cps
+    );
+
+    return start;
   }
 
   public stop() {}

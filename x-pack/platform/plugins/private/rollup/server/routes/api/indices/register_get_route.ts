@@ -5,8 +5,9 @@
  * 2.0.
  */
 
+import { getCapabilitiesForRollupIndices } from '@kbn/data-views-plugin/server';
 import { addBasePath } from '../../../services';
-import { RouteDependencies } from '../../../types';
+import type { RouteDependencies } from '../../../types';
 
 /**
  * Returns a list of all rollup index names
@@ -14,12 +15,18 @@ import { RouteDependencies } from '../../../types';
 export const registerGetRoute = ({
   router,
   license,
-  lib: { handleEsError, getCapabilitiesForRollupIndices },
+  lib: { handleEsError },
 }: RouteDependencies) => {
   router.get(
     {
       // this endpoint is used by the data views plugin, see https://github.com/elastic/kibana/issues/152708
       path: addBasePath('/indices'),
+      security: {
+        authz: {
+          enabled: false,
+          reason: 'Relies on es client for authorization',
+        },
+      },
       validate: false,
     },
     license.guardApiRoute(async (context, request, response) => {

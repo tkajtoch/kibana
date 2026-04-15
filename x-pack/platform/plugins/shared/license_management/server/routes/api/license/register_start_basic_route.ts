@@ -7,7 +7,7 @@
 
 import { schema } from '@kbn/config-schema';
 import { startBasic } from '../../../lib/start_basic';
-import { RouteDependencies } from '../../../types';
+import type { RouteDependencies } from '../../../types';
 import { addBasePath } from '../../helpers';
 
 export function registerStartBasicRoute({
@@ -18,6 +18,12 @@ export function registerStartBasicRoute({
   router.post(
     {
       path: addBasePath('/start_basic'),
+      security: {
+        authz: {
+          enabled: false,
+          reason: 'Relies on es client for authorization',
+        },
+      },
       validate: { query: schema.object({ acknowledge: schema.string() }) },
     },
     async (ctx, req, res) => {

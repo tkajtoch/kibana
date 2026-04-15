@@ -6,32 +6,30 @@
  */
 
 import { map, mergeMap } from 'rxjs';
-import {
+import type {
   ISearchStrategy,
   PluginStart,
   SearchStrategyDependencies,
-  shimHitsTotal,
 } from '@kbn/data-plugin/server';
+import { shimHitsTotal } from '@kbn/data-plugin/server';
 import type { ISearchOptions } from '@kbn/search-types';
 import { ENHANCED_ES_SEARCH_STRATEGY } from '@kbn/data-plugin/common';
-import { SecurityPluginSetup } from '@kbn/security-plugin/server';
-import { Logger } from '@kbn/logging';
-import { z } from '@kbn/zod';
+import type { Logger } from '@kbn/logging';
+import type { z } from '@kbn/zod/v4';
 
 import { searchStrategyRequestSchema } from '../../../common/api/search_strategy';
-import {
+import type {
   TimelineFactoryQueryTypes,
-  EntityType,
   TimelineStrategyRequestType,
 } from '../../../common/search_strategy/timeline';
+import { EntityType } from '../../../common/search_strategy/timeline';
 import { timelineFactory } from './factory';
-import { TimelineFactory } from './factory/types';
+import type { TimelineFactory } from './factory/types';
 import { isAggCardinalityAggregate } from './factory/helpers/is_agg_cardinality_aggregate';
 
 export const timelineSearchStrategyProvider = (
   data: PluginStart,
-  logger: Logger,
-  _security?: SecurityPluginSetup
+  logger: Logger
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
 ): ISearchStrategy<z.input<typeof searchStrategyRequestSchema>, any> => {
   const es = data.search.getSearchStrategy(ENHANCED_ES_SEARCH_STRATEGY);
@@ -85,7 +83,7 @@ const timelineSearchStrategy = <T extends TimelineFactoryQueryTypes>({
   logger: Logger;
 }) => {
   // NOTE: without this parameter, .hits.hits can be empty
-  options.retrieveResults = true;
+  options.returnIntermediateResults = true;
 
   const dsl = queryFactory.buildDsl(request);
   return es.search({ ...request, params: dsl }, options, deps).pipe(
@@ -113,7 +111,7 @@ const timelineSessionsSearchStrategy = <T extends TimelineFactoryQueryTypes>({
   queryFactory: TimelineFactory<T>;
 }) => {
   // NOTE: without this parameter, .hits.hits can be empty
-  options.retrieveResults = true;
+  options.returnIntermediateResults = true;
   const indices = request.defaultIndex ?? request.indexType;
 
   const requestSessionLeaders = {

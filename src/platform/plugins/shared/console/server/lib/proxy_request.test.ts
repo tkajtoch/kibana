@@ -7,7 +7,8 @@
  * License v3.0 only", or the "Server Side Public License, v 1".
  */
 
-import http, { ClientRequest, OutgoingHttpHeaders } from 'http';
+import type { ClientRequest, OutgoingHttpHeaders } from 'http';
+import http from 'http';
 import * as sinon from 'sinon';
 import { proxyRequest } from './proxy_request';
 import { URL } from 'url';
@@ -55,12 +56,18 @@ describe(`Console's send request`, () => {
       destroy: sinon.stub(),
       on() {},
       once() {},
+      protocol: 'http:',
+      host: 'nowhere.none',
+      method: 'POST',
+      path: '/_bulk',
     } as any;
     try {
       await sendProxyRequest({ timeout: 0 }); // immediately timeout
       fail('Should not reach here!');
     } catch (e) {
-      expect(e.message).toEqual('Client request timeout');
+      expect(e.message).toEqual(
+        'Client request timeout for: http://nowhere.none with request POST /_bulk'
+      );
       expect((fakeRequest.destroy as sinon.SinonStub).calledOnce).toBe(true);
     }
   });

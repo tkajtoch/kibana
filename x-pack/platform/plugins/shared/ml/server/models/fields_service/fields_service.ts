@@ -8,7 +8,7 @@
 import Boom from '@hapi/boom';
 import { duration } from 'moment';
 
-import type * as estypes from '@elastic/elasticsearch/lib/api/typesWithBodyKey';
+import type { estypes } from '@elastic/elasticsearch';
 import type { IScopedClusterClient } from '@kbn/core/server';
 import type { AggCardinality } from '@kbn/ml-agg-utils';
 import { isPopulatedObject } from '@kbn/ml-is-populated-object';
@@ -224,7 +224,8 @@ export function fieldsServiceProvider({ asCurrentUser }: IScopedClusterClient) {
     query: any,
     runtimeMappings?: RuntimeMappings,
     indicesOptions?: IndicesOptions,
-    allowFutureTime = false
+    allowFutureTime = false,
+    projectRouting?: string
   ): Promise<{
     success: boolean;
     start: number;
@@ -242,23 +243,22 @@ export function fieldsServiceProvider({ asCurrentUser }: IScopedClusterClient) {
       {
         index,
         size: 0,
-        body: {
-          ...(query ? { query } : {}),
-          aggs: {
-            earliest: {
-              min: {
-                field: timeFieldName,
-              },
-            },
-            latest: {
-              max: {
-                field: timeFieldName,
-              },
+        ...(query ? { query } : {}),
+        aggs: {
+          earliest: {
+            min: {
+              field: timeFieldName,
             },
           },
-          ...(isPopulatedObject(runtimeMappings) ? { runtime_mappings: runtimeMappings } : {}),
+          latest: {
+            max: {
+              field: timeFieldName,
+            },
+          },
         },
+        ...(isPopulatedObject(runtimeMappings) ? { runtime_mappings: runtimeMappings } : {}),
         ...(indicesOptions ?? {}),
+        ...(projectRouting ? { project_routing: projectRouting } : {}),
       },
       { maxRetries: 0 }
     );
@@ -417,7 +417,7 @@ export function fieldsServiceProvider({ asCurrentUser }: IScopedClusterClient) {
     const { aggregations } = await asCurrentUser.search(
       {
         index,
-        body,
+        ...body,
         ...getIndicesOptions(datafeedConfig),
       },
       { maxRetries: 0 }

@@ -6,18 +6,20 @@
  */
 
 import React from 'react';
+import { QueryClient, QueryClientProvider } from '@kbn/react-query';
 import { render } from '../../../utils/testing/rtl_helpers';
 import * as permissionsHooks from '../../../hooks';
 import * as locationHooks from './hooks/use_locations_api';
 import * as settingsHooks from '../../../contexts/synthetics_settings_context';
 import type { SyntheticsSettingsContextValues } from '../../../contexts';
 import { ManagePrivateLocations } from './manage_private_locations';
-import { PrivateLocation } from '../../../../../../common/runtime_types';
 import { fireEvent } from '@testing-library/react';
 
 jest.mock('../../../hooks');
 jest.mock('./hooks/use_locations_api');
 jest.mock('../../../contexts/synthetics_settings_context');
+
+const queryClient = new QueryClient();
 
 describe('<ManagePrivateLocations />', () => {
   beforeEach(() => {
@@ -28,12 +30,13 @@ describe('<ManagePrivateLocations />', () => {
       canCreateAgentPolicies: false,
     });
     jest.spyOn(locationHooks, 'usePrivateLocationsAPI').mockReturnValue({
-      formData: {} as PrivateLocation,
       loading: false,
-      onSubmit: jest.fn(),
+      onCreateLocationAPI: jest.fn(),
+      onEditLocationAPI: jest.fn(),
       privateLocations: [],
-      onDelete: jest.fn(),
+      onDeleteLocationAPI: jest.fn(),
       deleteLoading: false,
+      createLoading: false,
     });
     jest.spyOn(permissionsHooks, 'useEnablement').mockReturnValue({
       isServiceAllowed: true,
@@ -53,17 +56,23 @@ describe('<ManagePrivateLocations />', () => {
       jest.spyOn(settingsHooks, 'useSyntheticsSettingsContext').mockReturnValue({
         canSave,
       } as SyntheticsSettingsContextValues);
-      const { getByText, getByRole, findByText } = render(<ManagePrivateLocations />, {
-        state: {
-          agentPolicies: {
-            data: [],
-            loading: false,
-            error: null,
-            isManageFlyoutOpen: false,
-            isAddingNewPrivateLocation: false,
+      const { getByText, getByRole, findByText } = render(
+        <QueryClientProvider client={queryClient}>
+          <ManagePrivateLocations />
+        </QueryClientProvider>,
+        {
+          state: {
+            agentPolicies: {
+              data: [],
+              loading: false,
+              error: null,
+            },
+            privateLocations: {
+              isPrivateLocationFlyoutVisible: false,
+            },
           },
-        },
-      });
+        }
+      );
       expect(getByText('No agent policies found')).toBeInTheDocument();
 
       if (canSave) {
@@ -87,17 +96,23 @@ describe('<ManagePrivateLocations />', () => {
       jest.spyOn(settingsHooks, 'useSyntheticsSettingsContext').mockReturnValue({
         canSave,
       } as SyntheticsSettingsContextValues);
-      const { getByText, getByRole, findByText } = render(<ManagePrivateLocations />, {
-        state: {
-          agentPolicies: {
-            data: [{}],
-            loading: false,
-            error: null,
-            isManageFlyoutOpen: false,
-            isAddingNewPrivateLocation: false,
+      const { getByText, getByRole, findByText } = render(
+        <QueryClientProvider client={queryClient}>
+          <ManagePrivateLocations />
+        </QueryClientProvider>,
+        {
+          state: {
+            agentPolicies: {
+              data: [{}],
+              loading: false,
+              error: null,
+            },
+            privateLocations: {
+              isPrivateLocationFlyoutVisible: false,
+            },
           },
-        },
-      });
+        }
+      );
       expect(getByText('Create your first private location')).toBeInTheDocument();
       const button = getByRole('button', { name: 'Create location' });
 
@@ -123,9 +138,9 @@ describe('<ManagePrivateLocations />', () => {
       } as SyntheticsSettingsContextValues);
 
       jest.spyOn(locationHooks, 'usePrivateLocationsAPI').mockReturnValue({
-        formData: {} as PrivateLocation,
         loading: false,
-        onSubmit: jest.fn(),
+        onCreateLocationAPI: jest.fn(),
+        onEditLocationAPI: jest.fn(),
         privateLocations: [
           {
             label: privateLocationName,
@@ -134,20 +149,27 @@ describe('<ManagePrivateLocations />', () => {
             isServiceManaged: false,
           },
         ],
-        onDelete: jest.fn(),
+        onDeleteLocationAPI: jest.fn(),
         deleteLoading: false,
+        createLoading: false,
       });
-      const { getByText, getByRole, findByText } = render(<ManagePrivateLocations />, {
-        state: {
-          agentPolicies: {
-            data: [{}],
-            loading: false,
-            error: null,
-            isManageFlyoutOpen: false,
-            isAddingNewPrivateLocation: false,
+      const { getByText, getByRole, findByText } = render(
+        <QueryClientProvider client={queryClient}>
+          <ManagePrivateLocations />
+        </QueryClientProvider>,
+        {
+          state: {
+            agentPolicies: {
+              data: [{}],
+              loading: false,
+              error: null,
+            },
+            privateLocations: {
+              isPrivateLocationFlyoutVisible: false,
+            },
           },
-        },
-      });
+        }
+      );
       expect(getByText(privateLocationName)).toBeInTheDocument();
       const button = getByRole('button', { name: 'Create location' });
 

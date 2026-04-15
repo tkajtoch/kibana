@@ -20,6 +20,7 @@ import { DatePickerContextProvider } from '@kbn/ml-date-picker';
 import type { SignificantItem } from '@kbn/ml-agg-utils';
 
 import type { WindowParameters } from '@kbn/aiops-log-rate-analysis';
+import type { PublishesFilters } from '@kbn/presentation-publishing';
 import { AiopsAppContext, type AiopsAppContextValue } from '../hooks/use_aiops_app_context';
 import { DataSourceContextProvider } from '../hooks/use_data_source';
 import { ReloadContextProvider } from '../hooks/use_reload';
@@ -39,7 +40,7 @@ export type LogRateAnalysisPropsWithDeps = LogRateAnalysisEmbeddableWrapperProps
 export type LogRateAnalysisEmbeddableWrapper = FC<LogRateAnalysisEmbeddableWrapperProps>;
 
 export interface LogRateAnalysisEmbeddableWrapperProps {
-  dataViewId: string;
+  dataViewId?: string;
   timeRange: TimeRange;
   /**
    * Component to render if there are no significant items found
@@ -59,6 +60,7 @@ export interface LogRateAnalysisEmbeddableWrapperProps {
   onRenderComplete: () => void;
   onError: (error: Error) => void;
   windowParameters?: WindowParameters;
+  filtersApi?: PublishesFilters;
 }
 
 const LogRateAnalysisEmbeddableWrapperWithDeps: FC<LogRateAnalysisPropsWithDeps> = ({
@@ -71,10 +73,20 @@ const LogRateAnalysisEmbeddableWrapperWithDeps: FC<LogRateAnalysisPropsWithDeps>
   embeddingOrigin,
   lastReloadRequestTime,
   windowParameters,
+  filtersApi,
 }) => {
   const deps = useMemo(() => {
-    const { lens, data, usageCollection, fieldFormats, charts, share, storage, unifiedSearch } =
-      pluginStart;
+    const {
+      lens,
+      data,
+      usageCollection,
+      fieldFormats,
+      charts,
+      share,
+      storage,
+      unifiedSearch,
+      cps,
+    } = pluginStart;
 
     return {
       data,
@@ -85,12 +97,22 @@ const LogRateAnalysisEmbeddableWrapperWithDeps: FC<LogRateAnalysisPropsWithDeps>
       share,
       storage,
       unifiedSearch,
+      cps,
       ...coreStart,
     };
   }, [coreStart, pluginStart]);
 
   const datePickerDeps = {
-    ...pick(deps, ['data', 'http', 'notifications', 'theme', 'uiSettings', 'i18n']),
+    ...pick(deps, [
+      'data',
+      'http',
+      'notifications',
+      'theme',
+      'uiSettings',
+      'userProfile',
+      'i18n',
+      'cps',
+    ]),
     uiSettingsKeys: UI_SETTINGS,
   };
 
@@ -155,7 +177,7 @@ const LogRateAnalysisEmbeddableWrapperWithDeps: FC<LogRateAnalysisPropsWithDeps>
                 dataViews={pluginStart.data.dataViews}
                 dataViewId={dataViewId}
               >
-                <FilterQueryContextProvider timeRange={timeRange}>
+                <FilterQueryContextProvider timeRange={timeRange} filtersApi={filtersApi}>
                   <LogRateAnalysisReduxProvider initialAnalysisStart={windowParameters}>
                     <LogRateAnalysisForEmbeddable timeRange={timeRange} />
                   </LogRateAnalysisReduxProvider>

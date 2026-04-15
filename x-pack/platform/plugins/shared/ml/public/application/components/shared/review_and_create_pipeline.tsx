@@ -8,7 +8,7 @@
 import type { FC } from 'react';
 import React, { useMemo, useState } from 'react';
 import { FormattedMessage } from '@kbn/i18n-react';
-import type * as estypes from '@elastic/elasticsearch/lib/api/typesWithBodyKey';
+import type { estypes } from '@elastic/elasticsearch';
 
 import {
   EuiAccordion,
@@ -35,7 +35,7 @@ function getFieldFromPipelineConfig(config: estypes.IngestPipeline) {
   const { processors } = config;
   let field = '';
   if (processors?.length) {
-    field = Object.keys(processors[0].inference?.field_map ?? {})[0];
+    field = Object.keys(processors[0]?.inference?.field_map ?? {})[0];
   }
   return field;
 }
@@ -120,6 +120,7 @@ export const ReviewAndCreatePipeline: FC<Props> = ({
             <EuiSpacer size="s" />
             {pipelineCreated === true && pipelineError === undefined ? (
               <EuiCallOut
+                announceOnMount
                 data-test-subj="mlTrainedModelsInferenceReviewAndCreateStepSuccessCallout"
                 title={i18n.translate(
                   'xpack.ml.trainedModels.content.indices.pipelines.addInferencePipelineModal.steps.create.successMessage',
@@ -170,6 +171,7 @@ export const ReviewAndCreatePipeline: FC<Props> = ({
             ) : null}
             {pipelineError !== undefined ? (
               <EuiCallOut
+                announceOnMount
                 title={i18n.translate(
                   'xpack.ml.trainedModels.content.indices.pipelines.addInferencePipelineModal.steps.create.failureMessage',
                   {

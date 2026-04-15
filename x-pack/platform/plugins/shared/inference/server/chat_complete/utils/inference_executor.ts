@@ -5,9 +5,12 @@
  * 2.0.
  */
 
+import type { KibanaRequest } from '@kbn/core-http-server';
 import type { ActionTypeExecutorResult } from '@kbn/actions-plugin/common';
-import type { ActionsClient } from '@kbn/actions-plugin/server';
-import type { InferenceConnector } from '../../../common/connectors';
+import type { ElasticsearchClient, Logger } from '@kbn/core/server';
+import type { InferenceConnector } from '@kbn/inference-common';
+import type { ActionsClientProvider } from '../../types';
+import { getConnectorById } from '../../util/get_connector_by_id';
 
 export interface InferenceInvokeOptions {
   subAction: string;
@@ -22,18 +25,23 @@ export type InferenceInvokeResult<Data = unknown> = ActionTypeExecutorResult<Dat
  * In practice, for now it's just a thin abstraction around the action client.
  */
 export interface InferenceExecutor {
-  invoke(params: InferenceInvokeOptions): Promise<InferenceInvokeResult>;
+  getConnector: () => InferenceConnector;
+  invoke<Data = unknown>(params: InferenceInvokeOptions): Promise<InferenceInvokeResult<Data>>;
 }
 
 export const createInferenceExecutor = ({
   connector,
-  actionsClient,
+  actions,
+  request,
 }: {
   connector: InferenceConnector;
-  actionsClient: ActionsClient;
+  actions: ActionsClientProvider;
+  request: KibanaRequest;
 }): InferenceExecutor => {
   return {
-    async invoke({ subAction, subActionParams }): Promise<InferenceInvokeResult> {
+    getConnector: () => connector,
+    async invoke({ subAction, subActionParams }): Promise<InferenceInvokeResult<any>> {
+      const actionsClient = await actions.getActionsClientWithRequest(request);
       return await actionsClient.execute({
         actionId: connector.connectorId,
         params: {
@@ -43,4 +51,21 @@ export const createInferenceExecutor = ({
       });
     },
   };
+};
+
+export const getInferenceExecutor = async ({
+  connectorId,
+  actions,
+  request,
+  esClient,
+  logger,
+}: {
+  connectorId: string;
+  actions: ActionsClientProvider;
+  request: KibanaRequest;
+  esClient: ElasticsearchClient;
+  logger: Logger;
+}) => {
+  const connector = await getConnectorById({ connectorId, actions, request, esClient, logger });
+  return createInferenceExecutor({ actions, connector, request });
 };

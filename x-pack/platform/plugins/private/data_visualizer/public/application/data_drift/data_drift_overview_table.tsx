@@ -10,22 +10,16 @@ import type { ReactNode } from 'react';
 import React, { useEffect, useMemo, useState } from 'react';
 import { i18n } from '@kbn/i18n';
 import type { EuiBasicTableColumn, EuiTableFieldDataColumnType } from '@elastic/eui';
-import {
-  EuiButtonIcon,
-  EuiIcon,
-  EuiInMemoryTable,
-  EuiScreenReaderOnly,
-  EuiToolTip,
-} from '@elastic/eui';
+import { EuiButtonIcon, EuiInMemoryTable, EuiScreenReaderOnly } from '@elastic/eui';
 import { FieldTypeIcon } from '../common/components/field_type_icon';
 import { COLLAPSE_ROW, EXPAND_ROW } from '../../../common/i18n_constants';
 import { COMPARISON_LABEL, REFERENCE_LABEL } from './constants';
-import { useCurrentEuiTheme } from '../common/hooks/use_current_eui_theme';
 import { type DataDriftField, type Feature, FETCH_STATUS } from './types';
 import { formatSignificanceLevel } from './data_drift_utils';
 import { SingleDistributionChart } from './charts/single_distribution_chart';
 import { OverlapDistributionComparison } from './charts/overlap_distribution_chart';
 import { DataDriftDistributionChart } from './charts/data_drift_distribution_chart';
+import { useDataDriftColors } from './use_data_drift_colors';
 
 const dataComparisonYesLabel = i18n.translate('xpack.dataVisualizer.dataDrift.fieldTypeYesLabel', {
   defaultMessage: 'Yes',
@@ -47,15 +41,8 @@ export const DataDriftOverviewTable = ({
   data: Feature[];
   status: FETCH_STATUS;
 } & UseTableState<Feature>) => {
-  const euiTheme = useCurrentEuiTheme();
+  const colors = useDataDriftColors();
 
-  const colors = useMemo(
-    () => ({
-      referenceColor: euiTheme.euiColorVis2,
-      comparisonColor: euiTheme.euiColorVis1,
-    }),
-    [euiTheme]
-  );
   const [itemIdToExpandedRowMap, setItemIdToExpandedRowMap] = useState<Record<string, ReactNode>>(
     {}
   );
@@ -117,7 +104,11 @@ export const DataDriftOverviewTable = ({
             }`}
             onClick={() => toggleDetails(item)}
             aria-label={itemIdToExpandedRowMapValues[item.featureName] ? COLLAPSE_ROW : EXPAND_ROW}
-            iconType={itemIdToExpandedRowMapValues[item.featureName] ? 'arrowDown' : 'arrowRight'}
+            iconType={
+              itemIdToExpandedRowMapValues[item.featureName]
+                ? 'chevronSingleDown'
+                : 'chevronSingleRight'
+            }
           />
         );
       },
@@ -161,21 +152,16 @@ export const DataDriftOverviewTable = ({
     },
     {
       field: 'similarityTestPValue',
-      name: (
-        <EuiToolTip
-          content={i18n.translate('xpack.dataVisualizer.dataDrift.pValueTooltip', {
-            defaultMessage:
-              'Indicates how extreme the change is. Lower values indicate greater change.',
-          })}
-        >
-          <span>
-            {i18n.translate('xpack.dataVisualizer.dataDrift.pValueLabel', {
-              defaultMessage: 'Similarity p-value',
-            })}
-            <EuiIcon size="s" color="subdued" type="questionInCircle" className="eui-alignTop" />
-          </span>
-        </EuiToolTip>
-      ),
+      name: i18n.translate('xpack.dataVisualizer.dataDrift.pValueLabel', {
+        defaultMessage: 'Similarity p-value',
+      }),
+      nameTooltip: {
+        content: i18n.translate('xpack.dataVisualizer.dataDrift.pValueTooltip', {
+          defaultMessage:
+            'Indicates how extreme the change is. Lower values indicate greater change.',
+        }),
+        icon: 'question',
+      },
       'data-test-subj': 'mlDataDriftOverviewTableSimilarityTestPValue',
       sortable: true,
       textOnly: true,
@@ -309,7 +295,7 @@ export const DataDriftOverviewTable = ({
       onChange={onTableChange}
       pagination={pagination}
       loading={status === FETCH_STATUS.LOADING}
-      message={tableMessage}
+      noItemsMessage={tableMessage}
     />
   );
 };

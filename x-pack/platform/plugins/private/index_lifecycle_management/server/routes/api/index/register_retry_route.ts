@@ -6,9 +6,9 @@
  */
 
 import { schema } from '@kbn/config-schema';
-import { ElasticsearchClient } from '@kbn/core/server';
+import type { ElasticsearchClient } from '@kbn/core/server';
 
-import { RouteDependencies } from '../../../types';
+import type { RouteDependencies } from '../../../types';
 import { addBasePath } from '../../../services';
 
 async function retryLifecycle(client: ElasticsearchClient, indexNames: string[]) {
@@ -25,12 +25,21 @@ async function retryLifecycle(client: ElasticsearchClient, indexNames: string[])
 }
 
 const bodySchema = schema.object({
-  indexNames: schema.arrayOf(schema.string()),
+  indexNames: schema.arrayOf(schema.string({ maxLength: 1000 }), { maxSize: 1000 }),
 });
 
 export function registerRetryRoute({ router, license, lib: { handleEsError } }: RouteDependencies) {
   router.post(
-    { path: addBasePath('/index/retry'), validate: { body: bodySchema } },
+    {
+      path: addBasePath('/index/retry'),
+      security: {
+        authz: {
+          enabled: false,
+          reason: 'Relies on es client for authorization',
+        },
+      },
+      validate: { body: bodySchema },
+    },
     license.guardApiRoute(async (context, request, response) => {
       const body = request.body as typeof bodySchema.type;
       const { indexNames } = body;

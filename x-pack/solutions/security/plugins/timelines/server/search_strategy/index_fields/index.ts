@@ -6,26 +6,22 @@
  */
 
 import { from } from 'rxjs';
-import isEmpty from 'lodash/isEmpty';
-import get from 'lodash/get';
+import { isEmpty, get } from 'lodash';
 import deepmerge from 'deepmerge';
-import { ElasticsearchClient, StartServicesAccessor } from '@kbn/core/server';
-import {
-  DataViewsServerPluginStart,
-  IndexPatternsFetcher,
-  ISearchStrategy,
-  SearchStrategyDependencies,
-} from '@kbn/data-plugin/server';
+import type { ElasticsearchClient, StartServicesAccessor } from '@kbn/core/server';
+import type { ISearchStrategy, SearchStrategyDependencies } from '@kbn/data-plugin/server';
+import type { DataViewsServerPluginStart } from '@kbn/data-views-plugin/server';
+import { IndexPatternsFetcher } from '@kbn/data-views-plugin/server';
 
 import type { FieldSpec } from '@kbn/data-views-plugin/common';
 import { DELETED_SECURITY_SOLUTION_DATA_VIEW } from '../../../common/constants';
-import {
+import type {
   BeatFields,
   IndexField,
   IndexFieldsStrategyRequest,
   IndexFieldsStrategyResponse,
 } from '../../../common/search_strategy';
-import { StartPlugins } from '../../types';
+import type { StartPlugins } from '../../types';
 import { parseOptions } from './parse_options';
 
 const apmIndexPattern = 'apm-*-transaction*';
@@ -63,7 +59,8 @@ export const findExistingIndices = async (
         if ([apmIndexPattern, apmDataStreamsPattern].includes(index)) {
           const searchResponse = await esClient.search({
             index,
-            body: { query: { match_all: {} }, size: 0 },
+            query: { match_all: {} },
+            size: 0,
           });
           return get(searchResponse, 'hits.total.value', 0) > 0;
         }

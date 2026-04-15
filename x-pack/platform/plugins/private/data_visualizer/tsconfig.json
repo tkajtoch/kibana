@@ -1,7 +1,7 @@
 {
-  "extends": "../../../../../tsconfig.base.json",
+  "extends": "@kbn/tsconfig-base/tsconfig.json",
   "compilerOptions": {
-    "outDir": "target/types",
+    "outDir": "target/types"
   },
   "include": [
     "../../../../../typings/**/*",
@@ -15,7 +15,6 @@
     "@kbn/aiops-components",
     "@kbn/charts-plugin",
     "@kbn/cloud-plugin",
-    "@kbn/code-editor",
     "@kbn/config-schema",
     "@kbn/core-execution-context-common",
     "@kbn/core-notifications-browser",
@@ -52,7 +51,6 @@
     "@kbn/ml-in-memory-table",
     "@kbn/ml-is-defined",
     "@kbn/ml-is-populated-object",
-    "@kbn/ml-kibana-theme",
     "@kbn/ml-local-storage",
     "@kbn/ml-nested-property",
     "@kbn/ml-number-utils",
@@ -65,10 +63,8 @@
     "@kbn/saved-search-plugin",
     "@kbn/security-plugin",
     "@kbn/share-plugin",
-    "@kbn/test-jest-helpers",
     "@kbn/esql",
     "@kbn/ui-actions-plugin",
-    "@kbn/ui-theme",
     "@kbn/unified-search-plugin",
     "@kbn/usage-collection-plugin",
     "@kbn/utility-types",
@@ -80,14 +76,16 @@
     "@kbn/shared-ux-utility",
     "@kbn/search-types",
     "@kbn/unified-field-list",
-    "@kbn/core-http-browser",
     "@kbn/content-management-utils",
     "@kbn/core-lifecycle-browser",
-    "@kbn/presentation-containers",
-    "@kbn/react-kibana-mount",
-    "@kbn/core-ui-settings-browser"
+    "@kbn/core-ui-settings-browser",
+    "@kbn/file-upload-common",
+    "@kbn/charts-theme",
+    "@kbn/file-upload",
+    "@kbn/charts-theme",
+    "@kbn/presentation-util",
+    "@kbn/presentation-publishing-schemas",
+    "@kbn/cps"
   ],
-  "exclude": [
-    "target/**/*",
-  ]
+  "exclude": ["target/**/*"]
 }

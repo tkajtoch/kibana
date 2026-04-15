@@ -5,10 +5,10 @@
  * 2.0.
  */
 
-import type { SearchResponse } from '@elastic/elasticsearch/lib/api/types';
+import type { DateMath, SearchResponse } from '@elastic/elasticsearch/lib/api/types';
 import type { ElasticsearchClient } from '@kbn/core/server';
+import type { Replacements } from '@kbn/elastic-assistant-common';
 import {
-  Replacements,
   getAnonymizedValue,
   getOpenAndAcknowledgedAlertsQuery,
   getRawDataOrDefault,
@@ -16,22 +16,28 @@ import {
   transformRawData,
 } from '@kbn/elastic-assistant-common';
 
-import { AnonymizationFieldResponse } from '@kbn/elastic-assistant-common/impl/schemas/anonymization_fields/bulk_crud_anonymization_fields_route.gen';
+import type { AnonymizationFieldResponse } from '@kbn/elastic-assistant-common/impl/schemas';
 
 export const getAnonymizedAlerts = async ({
   alertsIndexPattern,
   anonymizationFields,
+  end,
   esClient,
+  filter,
   onNewReplacements,
   replacements,
   size,
+  start,
 }: {
   alertsIndexPattern?: string;
   anonymizationFields?: AnonymizationFieldResponse[];
+  end?: DateMath | null;
   esClient: ElasticsearchClient;
+  filter?: Record<string, unknown> | null;
   onNewReplacements?: (replacements: Replacements) => void;
   replacements?: Replacements;
   size?: number;
+  start?: DateMath | null;
 }): Promise<string[]> => {
   if (alertsIndexPattern == null || size == null || sizeIsOutOfRange(size)) {
     return [];
@@ -40,7 +46,10 @@ export const getAnonymizedAlerts = async ({
   const query = getOpenAndAcknowledgedAlertsQuery({
     alertsIndexPattern,
     anonymizationFields: anonymizationFields ?? [],
+    end,
+    filter,
     size,
+    start,
   });
 
   const result = await esClient.search<SearchResponse>(query);

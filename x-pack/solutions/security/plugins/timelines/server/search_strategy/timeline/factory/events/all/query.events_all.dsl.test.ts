@@ -39,54 +39,92 @@ describe('buildTimelineEventsAllQuery', () => {
     });
     expect(query).toMatchInlineSnapshot(`
       Object {
-        "allow_no_indices": true,
-        "body": Object {
-          "_source": false,
-          "aggregations": Object {
-            "producers": Object {
-              "terms": Object {
-                "exclude": Array [
-                  "alerts",
-                ],
-                "field": "kibana.alert.rule.producer",
-              },
-            },
-          },
-          "fields": Array [
-            "signal.*",
-            "kibana.alert.*",
-            Object {
-              "field": "@timestamp",
-              "format": "strict_date_optional_time",
-            },
-          ],
-          "from": 0,
-          "query": Object {
-            "bool": Object {
-              "filter": Array [
-                Object {
-                  "match_all": Object {},
-                },
+        "_source": false,
+        "aggregations": Object {
+          "producers": Object {
+            "terms": Object {
+              "exclude": Array [
+                "alerts",
               ],
+              "field": "kibana.alert.rule.producer",
             },
           },
-          "runtime_mappings": Object {},
-          "size": 100,
-          "sort": Array [
-            Object {
-              "@timestamp": Object {
-                "order": "asc",
-                "unmapped_type": "date",
-              },
-            },
-          ],
-          "track_total_hits": true,
         },
+        "allow_no_indices": true,
+        "fields": Array [
+          "signal.*",
+          "kibana.alert.*",
+          Object {
+            "field": "@timestamp",
+            "format": "strict_date_optional_time",
+          },
+        ],
+        "from": 0,
         "ignore_unavailable": true,
         "index": Array [
           ".siem-signals-default",
         ],
+        "query": Object {
+          "bool": Object {
+            "filter": Array [
+              Object {
+                "match_all": Object {},
+              },
+            ],
+          },
+        },
+        "runtime_mappings": Object {},
+        "size": 100,
+        "sort": Array [
+          Object {
+            "@timestamp": Object {
+              "order": "asc",
+              "unmapped_type": "date",
+            },
+          },
+        ],
+        "track_total_hits": true,
       }
     `);
+  });
+
+  it('uses dateRangeField when provided for timerange, sort, and fields', () => {
+    const query = buildTimelineEventsAllQuery({
+      factoryQueryType: TimelineEventsQueries.all,
+      fields: [],
+      defaultIndex: ['.siem-signals-default'],
+      filterQuery: '',
+      language: 'kuery',
+      dateRangeField: 'event.ingested',
+      pagination: { activePage: 0, querySize: 100 },
+      runtimeMappings: {},
+      sort: [
+        {
+          direction: Direction.asc,
+          field: 'event.ingested',
+          type: 'datetime',
+          esTypes: ['date'],
+        },
+      ],
+      timerange: {
+        from: '2024-01-01T00:00:00.000Z',
+        interval: '5m',
+        to: '2024-01-02T00:00:00.000Z',
+      },
+    });
+    expect(query.query.bool.filter).toContainEqual({
+      range: {
+        'event.ingested': {
+          gte: '2024-01-01T00:00:00.000Z',
+          lte: '2024-01-02T00:00:00.000Z',
+          format: 'strict_date_optional_time',
+        },
+      },
+    });
+    expect(query.sort).toEqual([{ 'event.ingested': { order: 'asc', unmapped_type: 'date' } }]);
+    expect(query.fields).toContainEqual({
+      field: 'event.ingested',
+      format: 'strict_date_optional_time',
+    });
   });
 });

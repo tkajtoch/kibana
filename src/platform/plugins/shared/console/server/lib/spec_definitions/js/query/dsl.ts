@@ -9,7 +9,7 @@
 
 import _ from 'lodash';
 
-import { SpecDefinitionsService } from '../../../../services';
+import type { SpecDefinitionsService } from '../../../../services';
 
 import {
   spanFirstTemplate,
@@ -382,6 +382,35 @@ export const query = (specService: SpecDefinitionsService) => {
       _scope: '',
       query: {},
     },
+    knn: {
+      __template: {
+        field: '',
+        k: 10,
+        num_candidates: 100,
+        query_vector_builder: {
+          text_embedding: {
+            model_id: '',
+            model_text: '',
+          },
+        },
+      },
+      field: '{field}',
+      filter: { __scope_link: 'GLOBAL.filter' },
+      k: 10,
+      num_candidates: 100,
+      query_vector: [],
+      query_vector_builder: {
+        text_embedding: {
+          model_id: '',
+          model_text: '',
+        },
+      },
+      rescore_vector: {
+        oversample: 1.5,
+      },
+      similarity: { __one_of: ['l2_norm', 'cosine', 'dot_product', 'max_inner_product'] },
+      boost: 1.0,
+    },
     match_all: {
       boost: 1,
     },
@@ -594,7 +623,7 @@ export const query = (specService: SpecDefinitionsService) => {
         tokens_weight_threshold: 0.4,
         only_score_pruned_tokens: false,
       },
-      query_vector: [],
+      query_vector: {},
     },
     term: {
       __template: {

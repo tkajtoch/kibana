@@ -1,5 +1,5 @@
 {
-  "extends": "../../../../../tsconfig.base.json",
+  "extends": "@kbn/tsconfig-base/tsconfig.json",
   "compilerOptions": {
     "outDir": "target/types",
   },
@@ -9,7 +9,6 @@
     "@kbn/url-forwarding-plugin",
     "@kbn/management-plugin",
     "@kbn/i18n",
-    "@kbn/ui-theme",
     "@kbn/shared-ux-router",
     "@kbn/deeplinks-devtools",
     "@kbn/config-schema",

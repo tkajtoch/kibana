@@ -6,59 +6,45 @@
  */
 
 import { useMemo } from 'react';
-import { useKibanaSpace, useTheme } from '@kbn/observability-shared-plugin/public';
-import { ExploratoryEmbeddableComponentProps } from './embeddable';
-import { LayerConfig, LensAttributes } from '../configurations/lens_attributes';
+import { useKibanaSpace } from '@kbn/observability-shared-plugin/public';
+import { useEuiTheme } from '@elastic/eui';
+import type { ExploratoryEmbeddableComponentProps } from './embeddable';
+import type { LayerConfig } from '../configurations/lens_attributes';
+import { LensAttributes } from '../configurations/lens_attributes';
 import { getLayerConfigs } from '../hooks/use_lens_attributes';
 import { obsvReportConfigMap } from '../obsv_exploratory_view';
 import { ReportTypes } from '../../../..';
 import { SingleMetricLensAttributes } from '../configurations/lens_attributes/single_metric_attributes';
 import { HeatMapLensAttributes } from '../configurations/lens_attributes/heatmap_attributes';
-
 export const useEmbeddableAttributes = ({
   attributes,
   dataViewState,
   reportType,
   reportConfigMap = {},
-  lensFormulaHelper,
   dslFilters,
 }: ExploratoryEmbeddableComponentProps) => {
   const spaceId = useKibanaSpace();
-  const theme = useTheme();
+  const { euiTheme } = useEuiTheme();
 
   return useMemo(() => {
     try {
       const layerConfigs: LayerConfig[] = getLayerConfigs(
         attributes,
         reportType,
-        theme,
+        euiTheme,
         dataViewState,
         { ...reportConfigMap, ...obsvReportConfigMap },
         spaceId.space?.id
       );
 
       if (reportType === ReportTypes.SINGLE_METRIC) {
-        const lensAttributes = new SingleMetricLensAttributes(
-          layerConfigs,
-          reportType,
-          lensFormulaHelper!,
-          dslFilters
-        );
+        const lensAttributes = new SingleMetricLensAttributes(layerConfigs, reportType, dslFilters);
         return lensAttributes?.getJSON('lnsLegacyMetric');
       } else if (reportType === ReportTypes.HEATMAP) {
-        const lensAttributes = new HeatMapLensAttributes(
-          layerConfigs,
-          reportType,
-          lensFormulaHelper!
-        );
+        const lensAttributes = new HeatMapLensAttributes(layerConfigs, reportType);
         return lensAttributes?.getJSON('lnsHeatmap');
       } else {
-        const lensAttributes = new LensAttributes(
-          layerConfigs,
-          reportType,
-          lensFormulaHelper,
-          dslFilters
-        );
+        const lensAttributes = new LensAttributes(layerConfigs, reportType, dslFilters);
         return lensAttributes?.getJSON();
       }
     } catch (error) {
@@ -68,10 +54,9 @@ export const useEmbeddableAttributes = ({
     attributes,
     dataViewState,
     dslFilters,
-    lensFormulaHelper,
+    euiTheme,
     reportConfigMap,
     reportType,
     spaceId.space?.id,
-    theme,
   ]);
 };

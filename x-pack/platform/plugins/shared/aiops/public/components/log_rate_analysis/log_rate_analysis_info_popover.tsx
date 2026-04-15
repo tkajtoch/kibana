@@ -7,13 +7,18 @@
 
 import React, { useState, type FC } from 'react';
 
-import { EuiBadge, EuiPopover, EuiPopoverTitle, EuiText } from '@elastic/eui';
+import {
+  useEuiTheme,
+  EuiBadge,
+  EuiPopover,
+  EuiPopoverTitle,
+  EuiText,
+  htmlIdGenerator,
+} from '@elastic/eui';
 
 import { LOG_RATE_ANALYSIS_TYPE } from '@kbn/aiops-log-rate-analysis';
 import { useAppSelector } from '@kbn/aiops-log-rate-analysis/state';
 import { i18n } from '@kbn/i18n';
-
-import { useEuiTheme } from '../../hooks/use_eui_theme';
 
 export const LogRateAnalysisInfoPopoverButton: FC<{
   onClick: React.MouseEventHandler<HTMLButtonElement>;
@@ -21,12 +26,9 @@ export const LogRateAnalysisInfoPopoverButton: FC<{
 }> = ({ onClick, label }) => {
   return (
     <EuiBadge
-      iconType="help"
+      iconType="question"
       iconSide="right"
       color="hollow"
-      // Defining both iconOnClick and onClick so the mouse cursor changes for cases.
-      iconOnClick={onClick}
-      iconOnClickAriaLabel='Click to open "Log rate analysis info" popover'
       onClick={onClick}
       onClickAriaLabel='Click to open "Log rate analysis info" popover'
       data-test-subj="aiopsLogRateAnalysisInfoPopoverButton"
@@ -37,7 +39,7 @@ export const LogRateAnalysisInfoPopoverButton: FC<{
 };
 
 export const LogRateAnalysisInfoPopover: FC = () => {
-  const euiTheme = useEuiTheme();
+  const { euiTheme } = useEuiTheme();
 
   const showInfoPopover = useAppSelector(
     (s) => s.logRateAnalysisResults.significantItems.length > 0
@@ -50,6 +52,7 @@ export const LogRateAnalysisInfoPopover: FC = () => {
 
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
 
+  const popoverTitleId = htmlIdGenerator()('logRateAnalysisInfoPopoverTitle');
   const infoTitlePrefix = i18n.translate('xpack.aiops.analysis.analysisTypeInfoTitlePrefix', {
     defaultMessage: 'Analysis type: ',
   });
@@ -109,15 +112,16 @@ export const LogRateAnalysisInfoPopover: FC = () => {
       isOpen={isPopoverOpen}
       ownFocus
       panelPaddingSize="m"
+      aria-labelledby={popoverTitleId}
     >
       {infoTitle && (
-        <EuiPopoverTitle>
+        <EuiPopoverTitle id={popoverTitleId}>
           {infoTitlePrefix}
           {infoTitle}
         </EuiPopoverTitle>
       )}
 
-      <EuiText size="s" css={{ maxWidth: `calc(${euiTheme.euiSizeXL} * 15);` }}>
+      <EuiText size="s" css={{ maxWidth: `calc(${euiTheme.size.xl} * 15);` }}>
         <p>
           {infoContent}
           {fieldSelectionMessage && ` ${fieldSelectionMessage}`}

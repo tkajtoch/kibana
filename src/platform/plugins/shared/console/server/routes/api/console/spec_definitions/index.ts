@@ -7,8 +7,8 @@
  * License v3.0 only", or the "Server Side Public License, v 1".
  */
 
-import { RequestHandler } from '@kbn/core/server';
-import { RouteDependencies } from '../../..';
+import type { RequestHandler } from '@kbn/core/server';
+import type { RouteDependencies } from '../../..';
 
 interface SpecDefinitionsRouteResponse {
   es: {
@@ -32,5 +32,17 @@ export const registerSpecDefinitionsRoute = ({ router, services }: RouteDependen
     });
   };
 
-  router.get({ path: '/api/console/api_server', validate: false }, handler);
+  router.get(
+    {
+      path: '/api/console/api_server',
+      security: {
+        authz: {
+          enabled: false,
+          reason: 'Low effort request for config info',
+        },
+      },
+      validate: false,
+    },
+    handler
+  );
 };

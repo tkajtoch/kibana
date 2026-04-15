@@ -6,9 +6,11 @@
  */
 
 import { waitFor, renderHook } from '@testing-library/react';
-import { useSetupKnowledgeBase, UseSetupKnowledgeBaseParams } from './use_setup_knowledge_base';
+import type { UseSetupKnowledgeBaseParams } from './use_setup_knowledge_base';
+import { useSetupKnowledgeBase } from './use_setup_knowledge_base';
 import { postKnowledgeBase as _postKnowledgeBase } from './api';
-import { useMutation as _useMutation } from '@tanstack/react-query';
+import { useMutation as _useMutation } from '@kbn/react-query';
+import { API_VERSIONS } from '@kbn/elastic-assistant-common';
 
 const postKnowledgeBaseMock = _postKnowledgeBase as jest.Mock;
 const useMutationMock = _useMutation as jest.Mock;
@@ -22,7 +24,7 @@ jest.mock('./api', () => {
 jest.mock('./use_knowledge_base_status');
 jest.mock('./entries/use_knowledge_base_entries');
 
-jest.mock('@tanstack/react-query', () => ({
+jest.mock('@kbn/react-query', () => ({
   useMutation: jest.fn().mockImplementation(async (queryKey, fn, opts) => {
     try {
       const res = await fn();
@@ -53,10 +55,10 @@ describe('useSetupKnowledgeBase', () => {
     renderHook(() => useSetupKnowledgeBase(defaultProps));
     await waitFor(() => {
       expect(defaultProps.http.fetch).toHaveBeenCalledWith(
-        '/internal/elastic_assistant/knowledge_base/',
+        '/api/security_ai_assistant/knowledge_base/',
         {
           method: 'POST',
-          version: '1',
+          version: API_VERSIONS.public.v1,
         }
       );
       expect(toasts.addError).not.toHaveBeenCalled();
@@ -75,10 +77,10 @@ describe('useSetupKnowledgeBase', () => {
     renderHook(() => useSetupKnowledgeBase(defaultProps));
     await waitFor(() =>
       expect(defaultProps.http.fetch).toHaveBeenCalledWith(
-        '/internal/elastic_assistant/knowledge_base/something',
+        '/api/security_ai_assistant/knowledge_base/something',
         {
           method: 'POST',
-          version: '1',
+          version: API_VERSIONS.public.v1,
         }
       )
     );

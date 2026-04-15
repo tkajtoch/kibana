@@ -8,6 +8,7 @@
 import React from 'react';
 
 import type { TimeRangeBounds } from '@kbn/ml-time-buckets';
+import type { TableSeverityState } from '../components/controls/select_severity';
 
 interface TimeSeriesExplorerProps {
   appStateHandler: (action: string, payload: any) => void;
@@ -21,8 +22,15 @@ interface TimeSeriesExplorerProps {
   selectedEntities?: Record<string, string>;
   selectedForecastId?: string;
   tableInterval?: string;
-  tableSeverity?: number;
+  tableSeverity?: TableSeverityState;
   zoom?: { from?: string; to?: string };
+  handleJobSelectionChange: ({
+    jobIds,
+    time,
+  }: {
+    jobIds: string[];
+    time?: { from: string; to: string };
+  }) => void;
 }
 
 // eslint-disable-next-line react/prefer-stateless-function

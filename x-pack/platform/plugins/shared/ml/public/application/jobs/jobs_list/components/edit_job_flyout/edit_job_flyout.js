@@ -24,9 +24,10 @@ import {
   EuiTabbedContent,
   EuiConfirmModal,
   EuiSpacer,
+  htmlIdGenerator,
 } from '@elastic/eui';
 
-import { JobDetails, Detectors, Datafeed } from './tabs';
+import { EditJobDetailsTab, EditDetectorsTab, EditDatafeedTab } from './tabs';
 import { saveJob } from './edit_utils';
 import { loadFullJob } from '../utils';
 import { validateModelMemoryLimit, validateGroupNames } from '../validate_job';
@@ -36,6 +37,8 @@ import { DATAFEED_STATE, JOB_STATE } from '../../../../../../common/constants/st
 import { CustomUrlsWrapper, isValidCustomUrls } from '../../../../components/custom_urls';
 import { isManagedJob } from '../../../jobs_utils';
 import { ManagedJobsWarningCallout } from '../confirm_modals/managed_jobs_warning_callout';
+import { createJobActionFocusTrapProps } from '../../../../util/create_focus_trap_props';
+import { createJobActionFocusRestoration } from '../../../../util/create_focus_restoration';
 
 const { collapseLiteralStrings } = XJson;
 
@@ -305,6 +308,8 @@ export class EditJobFlyoutUI extends Component {
   };
 
   render() {
+    const confirmModalTitleId = htmlIdGenerator()('confirmModalTitle');
+
     let flyout;
     let confirmationModal;
 
@@ -340,7 +345,8 @@ export class EditJobFlyoutUI extends Component {
             defaultMessage: 'Job details',
           }),
           content: (
-            <JobDetails
+            <EditJobDetailsTab
+              euiTheme={this.props.euiTheme}
               jobClosed={jobClosed}
               datafeedRunning={datafeedRunning}
               jobDescription={jobDescription}
@@ -361,7 +367,7 @@ export class EditJobFlyoutUI extends Component {
             defaultMessage: 'Detectors',
           }),
           content: (
-            <Detectors
+            <EditDetectorsTab
               jobDetectors={jobDetectors}
               jobDetectorDescriptions={jobDetectorDescriptions}
               setDetectorDescriptions={this.setDetectorDescriptions}
@@ -375,7 +381,7 @@ export class EditJobFlyoutUI extends Component {
             defaultMessage: 'Datafeed',
           }),
           content: (
-            <Datafeed
+            <EditDatafeedTab
               datafeedQuery={datafeedQuery}
               datafeedQueryDelay={datafeedQueryDelay}
               datafeedFrequency={datafeedFrequency}
@@ -409,6 +415,10 @@ export class EditJobFlyoutUI extends Component {
           }}
           size="m"
           data-test-subj="mlJobEditFlyout"
+          aria-label={i18n.translate('xpack.ml.jobsList.editJobFlyout.ariaLabel', {
+            defaultMessage: 'Edit job flyout',
+          })}
+          focusTrapProps={createJobActionFocusTrapProps(job.job_id)}
         >
           <EuiFlyoutHeader>
             <EuiTitle>
@@ -476,13 +486,22 @@ export class EditJobFlyoutUI extends Component {
     }
 
     if (this.state.isConfirmationModalVisible) {
+      const returnFocus = createJobActionFocusRestoration(this.state.job.job_id);
       confirmationModal = (
         <EuiConfirmModal
+          aria-labelledby={confirmModalTitleId}
           title={i18n.translate('xpack.ml.jobsList.editJobFlyout.unsavedChangesDialogTitle', {
             defaultMessage: 'Save changes before leaving?',
           })}
-          onCancel={() => this.closeFlyout(true)}
-          onConfirm={() => this.save()}
+          titleProps={{ id: confirmModalTitleId }}
+          onCancel={() => {
+            this.closeFlyout(true);
+            returnFocus();
+          }}
+          onConfirm={() => {
+            this.save();
+            returnFocus();
+          }}
           cancelButtonText={i18n.translate(
             'xpack.ml.jobsList.editJobFlyout.leaveAnywayButtonLabel',
             { defaultMessage: 'Leave anyway' }
@@ -515,6 +534,7 @@ export class EditJobFlyoutUI extends Component {
 }
 
 EditJobFlyoutUI.propTypes = {
+  euiTheme: PropTypes.object.isRequired,
   setShowFunction: PropTypes.func.isRequired,
   unsetShowFunction: PropTypes.func.isRequired,
   refreshJobs: PropTypes.func.isRequired,

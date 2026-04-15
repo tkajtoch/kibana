@@ -19,7 +19,9 @@
           },
           " extends React.Component<Props, State, any>"
         ],
-        "path": "x-pack/packages/security/ui_components/src/kibana_privilege_table/feature_table.tsx",
+        "path": "x-pack/platform/packages/private/security/ui_components/src/kibana_privilege_table/feature_table.tsx",
+        "lineNumber": 58,
+        "columnNumber": 1,
         "deprecated": false,
         "trackAdoption": false,
         "children": [
@@ -30,7 +32,9 @@
             "tags": [],
             "label": "defaultProps",
             "description": [],
-            "path": "x-pack/packages/security/ui_components/src/kibana_privilege_table/feature_table.tsx",
+            "path": "x-pack/platform/packages/private/security/ui_components/src/kibana_privilege_table/feature_table.tsx",
+            "lineNumber": 59,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false,
             "children": [
@@ -41,7 +45,9 @@
                 "tags": [],
                 "label": "privilegeIndex",
                 "description": [],
-                "path": "x-pack/packages/security/ui_components/src/kibana_privilege_table/feature_table.tsx",
+                "path": "x-pack/platform/packages/private/security/ui_components/src/kibana_privilege_table/feature_table.tsx",
+                "lineNumber": 60,
+                "columnNumber": 5,
                 "deprecated": false,
                 "trackAdoption": false
               },
@@ -52,7 +58,9 @@
                 "tags": [],
                 "label": "showLocks",
                 "description": [],
-                "path": "x-pack/packages/security/ui_components/src/kibana_privilege_table/feature_table.tsx",
+                "path": "x-pack/platform/packages/private/security/ui_components/src/kibana_privilege_table/feature_table.tsx",
+                "lineNumber": 61,
+                "columnNumber": 5,
                 "deprecated": false,
                 "trackAdoption": false
               }
@@ -68,7 +76,9 @@
             "signature": [
               "any"
             ],
-            "path": "x-pack/packages/security/ui_components/src/kibana_privilege_table/feature_table.tsx",
+            "path": "x-pack/platform/packages/private/security/ui_components/src/kibana_privilege_table/feature_table.tsx",
+            "lineNumber": 66,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false,
             "children": [
@@ -82,7 +92,9 @@
                 "signature": [
                   "Props"
                 ],
-                "path": "x-pack/packages/security/ui_components/src/kibana_privilege_table/feature_table.tsx",
+                "path": "x-pack/platform/packages/private/security/ui_components/src/kibana_privilege_table/feature_table.tsx",
+                "lineNumber": 66,
+                "columnNumber": 15,
                 "deprecated": false,
                 "trackAdoption": false,
                 "isRequired": true
@@ -100,7 +112,9 @@
             "signature": [
               "() => React.JSX.Element"
             ],
-            "path": "x-pack/packages/security/ui_components/src/kibana_privilege_table/feature_table.tsx",
+            "path": "x-pack/platform/packages/private/security/ui_components/src/kibana_privilege_table/feature_table.tsx",
+            "lineNumber": 84,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false,
             "children": [],
@@ -118,7 +132,9 @@
         "description": [
           "\nCalculator responsible for determining the displayed and effective privilege values for the following interfaces:\n- <PrivilegeSpaceForm> and children\n- <PrivilegeSpaceTable> and children"
         ],
-        "path": "x-pack/packages/security/ui_components/src/privilege_form_calculator/privilege_form_calculator.ts",
+        "path": "x-pack/platform/packages/private/security/ui_components/src/privilege_form_calculator/privilege_form_calculator.ts",
+        "lineNumber": 15,
+        "columnNumber": 1,
         "deprecated": false,
         "trackAdoption": false,
         "children": [
@@ -132,7 +148,9 @@
             "signature": [
               "any"
             ],
-            "path": "x-pack/packages/security/ui_components/src/privilege_form_calculator/privilege_form_calculator.ts",
+            "path": "x-pack/platform/packages/private/security/ui_components/src/privilege_form_calculator/privilege_form_calculator.ts",
+            "lineNumber": 21,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false,
             "children": [
@@ -152,7 +170,9 @@
                     "text": "KibanaPrivileges"
                   }
                 ],
-                "path": "x-pack/packages/security/ui_components/src/privilege_form_calculator/privilege_form_calculator.ts",
+                "path": "x-pack/platform/packages/private/security/ui_components/src/privilege_form_calculator/privilege_form_calculator.ts",
+                "lineNumber": 21,
+                "columnNumber": 15,
                 "deprecated": false,
                 "trackAdoption": false,
                 "isRequired": true
@@ -173,7 +193,9 @@
                     "text": "Role"
                   }
                 ],
-                "path": "x-pack/packages/security/ui_components/src/privilege_form_calculator/privilege_form_calculator.ts",
+                "path": "x-pack/platform/packages/private/security/ui_components/src/privilege_form_calculator/privilege_form_calculator.ts",
+                "lineNumber": 21,
+                "columnNumber": 68,
                 "deprecated": false,
                 "trackAdoption": false,
                 "isRequired": true
@@ -201,7 +223,9 @@
               },
               " | undefined"
             ],
-            "path": "x-pack/packages/security/ui_components/src/privilege_form_calculator/privilege_form_calculator.ts",
+            "path": "x-pack/platform/packages/private/security/ui_components/src/privilege_form_calculator/privilege_form_calculator.ts",
+            "lineNumber": 23,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false,
             "children": [
@@ -217,7 +241,9 @@
                 "signature": [
                   "number"
                 ],
-                "path": "x-pack/packages/security/ui_components/src/privilege_form_calculator/privilege_form_calculator.ts",
+                "path": "x-pack/platform/packages/private/security/ui_components/src/privilege_form_calculator/privilege_form_calculator.ts",
+                "lineNumber": 30,
+                "columnNumber": 27,
                 "deprecated": false,
                 "trackAdoption": false,
                 "isRequired": true
@@ -237,7 +263,9 @@
             "signature": [
               "(privilegeIndex: number) => boolean"
             ],
-            "path": "x-pack/packages/security/ui_components/src/privilege_form_calculator/privilege_form_calculator.ts",
+            "path": "x-pack/platform/packages/private/security/ui_components/src/privilege_form_calculator/privilege_form_calculator.ts",
+            "lineNumber": 37,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false,
             "children": [
@@ -253,7 +281,9 @@
                 "signature": [
                   "number"
                 ],
-                "path": "x-pack/packages/security/ui_components/src/privilege_form_calculator/privilege_form_calculator.ts",
+                "path": "x-pack/platform/packages/private/security/ui_components/src/privilege_form_calculator/privilege_form_calculator.ts",
+                "lineNumber": 42,
+                "columnNumber": 34,
                 "deprecated": false,
                 "trackAdoption": false,
                 "isRequired": true
@@ -273,7 +303,9 @@
             "signature": [
               "(featureId: string, privilegeIndex: number, allSpacesSelected: boolean) => string | undefined"
             ],
-            "path": "x-pack/packages/security/ui_components/src/privilege_form_calculator/privilege_form_calculator.ts",
+            "path": "x-pack/platform/packages/private/security/ui_components/src/privilege_form_calculator/privilege_form_calculator.ts",
+            "lineNumber": 48,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false,
             "children": [
@@ -289,7 +321,9 @@
                 "signature": [
                   "string"
                 ],
-                "path": "x-pack/packages/security/ui_components/src/privilege_form_calculator/privilege_form_calculator.ts",
+                "path": "x-pack/platform/packages/private/security/ui_components/src/privilege_form_calculator/privilege_form_calculator.ts",
+                "lineNumber": 68,
+                "columnNumber": 5,
                 "deprecated": false,
                 "trackAdoption": false,
                 "isRequired": true
@@ -306,7 +340,9 @@
                 "signature": [
                   "number"
                 ],
-                "path": "x-pack/packages/security/ui_components/src/privilege_form_calculator/privilege_form_calculator.ts",
+                "path": "x-pack/platform/packages/private/security/ui_components/src/privilege_form_calculator/privilege_form_calculator.ts",
+                "lineNumber": 69,
+                "columnNumber": 5,
                 "deprecated": false,
                 "trackAdoption": false,
                 "isRequired": true
@@ -323,7 +359,9 @@
                 "signature": [
                   "boolean"
                 ],
-                "path": "x-pack/packages/security/ui_components/src/privilege_form_calculator/privilege_form_calculator.ts",
+                "path": "x-pack/platform/packages/private/security/ui_components/src/privilege_form_calculator/privilege_form_calculator.ts",
+                "lineNumber": 70,
+                "columnNumber": 5,
                 "deprecated": false,
                 "trackAdoption": false,
                 "isRequired": true
@@ -343,7 +381,9 @@
             "signature": [
               "(featureId: string, privilegeIndex: number, allSpacesSelected: boolean) => boolean"
             ],
-            "path": "x-pack/packages/security/ui_components/src/privilege_form_calculator/privilege_form_calculator.ts",
+            "path": "x-pack/platform/packages/private/security/ui_components/src/privilege_form_calculator/privilege_form_calculator.ts",
+            "lineNumber": 76,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false,
             "children": [
@@ -359,7 +399,9 @@
                 "signature": [
                   "string"
                 ],
-                "path": "x-pack/packages/security/ui_components/src/privilege_form_calculator/privilege_form_calculator.ts",
+                "path": "x-pack/platform/packages/private/security/ui_components/src/privilege_form_calculator/privilege_form_calculator.ts",
+                "lineNumber": 84,
+                "columnNumber": 5,
                 "deprecated": false,
                 "trackAdoption": false,
                 "isRequired": true
@@ -376,7 +418,9 @@
                 "signature": [
                   "number"
                 ],
-                "path": "x-pack/packages/security/ui_components/src/privilege_form_calculator/privilege_form_calculator.ts",
+                "path": "x-pack/platform/packages/private/security/ui_components/src/privilege_form_calculator/privilege_form_calculator.ts",
+                "lineNumber": 85,
+                "columnNumber": 5,
                 "deprecated": false,
                 "trackAdoption": false,
                 "isRequired": true
@@ -393,7 +437,9 @@
                 "signature": [
                   "boolean"
                 ],
-                "path": "x-pack/packages/security/ui_components/src/privilege_form_calculator/privilege_form_calculator.ts",
+                "path": "x-pack/platform/packages/private/security/ui_components/src/privilege_form_calculator/privilege_form_calculator.ts",
+                "lineNumber": 86,
+                "columnNumber": 5,
                 "deprecated": false,
                 "trackAdoption": false,
                 "isRequired": true
@@ -421,7 +467,9 @@
               },
               " | undefined"
             ],
-            "path": "x-pack/packages/security/ui_components/src/privilege_form_calculator/privilege_form_calculator.ts",
+            "path": "x-pack/platform/packages/private/security/ui_components/src/privilege_form_calculator/privilege_form_calculator.ts",
+            "lineNumber": 108,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false,
             "children": [
@@ -437,7 +485,9 @@
                 "signature": [
                   "string"
                 ],
-                "path": "x-pack/packages/security/ui_components/src/privilege_form_calculator/privilege_form_calculator.ts",
+                "path": "x-pack/platform/packages/private/security/ui_components/src/privilege_form_calculator/privilege_form_calculator.ts",
+                "lineNumber": 116,
+                "columnNumber": 5,
                 "deprecated": false,
                 "trackAdoption": false,
                 "isRequired": true
@@ -454,7 +504,9 @@
                 "signature": [
                   "number"
                 ],
-                "path": "x-pack/packages/security/ui_components/src/privilege_form_calculator/privilege_form_calculator.ts",
+                "path": "x-pack/platform/packages/private/security/ui_components/src/privilege_form_calculator/privilege_form_calculator.ts",
+                "lineNumber": 117,
+                "columnNumber": 5,
                 "deprecated": false,
                 "trackAdoption": false,
                 "isRequired": true
@@ -471,7 +523,9 @@
                 "signature": [
                   "boolean | undefined"
                 ],
-                "path": "x-pack/packages/security/ui_components/src/privilege_form_calculator/privilege_form_calculator.ts",
+                "path": "x-pack/platform/packages/private/security/ui_components/src/privilege_form_calculator/privilege_form_calculator.ts",
+                "lineNumber": 118,
+                "columnNumber": 5,
                 "deprecated": false,
                 "trackAdoption": false,
                 "isRequired": false
@@ -491,7 +545,9 @@
             "signature": [
               "(featureId: string, privilegeId: string, privilegeIndex: number) => boolean"
             ],
-            "path": "x-pack/packages/security/ui_components/src/privilege_form_calculator/privilege_form_calculator.ts",
+            "path": "x-pack/platform/packages/private/security/ui_components/src/privilege_form_calculator/privilege_form_calculator.ts",
+            "lineNumber": 136,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false,
             "children": [
@@ -507,7 +563,9 @@
                 "signature": [
                   "string"
                 ],
-                "path": "x-pack/packages/security/ui_components/src/privilege_form_calculator/privilege_form_calculator.ts",
+                "path": "x-pack/platform/packages/private/security/ui_components/src/privilege_form_calculator/privilege_form_calculator.ts",
+                "lineNumber": 144,
+                "columnNumber": 5,
                 "deprecated": false,
                 "trackAdoption": false,
                 "isRequired": true
@@ -524,7 +582,9 @@
                 "signature": [
                   "string"
                 ],
-                "path": "x-pack/packages/security/ui_components/src/privilege_form_calculator/privilege_form_calculator.ts",
+                "path": "x-pack/platform/packages/private/security/ui_components/src/privilege_form_calculator/privilege_form_calculator.ts",
+                "lineNumber": 145,
+                "columnNumber": 5,
                 "deprecated": false,
                 "trackAdoption": false,
                 "isRequired": true
@@ -541,7 +601,9 @@
                 "signature": [
                   "number"
                 ],
-                "path": "x-pack/packages/security/ui_components/src/privilege_form_calculator/privilege_form_calculator.ts",
+                "path": "x-pack/platform/packages/private/security/ui_components/src/privilege_form_calculator/privilege_form_calculator.ts",
+                "lineNumber": 146,
+                "columnNumber": 5,
                 "deprecated": false,
                 "trackAdoption": false,
                 "isRequired": true
@@ -577,7 +639,9 @@
               },
               " | undefined"
             ],
-            "path": "x-pack/packages/security/ui_components/src/privilege_form_calculator/privilege_form_calculator.ts",
+            "path": "x-pack/platform/packages/private/security/ui_components/src/privilege_form_calculator/privilege_form_calculator.ts",
+            "lineNumber": 162,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false,
             "children": [
@@ -593,7 +657,9 @@
                 "signature": [
                   "string"
                 ],
-                "path": "x-pack/packages/security/ui_components/src/privilege_form_calculator/privilege_form_calculator.ts",
+                "path": "x-pack/platform/packages/private/security/ui_components/src/privilege_form_calculator/privilege_form_calculator.ts",
+                "lineNumber": 170,
+                "columnNumber": 5,
                 "deprecated": false,
                 "trackAdoption": false,
                 "isRequired": true
@@ -616,7 +682,9 @@
                     "text": "SubFeaturePrivilegeGroup"
                   }
                 ],
-                "path": "x-pack/packages/security/ui_components/src/privilege_form_calculator/privilege_form_calculator.ts",
+                "path": "x-pack/platform/packages/private/security/ui_components/src/privilege_form_calculator/privilege_form_calculator.ts",
+                "lineNumber": 171,
+                "columnNumber": 5,
                 "deprecated": false,
                 "trackAdoption": false,
                 "isRequired": true
@@ -633,7 +701,9 @@
                 "signature": [
                   "number"
                 ],
-                "path": "x-pack/packages/security/ui_components/src/privilege_form_calculator/privilege_form_calculator.ts",
+                "path": "x-pack/platform/packages/private/security/ui_components/src/privilege_form_calculator/privilege_form_calculator.ts",
+                "lineNumber": 172,
+                "columnNumber": 5,
                 "deprecated": false,
                 "trackAdoption": false,
                 "isRequired": true
@@ -653,7 +723,9 @@
             "signature": [
               "(featureId: string, privilegeIndex: number) => boolean"
             ],
-            "path": "x-pack/packages/security/ui_components/src/privilege_form_calculator/privilege_form_calculator.ts",
+            "path": "x-pack/platform/packages/private/security/ui_components/src/privilege_form_calculator/privilege_form_calculator.ts",
+            "lineNumber": 184,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false,
             "children": [
@@ -669,7 +741,9 @@
                 "signature": [
                   "string"
                 ],
-                "path": "x-pack/packages/security/ui_components/src/privilege_form_calculator/privilege_form_calculator.ts",
+                "path": "x-pack/platform/packages/private/security/ui_components/src/privilege_form_calculator/privilege_form_calculator.ts",
+                "lineNumber": 190,
+                "columnNumber": 43,
                 "deprecated": false,
                 "trackAdoption": false,
                 "isRequired": true
@@ -686,7 +760,9 @@
                 "signature": [
                   "number"
                 ],
-                "path": "x-pack/packages/security/ui_components/src/privilege_form_calculator/privilege_form_calculator.ts",
+                "path": "x-pack/platform/packages/private/security/ui_components/src/privilege_form_calculator/privilege_form_calculator.ts",
+                "lineNumber": 190,
+                "columnNumber": 62,
                 "deprecated": false,
                 "trackAdoption": false,
                 "isRequired": true
@@ -706,7 +782,9 @@
             "signature": [
               "(featureId: string, privilegeIndex: number, willBeCustomizing: boolean, allSpacesSelected: boolean) => string[]"
             ],
-            "path": "x-pack/packages/security/ui_components/src/privilege_form_calculator/privilege_form_calculator.ts",
+            "path": "x-pack/platform/packages/private/security/ui_components/src/privilege_form_calculator/privilege_form_calculator.ts",
+            "lineNumber": 199,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false,
             "children": [
@@ -722,7 +800,9 @@
                 "signature": [
                   "string"
                 ],
-                "path": "x-pack/packages/security/ui_components/src/privilege_form_calculator/privilege_form_calculator.ts",
+                "path": "x-pack/platform/packages/private/security/ui_components/src/privilege_form_calculator/privilege_form_calculator.ts",
+                "lineNumber": 208,
+                "columnNumber": 5,
                 "deprecated": false,
                 "trackAdoption": false,
                 "isRequired": true
@@ -739,7 +819,9 @@
                 "signature": [
                   "number"
                 ],
-                "path": "x-pack/packages/security/ui_components/src/privilege_form_calculator/privilege_form_calculator.ts",
+                "path": "x-pack/platform/packages/private/security/ui_components/src/privilege_form_calculator/privilege_form_calculator.ts",
+                "lineNumber": 209,
+                "columnNumber": 5,
                 "deprecated": false,
                 "trackAdoption": false,
                 "isRequired": true
@@ -756,7 +838,9 @@
                 "signature": [
                   "boolean"
                 ],
-                "path": "x-pack/packages/security/ui_components/src/privilege_form_calculator/privilege_form_calculator.ts",
+                "path": "x-pack/platform/packages/private/security/ui_components/src/privilege_form_calculator/privilege_form_calculator.ts",
+                "lineNumber": 210,
+                "columnNumber": 5,
                 "deprecated": false,
                 "trackAdoption": false,
                 "isRequired": true
@@ -773,7 +857,9 @@
                 "signature": [
                   "boolean"
                 ],
-                "path": "x-pack/packages/security/ui_components/src/privilege_form_calculator/privilege_form_calculator.ts",
+                "path": "x-pack/platform/packages/private/security/ui_components/src/privilege_form_calculator/privilege_form_calculator.ts",
+                "lineNumber": 211,
+                "columnNumber": 5,
                 "deprecated": false,
                 "trackAdoption": false,
                 "isRequired": true
@@ -793,7 +879,9 @@
             "signature": [
               "(privilegeIndex: number) => boolean"
             ],
-            "path": "x-pack/packages/security/ui_components/src/privilege_form_calculator/privilege_form_calculator.ts",
+            "path": "x-pack/platform/packages/private/security/ui_components/src/privilege_form_calculator/privilege_form_calculator.ts",
+            "lineNumber": 242,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false,
             "children": [
@@ -809,7 +897,9 @@
                 "signature": [
                   "number"
                 ],
-                "path": "x-pack/packages/security/ui_components/src/privilege_form_calculator/privilege_form_calculator.ts",
+                "path": "x-pack/platform/packages/private/security/ui_components/src/privilege_form_calculator/privilege_form_calculator.ts",
+                "lineNumber": 246,
+                "columnNumber": 43,
                 "deprecated": false,
                 "trackAdoption": false,
                 "isRequired": true
@@ -830,9 +920,11 @@
         "label": "FeatureTableCell",
         "description": [],
         "signature": [
-          "({ feature, className }: Props) => React.JSX.Element"
+          "({ feature, hasSubFeaturePrivileges }: Props) => React.JSX.Element"
         ],
-        "path": "x-pack/packages/security/ui_components/src/kibana_privilege_table/components/feature_table_cell.tsx",
+        "path": "x-pack/platform/packages/private/security/ui_components/src/kibana_privilege_table/components/feature_table_cell.tsx",
+        "lineNumber": 19,
+        "columnNumber": 14,
         "deprecated": false,
         "trackAdoption": false,
         "children": [
@@ -841,12 +933,14 @@
             "id": "def-public.FeatureTableCell.$1",
             "type": "Object",
             "tags": [],
-            "label": "{ feature, className }",
+            "label": "{ feature, hasSubFeaturePrivileges }",
             "description": [],
             "signature": [
               "Props"
             ],
-            "path": "x-pack/packages/security/ui_components/src/kibana_privilege_table/components/feature_table_cell.tsx",
+            "path": "x-pack/platform/packages/private/security/ui_components/src/kibana_privilege_table/components/feature_table_cell.tsx",
+            "lineNumber": 19,
+            "columnNumber": 34,
             "deprecated": false,
             "trackAdoption": false,
             "isRequired": true

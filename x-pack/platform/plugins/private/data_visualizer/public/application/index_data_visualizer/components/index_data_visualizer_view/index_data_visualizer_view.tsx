@@ -20,7 +20,6 @@ import {
   EuiPanel,
   EuiProgress,
   EuiSpacer,
-  EuiTitle,
 } from '@elastic/eui';
 
 import { type Filter, FilterStateStore, type Query, buildEsQuery } from '@kbn/es-query';
@@ -31,13 +30,13 @@ import {
   DatePickerWrapper,
   FullTimeRangeSelector,
   FROZEN_TIER_PREFERENCE,
+  mlTimefilterRefresh$,
 } from '@kbn/ml-date-picker';
 import { useStorage } from '@kbn/ml-local-storage';
 
 import type { SavedSearch } from '@kbn/saved-search-plugin/public';
 import { SEARCH_QUERY_LANGUAGE, type SearchQueryLanguage } from '@kbn/ml-query-utils';
 import { kbnTypeToSupportedType } from '../../../common/util/field_types_utils';
-import { useCurrentEuiTheme } from '../../../common/hooks/use_current_eui_theme';
 import {
   DV_FROZEN_TIER_PREFERENCE,
   DV_RANDOM_SAMPLER_PREFERENCE,
@@ -108,8 +107,6 @@ export interface IndexDataVisualizerViewProps {
 }
 
 export const IndexDataVisualizerView: FC<IndexDataVisualizerViewProps> = (dataVisualizerProps) => {
-  const euiTheme = useCurrentEuiTheme();
-
   const [savedRandomSamplerPreference, saveRandomSamplerPreference] = useStorage<
     DVKey,
     DVStorageMapped<typeof DV_RANDOM_SAMPLER_PREFERENCE>
@@ -141,7 +138,7 @@ export const IndexDataVisualizerView: FC<IndexDataVisualizerViewProps> = (dataVi
   );
 
   const { services } = useDataVisualizerKibana();
-  const { uiSettings, data } = services;
+  const { uiSettings, data, cps } = services;
 
   const [dataVisualizerListState, setDataVisualizerListState] =
     usePageUrlState<DataVisualizerIndexBasedPageUrlState>(
@@ -505,6 +502,13 @@ export const IndexDataVisualizerView: FC<IndexDataVisualizerViewProps> = (dataVi
     dataVisualizerListState,
   ]);
 
+  useEffect(() => {
+    const subscription = cps?.cpsManager?.getProjectRouting$()?.subscribe(() => {
+      mlTimefilterRefresh$.next({ lastRefresh: Date.now() });
+    });
+    return () => subscription?.unsubscribe();
+  }, [cps?.cpsManager]);
+
   return (
     <EuiPageTemplate
       offset={0}
@@ -515,49 +519,40 @@ export const IndexDataVisualizerView: FC<IndexDataVisualizerViewProps> = (dataVi
       paddingSize="none"
     >
       <EuiPageTemplate.Section>
-        <EuiPageTemplate.Header data-test-subj="dataVisualizerPageHeader" css={dvPageHeader}>
-          <EuiFlexGroup
-            data-test-subj="dataViewTitleHeader"
-            direction="row"
-            alignItems="center"
-            css={{ padding: `${euiTheme.euiSizeS} 0`, marginRight: `${euiTheme.euiSize}` }}
-          >
-            <EuiTitle size={'s'}>
-              <h2>{currentDataView.getName()}</h2>
-            </EuiTitle>
-            <DataVisualizerDataViewManagement currentDataView={currentDataView} />
-          </EuiFlexGroup>
-
-          {isWithinLargeBreakpoint ? <EuiSpacer size="m" /> : null}
-          <EuiFlexGroup
-            alignItems="center"
-            justifyContent="flexEnd"
-            gutterSize="s"
-            data-test-subj="dataVisualizerTimeRangeSelectorSection"
-          >
-            {hasValidTimeField ? (
-              <EuiFlexItem grow={false}>
-                <FullTimeRangeSelector
-                  frozenDataPreference={frozenDataPreference}
-                  setFrozenDataPreference={setFrozenDataPreference}
-                  dataView={currentDataView}
-                  query={undefined}
-                  disabled={false}
-                  timefilter={timefilter}
-                />
-              </EuiFlexItem>
-            ) : null}
-            <EuiFlexItem grow={false}>
-              <DatePickerWrapper
-                isAutoRefreshOnly={!hasValidTimeField}
-                showRefresh={!hasValidTimeField}
-                width="full"
-                needsUpdate={queryNeedsUpdate}
-                onRefresh={handleRefresh}
+        <EuiPageTemplate.Header
+          data-test-subj="dataVisualizerPageHeader"
+          css={dvPageHeader}
+          pageTitle={
+            <>
+              {currentDataView.getName()}
+              {/* TODO: This management section shouldn't live inside the header */}
+              <DataVisualizerDataViewManagement currentDataView={currentDataView} />
+            </>
+          }
+          rightSideGroupProps={{
+            gutterSize: 's',
+            'data-test-subj': 'dataVisualizerTimeRangeSelectorSection',
+          }}
+          rightSideItems={[
+            <DatePickerWrapper
+              isAutoRefreshOnly={!hasValidTimeField}
+              showRefresh={!hasValidTimeField}
+              width="full"
+              needsUpdate={queryNeedsUpdate}
+              onRefresh={handleRefresh}
+            />,
+            hasValidTimeField && (
+              <FullTimeRangeSelector
+                frozenDataPreference={frozenDataPreference}
+                setFrozenDataPreference={setFrozenDataPreference}
+                dataView={currentDataView}
+                query={undefined}
+                disabled={false}
+                timefilter={timefilter}
               />
-            </EuiFlexItem>
-          </EuiFlexGroup>
-        </EuiPageTemplate.Header>
+            ),
+          ]}
+        />
         <EuiSpacer size="m" />
 
         <EuiFlexGroup gutterSize="m" direction={isWithinLargeBreakpoint ? 'column' : 'row'}>

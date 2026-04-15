@@ -10,21 +10,21 @@ import type {
   HasEditCapabilities,
   PublishesDataViews,
   PublishesUnifiedSearch,
-  PublishesWritablePanelTitle,
+  PublishesWritableTitle,
   PublishingSubject,
-  SerializedTitles,
 } from '@kbn/presentation-publishing';
 import { apiIsOfType } from '@kbn/presentation-publishing';
+import type { TypeOf } from '@kbn/config-schema';
 import type { SwimlaneType } from '../../application/explorer/explorer_constants';
 
 import type { JobId } from '../../../common/types/anomaly_detection_jobs';
 import type { AppStateSelectedCells } from '../../application/explorer/explorer_utils';
 import { ANOMALY_SWIMLANE_EMBEDDABLE_TYPE } from '../constants';
+import type { AnomalySwimlaneEmbeddableUserInput, MlEmbeddableBaseApi } from '../types';
 import type {
-  AnomalySwimlaneEmbeddableCustomInput,
-  AnomalySwimlaneEmbeddableUserInput,
-  MlEmbeddableBaseApi,
-} from '../types';
+  anomalySwimLaneEmbeddableStateSchema,
+  anomalySwimlaneEmbeddableStateViewBySchema,
+} from '../../../server/embeddable/schemas';
 
 export interface AnomalySwimLaneComponentApi {
   jobIds: PublishingSubject<JobId[]>;
@@ -41,7 +41,7 @@ export interface AnomalySwimLaneComponentApi {
 export type AnomalySwimLaneEmbeddableApi = MlEmbeddableBaseApi<AnomalySwimLaneEmbeddableState> &
   PublishesDataViews &
   PublishesUnifiedSearch &
-  PublishesWritablePanelTitle &
+  PublishesWritableTitle &
   HasEditCapabilities &
   AnomalySwimLaneComponentApi;
 
@@ -60,10 +60,10 @@ export function isSwimLaneEmbeddableContext(arg: unknown): arg is AnomalySwimLan
 /**
  * Persisted state for the Anomaly Swim Lane Embeddable.
  */
-export interface AnomalySwimLaneEmbeddableState
-  extends SerializedTitles,
-    AnomalySwimlaneEmbeddableCustomInput {}
-
+export type AnomalySwimLaneEmbeddableState = TypeOf<typeof anomalySwimLaneEmbeddableStateSchema>;
+export type AnomalySwimlaneEmbeddableStateViewBy = TypeOf<
+  typeof anomalySwimlaneEmbeddableStateViewBySchema
+>;
 /**
  * The subset of the Anomaly Swim Lane Embeddable state that is actually used by the swimlane embeddable.
  *

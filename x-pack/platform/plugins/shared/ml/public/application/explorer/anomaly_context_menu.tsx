@@ -52,6 +52,7 @@ import { useMlKibana } from '../contexts/kibana';
 import type { AppStateSelectedCells, ExplorerJob } from './explorer_utils';
 import { getSelectionInfluencers, getSelectionTimeRange } from './explorer_utils';
 import { getDefaultExplorerChartsPanelTitle } from '../../embeddables/anomaly_charts/utils';
+import { CASES_TOAST_MESSAGES_TITLES } from '../../cases/constants';
 
 interface AnomalyContextMenuProps {
   selectedJobs: ExplorerJob[];
@@ -59,6 +60,7 @@ interface AnomalyContextMenuProps {
   bounds?: TimeRangeBounds;
   interval?: number;
   chartsCount: number;
+  mergedGroupsAndJobsIds: string[];
 }
 
 const SavedObjectSaveModalDashboard = withSuspense(LazySavedObjectSaveModalDashboard);
@@ -76,6 +78,7 @@ export const AnomalyContextMenu: FC<AnomalyContextMenuProps> = ({
   bounds,
   interval,
   chartsCount,
+  mergedGroupsAndJobsIds,
 }) => {
   const {
     services: {
@@ -97,15 +100,18 @@ export const AnomalyContextMenu: FC<AnomalyContextMenuProps> = ({
     [setIsMenuOpen]
   );
 
-  const openCasesModal = useCasesModal(ANOMALY_EXPLORER_CHARTS_EMBEDDABLE_TYPE);
+  const openCasesModal = useCasesModal(
+    ANOMALY_EXPLORER_CHARTS_EMBEDDABLE_TYPE,
+    CASES_TOAST_MESSAGES_TITLES.ANOMALY_CHARTS(maxSeriesToPlot)
+  );
 
-  const canEditDashboards = capabilities.dashboard?.createNew ?? false;
+  const canEditDashboards = capabilities.dashboard_v2?.createNew ?? false;
   const casesPrivileges = cases?.helpers.canUseCases();
 
   const { anomalyExplorerCommonStateService, chartsStateService } = useAnomalyExplorerContext();
   const { queryString } = useObservable(
-    anomalyExplorerCommonStateService.getFilterSettings$(),
-    anomalyExplorerCommonStateService.getFilterSettings()
+    anomalyExplorerCommonStateService.filterSettings$,
+    anomalyExplorerCommonStateService.filterSettings
   );
 
   const chartsData = useObservable(
@@ -137,8 +143,6 @@ export const AnomalyContextMenu: FC<AnomalyContextMenuProps> = ({
     maxSeriesToPlot >= 1 &&
     maxSeriesToPlot <= MAX_ANOMALY_CHARTS_ALLOWED;
 
-  const jobIds = selectedJobs.map(({ id }) => id);
-
   const getEmbeddableInput = useCallback(
     (timeRange?: TimeRange) => {
       // Respect the query and the influencers selected
@@ -151,7 +155,8 @@ export const AnomalyContextMenu: FC<AnomalyContextMenuProps> = ({
       );
 
       const influencers = selectionInfluencers ?? [];
-      const config = getDefaultEmbeddablePanelConfig(jobIds, queryString);
+      const config = getDefaultEmbeddablePanelConfig(mergedGroupsAndJobsIds, queryString);
+
       const queryFromSelectedCells = influencers
         .map((s) => escapeKueryForEmbeddableFieldValuePair(s.fieldName, s.fieldValue))
         .join(' or ');
@@ -160,8 +165,8 @@ export const AnomalyContextMenu: FC<AnomalyContextMenuProps> = ({
       // so we are not passing the time range here
       return {
         ...config,
-        ...(timeRange ? { timeRange } : {}),
-        jobIds,
+        ...(timeRange ? { time_range: timeRange } : {}),
+        jobIds: mergedGroupsAndJobsIds,
         maxSeriesToPlot: maxSeriesToPlot ?? DEFAULT_MAX_SERIES_TO_PLOT,
         severityThreshold: severity.val,
         ...((isDefined(queryString) && queryString !== '') ||
@@ -175,11 +180,11 @@ export const AnomalyContextMenu: FC<AnomalyContextMenuProps> = ({
           : {}),
       };
     },
-    [jobIds, maxSeriesToPlot, severity, queryString, selectedCells]
+    [selectedCells, mergedGroupsAndJobsIds, queryString, maxSeriesToPlot, severity.val]
   );
 
   const onSaveCallback: SaveModalDashboardProps['onSave'] = useCallback(
-    ({ dashboardId, newTitle, newDescription }) => {
+    async ({ dashboardId, newTitle, newDescription }) => {
       const stateTransfer = embeddable!.getStateTransfer();
 
       const embeddableInput: Partial<AnomalyChartsEmbeddableState> = {
@@ -189,14 +194,14 @@ export const AnomalyContextMenu: FC<AnomalyContextMenuProps> = ({
       };
 
       const state = {
-        input: embeddableInput,
+        serializedState: embeddableInput,
         type: ANOMALY_EXPLORER_CHARTS_EMBEDDABLE_TYPE,
       };
 
       const path = dashboardId === 'new' ? '#/create' : `#/view/${dashboardId}`;
 
-      stateTransfer.navigateToWithEmbeddablePackage('dashboards', {
-        state,
+      stateTransfer.navigateToWithEmbeddablePackages('dashboards', {
+        state: [state],
         path,
       });
     },
@@ -229,6 +234,7 @@ export const AnomalyContextMenu: FC<AnomalyContextMenuProps> = ({
             }
           >
             <EuiFieldNumber
+              isInvalid={!isMaxSeriesToPlotValid}
               data-test-subj="mlAnomalyChartsInitializerMaxSeries"
               id="selectMaxSeriesToPlot"
               name="selectMaxSeriesToPlot"
@@ -265,6 +271,7 @@ export const AnomalyContextMenu: FC<AnomalyContextMenuProps> = ({
           />
         ),
         panel: 'addToDashboardPanel',
+        icon: 'dashboardApp',
         'data-test-subj': 'mlAnomalyAddChartsToDashboardButton',
       });
 
@@ -285,6 +292,7 @@ export const AnomalyContextMenu: FC<AnomalyContextMenuProps> = ({
         name: (
           <FormattedMessage id="xpack.ml.explorer.attachToCaseLabel" defaultMessage="Add to case" />
         ),
+        icon: 'casesApp',
         panel: 'addToCasePanel',
         'data-test-subj': 'mlAnomalyAttachChartsToCasesButton',
       });
@@ -328,7 +336,8 @@ export const AnomalyContextMenu: FC<AnomalyContextMenuProps> = ({
                   defaultMessage: 'Actions',
                 })}
                 color="text"
-                iconType="boxesHorizontal"
+                display="base"
+                iconType="boxesVertical"
                 onClick={setIsMenuOpen.bind(null, !isMenuOpen)}
                 data-test-subj="mlExplorerAnomalyPanelMenu"
                 disabled={chartsCount < 1}
@@ -350,7 +359,7 @@ export const AnomalyContextMenu: FC<AnomalyContextMenuProps> = ({
             defaultMessage: 'Anomaly charts',
           })}
           documentInfo={{
-            title: getDefaultExplorerChartsPanelTitle(selectedJobs.map(({ id }) => id)),
+            title: getDefaultExplorerChartsPanelTitle(mergedGroupsAndJobsIds),
           }}
           onClose={setIsAddDashboardActive.bind(null, false)}
           onSave={onSaveCallback}

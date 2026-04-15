@@ -7,10 +7,9 @@
 
 import type { FC } from 'react';
 import React from 'react';
-import { EuiIcon } from '@elastic/eui';
+import { useEuiTheme, EuiIcon } from '@elastic/eui';
 import { timeFormatter } from '@kbn/ml-date-utils';
 import { AnnotationDomainType, LineAnnotation, Position, RectAnnotation } from '@elastic/charts';
-import { useCurrentThemeVars } from '../../../../../../contexts/kibana';
 
 interface Props {
   overlayKey: number;
@@ -21,7 +20,7 @@ interface Props {
 }
 
 export const OverlayRange: FC<Props> = ({ overlayKey, start, end, color, showMarker = true }) => {
-  const { euiTheme } = useCurrentThemeVars();
+  const { euiTheme } = useEuiTheme();
 
   return (
     <>
@@ -54,10 +53,10 @@ export const OverlayRange: FC<Props> = ({ overlayKey, start, end, color, showMar
         }}
         markerPosition={Position.Bottom}
         hideTooltips
-        marker={showMarker ? <EuiIcon type="arrowUp" /> : undefined}
+        marker={showMarker ? <EuiIcon type="chevronSingleUp" /> : undefined}
         markerBody={
           showMarker ? (
-            <div style={{ fontWeight: 'normal', color: euiTheme.euiTextColor }}>
+            <div style={{ fontWeight: 'normal', color: euiTheme.colors.textParagraph }}>
               {timeFormatter(start)}
             </div>
           ) : undefined

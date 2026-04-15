@@ -7,8 +7,7 @@
  * License v3.0 only", or the "Server Side Public License, v 1".
  */
 
-import { EuiPopover, EuiScreenReaderOnly } from '@elastic/eui';
-
+import { type EuiButtonIconProps, EuiPopover, EuiScreenReaderOnly } from '@elastic/eui';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { euiThemeVars } from '@kbn/ui-theme';
 import { css } from '@emotion/react';
@@ -43,6 +42,8 @@ interface Props {
   actionContext: CellActionExecutionContext;
   showActionTooltips: boolean;
   disabledActionTypes: string[];
+  extraActionsIconType?: EuiButtonIconProps['iconType'];
+  extraActionsColor?: EuiButtonIconProps['color'];
 }
 
 export const HoverActionsPopover: React.FC<Props> = ({
@@ -52,6 +53,8 @@ export const HoverActionsPopover: React.FC<Props> = ({
   actionContext,
   showActionTooltips,
   disabledActionTypes,
+  extraActionsIconType,
+  extraActionsColor,
 }) => {
   const contentRef = useRef<HTMLDivElement>(null);
   const [isExtraActionsPopoverOpen, setIsExtraActionsPopoverOpen] = useState(false);
@@ -133,9 +136,12 @@ export const HoverActionsPopover: React.FC<Props> = ({
           closePopover={closePopover}
           hasArrow={false}
           isOpen={showHoverContent}
+          offset={0}
+          // Avoid scrolling scrollable ancestors (e.g. flyout body) when focus moves into the panel;
+          // react-focus-on maps this to focusOptions: { preventScroll: true } on react-focus-lock.
+          focusTrapProps={{ preventScrollOnFocus: true }}
           panelPaddingSize="none"
           repositionOnScroll
-          ownFocus={false}
           panelProps={{ 'data-test-subj': 'hoverActionsPopover' }}
           aria-label={ACTIONS_AREA_LABEL}
         >
@@ -161,6 +167,8 @@ export const HoverActionsPopover: React.FC<Props> = ({
                 <ExtraActionsButton
                   onClick={onShowExtraActionsClick}
                   showTooltip={showActionTooltips}
+                  extraActionsIconType={extraActionsIconType}
+                  extraActionsColor={extraActionsColor}
                 />
               )}
             </div>

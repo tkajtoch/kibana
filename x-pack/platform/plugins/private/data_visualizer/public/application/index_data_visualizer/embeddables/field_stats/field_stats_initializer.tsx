@@ -6,6 +6,8 @@
  */
 
 import {
+  mathWithUnits,
+  useEuiTheme,
   EuiButton,
   EuiButtonEmpty,
   EuiCodeBlock,
@@ -28,7 +30,6 @@ import React, { useMemo, useState, useCallback } from 'react';
 import { ENABLE_ESQL, getESQLAdHocDataview } from '@kbn/esql-utils';
 import type { AggregateQuery } from '@kbn/es-query';
 import { css } from '@emotion/react';
-import { euiThemeVars } from '@kbn/ui-theme';
 import { useDataVisualizerKibana } from '../../../kibana_context';
 import { FieldStatsESQLEditor } from './field_stats_esql_editor';
 import type {
@@ -61,12 +62,19 @@ export const FieldStatisticsInitializer: FC<FieldStatsInitializerProps> = ({
   onPreview,
   isNewPanel,
 }) => {
+  const euiContext = useEuiTheme();
+  const { euiTheme } = euiContext;
+
+  // FIXME: add a token for this on euiTheme.components. https://github.com/elastic/eui/issues/8217
+  const formMaxWidth = mathWithUnits(euiTheme.size.base, (x) => x * 25);
+
   const {
     data: { dataViews },
     unifiedSearch: {
       ui: { IndexPatternSelect },
     },
     uiSettings,
+    http,
   } = useDataVisualizerKibana().services;
 
   const [dataViewId, setDataViewId] = useState(initialInput?.dataViewId ?? '');
@@ -103,7 +111,11 @@ export const FieldStatisticsInitializer: FC<FieldStatsInitializerProps> = ({
 
   const onESQLQuerySubmit = useCallback(
     async (query: AggregateQuery, abortController?: AbortController) => {
-      const adhocDataView = await getESQLAdHocDataview(query.esql, dataViews);
+      const adhocDataView = await getESQLAdHocDataview({
+        dataViewsService: dataViews,
+        query: query.esql,
+        http,
+      });
       if (adhocDataView && adhocDataView.id) {
         setDataViewId(adhocDataView.id);
       }
@@ -130,7 +142,7 @@ export const FieldStatisticsInitializer: FC<FieldStatsInitializerProps> = ({
         hasBorder={true}
         css={css`
           pointer-events: auto;
-          background-color: ${euiThemeVars.euiColorEmptyShade};
+          background-color: ${euiTheme.colors.emptyShade};
         `}
         data-test-subj="editFlyoutHeader"
       >
@@ -152,7 +164,7 @@ export const FieldStatisticsInitializer: FC<FieldStatsInitializerProps> = ({
                       }
                     )}{' '}
                 <EuiIconTip
-                  type="iInCircle"
+                  type="info"
                   content={i18n.translate(
                     'xpack.dataVisualizer.fieldStatisticsDashboardPanel.config.samplingTooltip',
                     {
@@ -171,8 +183,8 @@ export const FieldStatisticsInitializer: FC<FieldStatsInitializerProps> = ({
         css={css`
           // styles needed to display extra drop targets that are outside of the config panel main area
           overflow-y: auto;
-          padding-left: ${euiThemeVars.euiFormMaxWidth};
-          margin-left: -${euiThemeVars.euiFormMaxWidth};
+          padding-left: ${formMaxWidth};
+          margin-left: -${formMaxWidth};
           pointer-events: none;
           .euiFlyoutBody__overflow {
             -webkit-mask-image: none;
@@ -190,7 +202,7 @@ export const FieldStatisticsInitializer: FC<FieldStatsInitializerProps> = ({
             padding: 0;
             block-size: 100%;
           }
-          border-bottom: 2px solid ${euiThemeVars.euiBorderColor};
+          border-bottom: 2px solid ${euiTheme.border.color};
         `}
       >
         <EuiFlexGroup
@@ -202,8 +214,9 @@ export const FieldStatisticsInitializer: FC<FieldStatsInitializerProps> = ({
         >
           {isNewPanel ? (
             <EuiCallOut
+              announceOnMount={false}
               size="s"
-              iconType="iInCircle"
+              iconType="info"
               title={
                 <FormattedMessage
                   id="xpack.dataVisualizer.fieldStatisticsDashboardPanel.config.description"
@@ -234,7 +247,7 @@ export const FieldStatisticsInitializer: FC<FieldStatsInitializerProps> = ({
                   defaultMessage: 'Data view',
                 }
               )}
-              css={css({ padding: euiThemeVars.euiSizeM })}
+              css={css({ padding: euiTheme.size.m })}
             >
               <IndexPatternSelect
                 autoFocus={!dataViewId}

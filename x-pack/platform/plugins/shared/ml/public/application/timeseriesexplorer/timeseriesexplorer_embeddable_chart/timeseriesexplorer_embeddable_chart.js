@@ -871,6 +871,7 @@ export class TimeSeriesExplorerEmbeddableChart extends React.Component {
         {fieldNamesWithEmptyValues.length > 0 && (
           <>
             <EuiCallOut
+              announceOnMount
               title={
                 <FormattedMessage
                   id="xpack.ml.timeSeriesExplorer.singleMetricRequiredMessage"
@@ -882,7 +883,7 @@ export class TimeSeriesExplorerEmbeddableChart extends React.Component {
                   }}
                 />
               }
-              iconType="help"
+              iconType="question"
               size="s"
             />
             <EuiSpacer size="m" />
@@ -1000,6 +1001,7 @@ export class TimeSeriesExplorerEmbeddableChart extends React.Component {
                 lastRefresh={lastRefresh}
                 tableData={tableData}
                 sourceIndicesWithGeoFields={sourceIndicesWithGeoFields}
+                telemetrySource={'embeddable_single_metric_viewer_chart'}
               />
             </div>
           )}

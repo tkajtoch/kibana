@@ -8,7 +8,7 @@
 import type { FC } from 'react';
 import React, { useMemo } from 'react';
 import type { Observable } from 'rxjs';
-import { map } from 'rxjs';
+import { EMPTY, map, merge } from 'rxjs';
 import { pick } from 'lodash';
 import { EuiSpacer } from '@elastic/eui';
 
@@ -64,16 +64,29 @@ export const ChangePointDetectionAppState: FC<ChangePointDetectionAppStateProps>
   showFrozenDataTierChoice = true,
 }) => {
   const datePickerDeps: DatePickerDependencies = {
-    ...pick(appContextValue, ['data', 'http', 'notifications', 'theme', 'uiSettings', 'i18n']),
+    ...pick(appContextValue, [
+      'data',
+      'http',
+      'notifications',
+      'theme',
+      'uiSettings',
+      'userProfile',
+      'i18n',
+    ]),
     uiSettingsKeys: UI_SETTINGS,
     showFrozenDataTierChoice,
   };
 
   const warning = timeSeriesDataViewWarning(dataView, 'change_point_detection');
 
-  const reload$ = useMemo<Observable<number>>(() => {
-    return mlTimefilterRefresh$.pipe(map((v) => v.lastRefresh));
-  }, []);
+  const reload$ = useMemo<Observable<number>>(
+    () =>
+      merge(
+        mlTimefilterRefresh$.pipe(map((v) => v.lastRefresh)),
+        (appContextValue.cps?.cpsManager?.getProjectRouting$() ?? EMPTY).pipe(map(() => Date.now()))
+      ),
+    [appContextValue.cps?.cpsManager]
+  );
 
   if (warning !== null) {
     return <>{warning}</>;

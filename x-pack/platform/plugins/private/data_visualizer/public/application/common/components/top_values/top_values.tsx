@@ -17,6 +17,7 @@ import {
   EuiSpacer,
   useEuiTheme,
   euiScrollBarStyles,
+  EuiTextTruncate,
 } from '@elastic/eui';
 
 import { FormattedMessage } from '@kbn/i18n-react';
@@ -34,7 +35,7 @@ import type { FieldVisStats } from '../../../../../common/types';
 import { ExpandedRowPanel } from '../stats_table/components/field_data_expanded_row/expanded_row_panel';
 import { EMPTY_EXAMPLE } from '../examples_list/examples_list';
 
-interface Props {
+interface TopValuesProps {
   stats: FieldVisStats | undefined;
   fieldFormat?: any;
   barColor?: EuiProgressProps['color'];
@@ -53,7 +54,7 @@ function getPercentLabel(percent: number): string {
   }
 }
 
-export const TopValues: FC<Props> = ({
+export const TopValues: FC<TopValuesProps> = ({
   stats,
   fieldFormat,
   barColor,
@@ -72,7 +73,13 @@ export const TopValues: FC<Props> = ({
       data: { fieldFormats },
     },
   } = useDataVisualizerKibana();
-  const euiTheme = useEuiTheme();
+  const euiThemeContext = useEuiTheme();
+  const { euiTheme } = euiThemeContext;
+
+  const fieldDataTopValuesContainer = css({ paddingTop: euiTheme.size.xs });
+  const topValuesValueLabelContainer = css({ marginRight: euiTheme.size.m });
+  const topValueLabelStyles = css({ textOverflow: 'ellipsis' });
+  const topValueBarStyles = css({ maxInlineSize: 'calc(100% - 52px)' });
 
   if (stats === undefined || !stats.topValues) return null;
   const { fieldName, sampleCount, approximate } = stats;
@@ -171,11 +178,13 @@ export const TopValues: FC<Props> = ({
 
   return (
     <ExpandedRowPanel
+      grow={true}
       dataTestSubj={'dataVisualizerFieldDataTopValues'}
       className={classNames('dvPanel__wrapper', compressed ? 'dvPanel--compressed' : undefined)}
       css={css`
         overflow-x: auto;
-        ${euiScrollBarStyles(euiTheme)}
+        ${euiScrollBarStyles(euiThemeContext)};
+        max-width: 420px;
       `}
     >
       <ExpandedRowFieldHeader>
@@ -194,23 +203,30 @@ export const TopValues: FC<Props> = ({
 
       <div
         data-test-subj="dataVisualizerFieldDataTopValuesContent"
-        className={classNames('fieldDataTopValuesContainer', 'dvTopValues__wrapper')}
+        className="dvTopValues__wrapper"
+        css={fieldDataTopValuesContainer}
       >
         {Array.isArray(topValues)
           ? topValues.map((value) => {
               const fieldValue = value.key_as_string ?? (value.key ? value.key.toString() : '');
               const displayValue = fieldValue === '' ? EMPTY_EXAMPLE : fieldValue;
+              const label: string = value.key
+                ? kibanaFieldFormat(value.key, fieldFormat)
+                : displayValue;
 
               return (
                 <EuiFlexGroup gutterSize="xs" alignItems="center" key={displayValue}>
-                  <EuiFlexItem data-test-subj="dataVisualizerFieldDataTopValueBar">
+                  <EuiFlexItem
+                    css={topValueBarStyles}
+                    data-test-subj="dataVisualizerFieldDataTopValueBar"
+                  >
                     <EuiProgress
                       value={value.percent}
                       max={1}
                       color={barColor}
                       size="xs"
-                      label={value.key ? kibanaFieldFormat(value.key, fieldFormat) : displayValue}
-                      className={classNames('eui-textTruncate', 'topValuesValueLabelContainer')}
+                      label={<EuiTextTruncate css={topValueLabelStyles} text={label} />}
+                      css={topValuesValueLabelContainer}
                       valueText={`${value.doc_count}${
                         totalDocuments !== undefined
                           ? ` (${getPercentLabel(value.percent * 100)})`
@@ -229,7 +245,7 @@ export const TopValues: FC<Props> = ({
                     >
                       <EuiButtonIcon
                         iconSize="s"
-                        iconType="plusInCircle"
+                        iconType="plusCircle"
                         onClick={() => onAddFilter(fieldName, fieldValue, '+')}
                         aria-label={i18n.translate(
                           'xpack.dataVisualizer.dataGrid.field.addFilterAriaLabel',
@@ -250,7 +266,7 @@ export const TopValues: FC<Props> = ({
                       />
                       <EuiButtonIcon
                         iconSize="s"
-                        iconType="minusInCircle"
+                        iconType="minusCircle"
                         onClick={() => onAddFilter(fieldName, fieldValue, '-')}
                         aria-label={i18n.translate(
                           'xpack.dataVisualizer.dataGrid.field.removeFilterAriaLabel',
@@ -277,7 +293,10 @@ export const TopValues: FC<Props> = ({
           : null}
         {shouldShowOtherCount && topValuesOtherCount > 0 ? (
           <EuiFlexGroup gutterSize="xs" alignItems="center" key="other">
-            <EuiFlexItem data-test-subj="dataVisualizerFieldDataTopValueBar">
+            <EuiFlexItem
+              css={topValueBarStyles}
+              data-test-subj="dataVisualizerFieldDataTopValueBar"
+            >
               <EuiProgress
                 value={topValuesOtherCount}
                 max={totalDocuments}
@@ -289,7 +308,8 @@ export const TopValues: FC<Props> = ({
                     defaultMessage="Other"
                   />
                 }
-                className={classNames('eui-textTruncate', 'topValuesValueLabelContainer')}
+                className="eui-textTruncate"
+                css={topValuesValueLabelContainer}
                 valueText={`${topValuesOtherCount}${
                   totalDocuments !== undefined
                     ? ` (${getPercentLabel(topValuesOtherCountPercent * 100)})`

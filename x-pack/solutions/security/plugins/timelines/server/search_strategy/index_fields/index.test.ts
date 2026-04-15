@@ -10,7 +10,8 @@ import { sortBy } from 'lodash/fp';
 import { formatIndexFields, createFieldItem, requestIndexFieldSearchHandler } from '.';
 import { mockAuditbeatIndexField, mockFilebeatIndexField, mockPacketbeatIndexField } from './mock';
 import { fieldsBeat as beatFields } from '../../utils/beat_schema/fields.json';
-import { IndexPatternsFetcher, SearchStrategyDependencies } from '@kbn/data-plugin/server';
+import type { SearchStrategyDependencies } from '@kbn/data-plugin/server';
+import { IndexPatternsFetcher } from '@kbn/data-views-plugin/server';
 
 describe('Index Fields', () => {
   describe('formatIndexFields', () => {
@@ -380,11 +381,13 @@ describe('Fields Provider', () => {
 
         expect(esClientSearchMock).toHaveBeenCalledWith({
           index: indices[0],
-          body: { query: { match_all: {} }, size: 0 },
+          query: { match_all: {} },
+          size: 0,
         });
         expect(esClientSearchMock).toHaveBeenCalledWith({
           index: indices[1],
-          body: { query: { match_all: {} }, size: 0 },
+          query: { match_all: {} },
+          size: 0,
         });
         expect(getFieldsForWildcardMock).not.toHaveBeenCalled();
 
@@ -413,11 +416,13 @@ describe('Fields Provider', () => {
 
         expect(esClientSearchMock).toHaveBeenCalledWith({
           index: indices[0],
-          body: { query: { match_all: {} }, size: 0 },
+          query: { match_all: {} },
+          size: 0,
         });
         expect(esClientSearchMock).toHaveBeenCalledWith({
           index: indices[1],
-          body: { query: { match_all: {} }, size: 0 },
+          query: { match_all: {} },
+          size: 0,
         });
         expect(getFieldsForWildcardMock).not.toHaveBeenCalled();
 

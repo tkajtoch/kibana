@@ -9,7 +9,7 @@ import { schema } from '@kbn/config-schema';
 
 import { deserializeAutoFollowPattern } from '../../../../common/services/auto_follow_pattern_serialization';
 import { addBasePath } from '../../../services';
-import { RouteDependencies } from '../../../types';
+import type { RouteDependencies } from '../../../types';
 
 /**
  * Get a single auto-follow pattern
@@ -26,6 +26,12 @@ export const registerGetRoute = ({
   router.get(
     {
       path: addBasePath('/auto_follow_patterns/{id}'),
+      security: {
+        authz: {
+          enabled: false,
+          reason: 'Relies on es client for authorization',
+        },
+      },
       validate: {
         params: paramsSchema,
       },

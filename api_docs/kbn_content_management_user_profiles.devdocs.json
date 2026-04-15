@@ -13,7 +13,9 @@
         "signature": [
           "({\n  entityName = i18n.translate('contentManagement.userProfiles.managedAvatarTip.defaultEntityName', {\n    defaultMessage: 'object',\n  }),\n}: { entityName?: string | undefined; }) => React.JSX.Element"
         ],
-        "path": "packages/content-management/user_profiles/src/components/managed_avatar_tip.tsx",
+        "path": "src/platform/packages/shared/content-management/user_profiles/src/components/managed_avatar_tip.tsx",
+        "lineNumber": 14,
+        "columnNumber": 1,
         "deprecated": false,
         "trackAdoption": false,
         "children": [
@@ -24,7 +26,9 @@
             "tags": [],
             "label": "{\n  entityName = i18n.translate('contentManagement.userProfiles.managedAvatarTip.defaultEntityName', {\n    defaultMessage: 'object',\n  }),\n}",
             "description": [],
-            "path": "packages/content-management/user_profiles/src/components/managed_avatar_tip.tsx",
+            "path": "src/platform/packages/shared/content-management/user_profiles/src/components/managed_avatar_tip.tsx",
+            "lineNumber": 18,
+            "columnNumber": 4,
             "deprecated": false,
             "trackAdoption": false,
             "children": [
@@ -38,7 +42,9 @@
                 "signature": [
                   "string | undefined"
                 ],
-                "path": "packages/content-management/user_profiles/src/components/managed_avatar_tip.tsx",
+                "path": "src/platform/packages/shared/content-management/user_profiles/src/components/managed_avatar_tip.tsx",
+                "lineNumber": 19,
+                "columnNumber": 3,
                 "deprecated": false,
                 "trackAdoption": false
               }
@@ -60,7 +66,9 @@
           "IconType",
           " | undefined; includeVersionTip?: boolean | undefined; entityNamePlural?: string | undefined; }) => React.JSX.Element"
         ],
-        "path": "packages/content-management/user_profiles/src/components/user_missing_tip.tsx",
+        "path": "src/platform/packages/shared/content-management/user_profiles/src/components/user_missing_tip.tsx",
+        "lineNumber": 21,
+        "columnNumber": 14,
         "deprecated": false,
         "trackAdoption": false,
         "children": [
@@ -71,7 +79,9 @@
             "tags": [],
             "label": "props",
             "description": [],
-            "path": "packages/content-management/user_profiles/src/components/user_missing_tip.tsx",
+            "path": "src/platform/packages/shared/content-management/user_profiles/src/components/user_missing_tip.tsx",
+            "lineNumber": 21,
+            "columnNumber": 37,
             "deprecated": false,
             "trackAdoption": false,
             "children": [
@@ -86,7 +96,9 @@
                   "IconType",
                   " | undefined"
                 ],
-                "path": "packages/content-management/user_profiles/src/components/user_missing_tip.tsx",
+                "path": "src/platform/packages/shared/content-management/user_profiles/src/components/user_missing_tip.tsx",
+                "lineNumber": 22,
+                "columnNumber": 3,
                 "deprecated": false,
                 "trackAdoption": false
               },
@@ -100,7 +112,9 @@
                 "signature": [
                   "boolean | undefined"
                 ],
-                "path": "packages/content-management/user_profiles/src/components/user_missing_tip.tsx",
+                "path": "src/platform/packages/shared/content-management/user_profiles/src/components/user_missing_tip.tsx",
+                "lineNumber": 23,
+                "columnNumber": 3,
                 "deprecated": false,
                 "trackAdoption": false
               },
@@ -114,7 +128,9 @@
                 "signature": [
                   "string | undefined"
                 ],
-                "path": "packages/content-management/user_profiles/src/components/user_missing_tip.tsx",
+                "path": "src/platform/packages/shared/content-management/user_profiles/src/components/user_missing_tip.tsx",
+                "lineNumber": 24,
+                "columnNumber": 3,
                 "deprecated": false,
                 "trackAdoption": false
               }
@@ -134,7 +150,9 @@
         "signature": [
           "(props: { iconType?: string | undefined; includeVersionTip?: boolean | undefined; entityNamePlural?: string | undefined; }) => React.JSX.Element"
         ],
-        "path": "packages/content-management/user_profiles/src/components/user_missing_tip.tsx",
+        "path": "src/platform/packages/shared/content-management/user_profiles/src/components/user_missing_tip.tsx",
+        "lineNumber": 49,
+        "columnNumber": 14,
         "deprecated": false,
         "trackAdoption": false,
         "children": [
@@ -145,7 +163,9 @@
             "tags": [],
             "label": "props",
             "description": [],
-            "path": "packages/content-management/user_profiles/src/components/user_missing_tip.tsx",
+            "path": "src/platform/packages/shared/content-management/user_profiles/src/components/user_missing_tip.tsx",
+            "lineNumber": 49,
+            "columnNumber": 37,
             "deprecated": false,
             "trackAdoption": false,
             "children": [
@@ -159,7 +179,9 @@
                 "signature": [
                   "string | undefined"
                 ],
-                "path": "packages/content-management/user_profiles/src/components/user_missing_tip.tsx",
+                "path": "src/platform/packages/shared/content-management/user_profiles/src/components/user_missing_tip.tsx",
+                "lineNumber": 50,
+                "columnNumber": 3,
                 "deprecated": false,
                 "trackAdoption": false
               },
@@ -173,7 +195,9 @@
                 "signature": [
                   "boolean | undefined"
                 ],
-                "path": "packages/content-management/user_profiles/src/components/user_missing_tip.tsx",
+                "path": "src/platform/packages/shared/content-management/user_profiles/src/components/user_missing_tip.tsx",
+                "lineNumber": 51,
+                "columnNumber": 3,
                 "deprecated": false,
                 "trackAdoption": false
               },
@@ -187,7 +211,9 @@
                 "signature": [
                   "string | undefined"
                 ],
-                "path": "packages/content-management/user_profiles/src/components/user_missing_tip.tsx",
+                "path": "src/platform/packages/shared/content-management/user_profiles/src/components/user_missing_tip.tsx",
+                "lineNumber": 52,
+                "columnNumber": 3,
                 "deprecated": false,
                 "trackAdoption": false
               }
@@ -207,7 +233,9 @@
         "signature": [
           "(props: { uid: string; }) => React.JSX.Element | null"
         ],
-        "path": "packages/content-management/user_profiles/src/components/user_avatar_tip.tsx",
+        "path": "src/platform/packages/shared/content-management/user_profiles/src/components/user_avatar_tip.tsx",
+        "lineNumber": 14,
+        "columnNumber": 1,
         "deprecated": false,
         "trackAdoption": false,
         "children": [
@@ -218,7 +246,9 @@
             "tags": [],
             "label": "props",
             "description": [],
-            "path": "packages/content-management/user_profiles/src/components/user_avatar_tip.tsx",
+            "path": "src/platform/packages/shared/content-management/user_profiles/src/components/user_avatar_tip.tsx",
+            "lineNumber": 14,
+            "columnNumber": 38,
             "deprecated": false,
             "trackAdoption": false,
             "children": [
@@ -229,7 +259,9 @@
                 "tags": [],
                 "label": "uid",
                 "description": [],
-                "path": "packages/content-management/user_profiles/src/components/user_avatar_tip.tsx",
+                "path": "src/platform/packages/shared/content-management/user_profiles/src/components/user_avatar_tip.tsx",
+                "lineNumber": 14,
+                "columnNumber": 40,
                 "deprecated": false,
                 "trackAdoption": false
               }
@@ -257,7 +289,9 @@
           },
           ">) => React.JSX.Element"
         ],
-        "path": "packages/content-management/user_profiles/src/services.tsx",
+        "path": "src/platform/packages/shared/content-management/user_profiles/src/services.tsx",
+        "lineNumber": 38,
+        "columnNumber": 14,
         "deprecated": false,
         "trackAdoption": false,
         "children": [
@@ -279,7 +313,9 @@
               },
               ">"
             ],
-            "path": "packages/content-management/user_profiles/src/services.tsx",
+            "path": "src/platform/packages/shared/content-management/user_profiles/src/services.tsx",
+            "lineNumber": 38,
+            "columnNumber": 99,
             "deprecated": false,
             "trackAdoption": false,
             "isRequired": true
@@ -306,7 +342,9 @@
           },
           ">) => React.JSX.Element"
         ],
-        "path": "packages/content-management/user_profiles/src/services.tsx",
+        "path": "src/platform/packages/shared/content-management/user_profiles/src/services.tsx",
+        "lineNumber": 31,
+        "columnNumber": 14,
         "deprecated": false,
         "trackAdoption": false,
         "children": [
@@ -328,7 +366,9 @@
               },
               ">"
             ],
-            "path": "packages/content-management/user_profiles/src/services.tsx",
+            "path": "src/platform/packages/shared/content-management/user_profiles/src/services.tsx",
+            "lineNumber": 31,
+            "columnNumber": 83,
             "deprecated": false,
             "trackAdoption": false,
             "isRequired": true
@@ -365,7 +405,9 @@
           },
           ">, unknown>"
         ],
-        "path": "packages/content-management/user_profiles/src/queries.ts",
+        "path": "src/platform/packages/shared/content-management/user_profiles/src/queries.ts",
+        "lineNumber": 18,
+        "columnNumber": 14,
         "deprecated": false,
         "trackAdoption": false,
         "children": [
@@ -379,7 +421,9 @@
             "signature": [
               "string"
             ],
-            "path": "packages/content-management/user_profiles/src/queries.ts",
+            "path": "src/platform/packages/shared/content-management/user_profiles/src/queries.ts",
+            "lineNumber": 18,
+            "columnNumber": 32,
             "deprecated": false,
             "trackAdoption": false,
             "isRequired": true
@@ -416,7 +460,9 @@
           },
           ">[], unknown>"
         ],
-        "path": "packages/content-management/user_profiles/src/queries.ts",
+        "path": "src/platform/packages/shared/content-management/user_profiles/src/queries.ts",
+        "lineNumber": 30,
+        "columnNumber": 14,
         "deprecated": false,
         "trackAdoption": false,
         "children": [
@@ -430,7 +476,9 @@
             "signature": [
               "string[]"
             ],
-            "path": "packages/content-management/user_profiles/src/queries.ts",
+            "path": "src/platform/packages/shared/content-management/user_profiles/src/queries.ts",
+            "lineNumber": 30,
+            "columnNumber": 33,
             "deprecated": false,
             "trackAdoption": false,
             "isRequired": true
@@ -442,7 +490,9 @@
             "tags": [],
             "label": "opts",
             "description": [],
-            "path": "packages/content-management/user_profiles/src/queries.ts",
+            "path": "src/platform/packages/shared/content-management/user_profiles/src/queries.ts",
+            "lineNumber": 30,
+            "columnNumber": 56,
             "deprecated": false,
             "trackAdoption": false,
             "children": [
@@ -456,7 +506,9 @@
                 "signature": [
                   "boolean | undefined"
                 ],
-                "path": "packages/content-management/user_profiles/src/queries.ts",
+                "path": "src/platform/packages/shared/content-management/user_profiles/src/queries.ts",
+                "lineNumber": 30,
+                "columnNumber": 58,
                 "deprecated": false,
                 "trackAdoption": false
               }
@@ -483,7 +535,9 @@
             "text": "UserProfilesServices"
           }
         ],
-        "path": "packages/content-management/user_profiles/src/services.tsx",
+        "path": "src/platform/packages/shared/content-management/user_profiles/src/services.tsx",
+        "lineNumber": 65,
+        "columnNumber": 1,
         "deprecated": false,
         "trackAdoption": false,
         "children": [],
@@ -499,7 +553,9 @@
         "tags": [],
         "label": "UserProfilesKibanaDependencies",
         "description": [],
-        "path": "packages/content-management/user_profiles/src/services.tsx",
+        "path": "src/platform/packages/shared/content-management/user_profiles/src/services.tsx",
+        "lineNumber": 16,
+        "columnNumber": 1,
         "deprecated": false,
         "trackAdoption": false,
         "children": [
@@ -512,32 +568,16 @@
             "description": [],
             "signature": [
               "{ userProfile: { bulkGet: <D extends ",
-              {
-                "pluginId": "@kbn/core-user-profile-common",
-                "scope": "common",
-                "docId": "kibKbnCoreUserProfileCommonPluginApi",
-                "section": "def-common.UserProfileData",
-                "text": "UserProfileData"
-              },
+              "UserProfileData",
               ">(params: ",
-              {
-                "pluginId": "@kbn/core-user-profile-browser",
-                "scope": "public",
-                "docId": "kibKbnCoreUserProfileBrowserPluginApi",
-                "section": "def-public.UserProfileBulkGetParams",
-                "text": "UserProfileBulkGetParams"
-              },
+              "UserProfileBulkGetParams",
               ") => Promise<",
-              {
-                "pluginId": "@kbn/core-user-profile-common",
-                "scope": "common",
-                "docId": "kibKbnCoreUserProfileCommonPluginApi",
-                "section": "def-common.UserProfile",
-                "text": "UserProfile"
-              },
+              "UserProfile",
               "<D>[]>; }; }"
             ],
-            "path": "packages/content-management/user_profiles/src/services.tsx",
+            "path": "src/platform/packages/shared/content-management/user_profiles/src/services.tsx",
+            "lineNumber": 17,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           }
@@ -551,7 +591,9 @@
         "tags": [],
         "label": "UserProfilesServices",
         "description": [],
-        "path": "packages/content-management/user_profiles/src/services.tsx",
+        "path": "src/platform/packages/shared/content-management/user_profiles/src/services.tsx",
+        "lineNumber": 24,
+        "columnNumber": 1,
         "deprecated": false,
         "trackAdoption": false,
         "children": [
@@ -581,7 +623,9 @@
               },
               ">[]>"
             ],
-            "path": "packages/content-management/user_profiles/src/services.tsx",
+            "path": "src/platform/packages/shared/content-management/user_profiles/src/services.tsx",
+            "lineNumber": 25,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false,
             "children": [
@@ -595,7 +639,9 @@
                 "signature": [
                   "string[]"
                 ],
-                "path": "packages/content-management/user_profiles/src/services.tsx",
+                "path": "src/platform/packages/shared/content-management/user_profiles/src/services.tsx",
+                "lineNumber": 25,
+                "columnNumber": 25,
                 "deprecated": false,
                 "trackAdoption": false,
                 "isRequired": true
@@ -629,7 +675,9 @@
               },
               ">>"
             ],
-            "path": "packages/content-management/user_profiles/src/services.tsx",
+            "path": "src/platform/packages/shared/content-management/user_profiles/src/services.tsx",
+            "lineNumber": 26,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false,
             "children": [
@@ -643,7 +691,9 @@
                 "signature": [
                   "string"
                 ],
-                "path": "packages/content-management/user_profiles/src/services.tsx",
+                "path": "src/platform/packages/shared/content-management/user_profiles/src/services.tsx",
+                "lineNumber": 26,
+                "columnNumber": 20,
                 "deprecated": false,
                 "trackAdoption": false,
                 "isRequired": true

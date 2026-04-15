@@ -6,13 +6,13 @@
  */
 
 import { schema } from '@kbn/config-schema';
-import { IScopedClusterClient } from '@kbn/core/server';
+import type { IScopedClusterClient } from '@kbn/core/server';
 // @ts-ignore
 import { Fields } from '../../models/fields';
-import { RouteDependencies } from '../../types';
+import type { RouteDependencies } from '../../types';
 
 const bodySchema = schema.object({
-  indexes: schema.arrayOf(schema.string()),
+  indexes: schema.arrayOf(schema.string({ maxLength: 1000 }), { maxSize: 1000 }),
 });
 
 function fetchFields(dataClient: IScopedClusterClient, indexes: string[]) {
@@ -35,6 +35,12 @@ export function registerListFieldsRoute({
   router.post(
     {
       path: '/api/watcher/fields',
+      security: {
+        authz: {
+          enabled: false,
+          reason: 'Relies on es client for authorization',
+        },
+      },
       validate: {
         body: bodySchema,
       },

@@ -6,26 +6,32 @@
  */
 
 import React from 'react';
-import { act, fireEvent, render } from '@testing-library/react';
+import { act, fireEvent, render, screen, within } from '@testing-library/react';
+
 import { AssistantHeader } from '.';
 import { TestProviders } from '../../mock/test_providers/test_providers';
-import { alertConvo, emptyWelcomeConvo, welcomeConvo } from '../../mock/conversation';
-import { useLoadConnectors } from '../../connectorland/use_load_connectors';
+import { alertConvo, welcomeConvo } from '../../mock/conversation';
+import { useLoadConnectors } from '@kbn/inference-connectors';
 import { mockConnectors } from '../../mock/connectors';
+import { CLOSE } from './translations';
+import { ConversationSharedState } from '@kbn/elastic-assistant-common';
 
 const onConversationSelected = jest.fn();
 const mockConversations = {
-  [alertConvo.title]: alertConvo,
-  [welcomeConvo.title]: welcomeConvo,
+  [alertConvo.title]: { ...alertConvo, isConversationOwner: true },
+  [welcomeConvo.title]: { ...welcomeConvo, isConversationOwner: true },
 };
 const testProps = {
+  conversationSharedState: ConversationSharedState.PRIVATE,
   conversationsLoaded: true,
+  currentUser: { name: 'elastic' },
   selectedConversation: welcomeConvo,
   title: 'Test Title',
   docLinks: {
     ELASTIC_WEBSITE_URL: 'https://www.elastic.co/',
     DOC_LINK_VERSION: 'master',
   },
+  isConversationOwner: true,
   isLoading: false,
   isDisabled: false,
   isSettingsModalVisible: false,
@@ -33,17 +39,23 @@ const testProps = {
   onToggleShowAnonymizedValues: jest.fn(),
   setIsSettingsModalVisible: jest.fn(),
   onConversationCreate: jest.fn(),
+  onConversationDeleted: jest.fn(),
   onChatCleared: jest.fn(),
   showAnonymizedValues: false,
   conversations: mockConversations,
+  refetchCurrentConversation: jest.fn(),
   refetchCurrentUserConversations: jest.fn(),
   isAssistantEnabled: true,
   anonymizationFields: { total: 0, page: 1, perPage: 1000, data: [] },
   refetchAnonymizationFieldsResults: jest.fn(),
   allPrompts: [],
+  contentReferencesVisible: true,
+  setContentReferencesVisible: jest.fn(),
+  setPaginationObserver: jest.fn(),
+  setCurrentConversation: jest.fn(),
 };
 
-jest.mock('../../connectorland/use_load_connectors', () => ({
+jest.mock('@kbn/inference-connectors', () => ({
   useLoadConnectors: jest.fn(() => {
     return {
       data: [],
@@ -71,59 +83,6 @@ describe('AssistantHeader', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
-  it('showAnonymizedValues is not checked when selectedConversation.replacements is null', () => {
-    const { getByText, getByTestId } = render(<AssistantHeader {...testProps} />, {
-      wrapper: TestProviders,
-    });
-    expect(getByText(welcomeConvo.title)).toBeInTheDocument();
-    expect(getByTestId('showAnonymizedValues').firstChild).toHaveAttribute(
-      'data-euiicon-type',
-      'eyeClosed'
-    );
-  });
-
-  it('showAnonymizedValues is not checked when selectedConversation.replacements is empty', () => {
-    const { getByText, getByTestId } = render(
-      <AssistantHeader
-        {...testProps}
-        selectedConversation={{ ...emptyWelcomeConvo, replacements: {} }}
-      />,
-      {
-        wrapper: TestProviders,
-      }
-    );
-    expect(getByText(welcomeConvo.title)).toBeInTheDocument();
-    expect(getByTestId('showAnonymizedValues').firstChild).toHaveAttribute(
-      'data-euiicon-type',
-      'eyeClosed'
-    );
-  });
-
-  it('showAnonymizedValues is not checked when selectedConversation.replacements has values and showAnonymizedValues is false', () => {
-    const { getByTestId } = render(
-      <AssistantHeader {...testProps} selectedConversation={alertConvo} />,
-      {
-        wrapper: TestProviders,
-      }
-    );
-    expect(getByTestId('showAnonymizedValues').firstChild).toHaveAttribute(
-      'data-euiicon-type',
-      'eyeClosed'
-    );
-  });
-
-  it('showAnonymizedValues is checked when selectedConversation.replacements has values and showAnonymizedValues is true', () => {
-    const { getByTestId } = render(
-      <AssistantHeader {...testProps} selectedConversation={alertConvo} showAnonymizedValues />,
-      {
-        wrapper: TestProviders,
-      }
-    );
-    expect(getByTestId('showAnonymizedValues').firstChild).toHaveAttribute(
-      'data-euiicon-type',
-      'eye'
-    );
-  });
 
   it('Conversation is updated when connector change occurs', async () => {
     const { getByTestId } = render(<AssistantHeader {...testProps} />, {
@@ -138,5 +97,51 @@ describe('AssistantHeader', () => {
       cId: alertConvo.id,
       cTitle: alertConvo.title,
     });
+  });
+
+  it('renders an accessible close button icon', () => {
+    const onCloseFlyout = jest.fn(); // required to render the close button
+
+    render(<AssistantHeader {...testProps} onCloseFlyout={onCloseFlyout} />, {
+      wrapper: TestProviders,
+    });
+
+    expect(screen.getByRole('button', { name: CLOSE })).toBeInTheDocument();
+  });
+
+  it('renders share badge when sharing is enabled', () => {
+    render(<AssistantHeader {...testProps} />, {
+      wrapper: TestProviders,
+    });
+    expect(screen.getByTestId('shareBadgeButton')).not.toBeDisabled();
+    expect(screen.getByTestId('connector-selector')).not.toBeDisabled();
+    expect(
+      within(screen.getByTestId('conversationTitle')).getByTestId('euiInlineReadModeButton')
+    ).not.toBeDisabled();
+  });
+
+  it('disables assistant settings menu when isDisabled=true', () => {
+    render(<AssistantHeader {...testProps} isDisabled={true} />, {
+      wrapper: TestProviders,
+    });
+    expect(screen.getByTestId('chat-context-menu')).toBeDisabled();
+  });
+
+  it('enables assistant settings menu when isDisabled=false', () => {
+    render(<AssistantHeader {...testProps} isDisabled={false} />, {
+      wrapper: TestProviders,
+    });
+    expect(screen.getByTestId('chat-context-menu')).not.toBeDisabled();
+  });
+
+  it('disables share badge when isConversationOwner=false', () => {
+    render(<AssistantHeader {...testProps} isConversationOwner={false} />, {
+      wrapper: TestProviders,
+    });
+    expect(screen.getByTestId('shareBadgeButton')).toBeDisabled();
+    expect(screen.getByTestId('connector-selector')).toBeDisabled();
+    expect(
+      within(screen.getByTestId('conversationTitle')).getByTestId('euiInlineReadModeButton')
+    ).toBeDisabled();
   });
 });

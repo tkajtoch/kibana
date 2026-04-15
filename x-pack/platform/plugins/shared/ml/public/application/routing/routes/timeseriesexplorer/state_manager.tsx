@@ -26,6 +26,7 @@ import { APP_STATE_ACTION } from '../../../timeseriesexplorer/timeseriesexplorer
 import { validateJobSelection } from '../../../timeseriesexplorer/timeseriesexplorer_utils';
 import { TimeSeriesExplorerPage } from '../../../timeseriesexplorer/timeseriesexplorer_page';
 import { TimeseriesexplorerNoJobsFound } from '../../../timeseriesexplorer/components/timeseriesexplorer_no_jobs_found';
+import { AnomalyDetectionNoJobsSelected } from '../../../components/anomaly_detection_no_jobs_selected';
 import { useTableInterval } from '../../../components/controls/select_interval';
 import { useTableSeverity } from '../../../components/controls/select_severity';
 import { useTimeSeriesExplorerUrlState } from '../../../timeseriesexplorer/hooks/use_timeseriesexplorer_url_state';
@@ -189,6 +190,25 @@ export const TimeSeriesExplorerUrlStateManager: FC<TimeSeriesExplorerUrlStateMan
 
   const getJobSelection = useJobSelectionFlyout();
 
+  const handleJobSelectionChange = useCallback(
+    ({
+      jobIds,
+      time,
+    }: {
+      jobIds: string[];
+
+      time?: { from: string; to: string };
+    }) => {
+      setGlobalState({
+        ml: {
+          jobIds,
+        },
+        ...(time !== undefined ? { time } : {}),
+      });
+    },
+    [setGlobalState]
+  );
+
   // Use a side effect to clear appState when changing jobs.
   useEffect(() => {
     if (selectedJobIds !== undefined && previousSelectedJobIds !== undefined) {
@@ -266,17 +286,36 @@ export const TimeSeriesExplorerUrlStateManager: FC<TimeSeriesExplorerUrlStateMan
   const tzConfig = config.get('dateFormat:tz');
   const dateFormatTz = tzConfig !== 'Browser' ? tzConfig : moment.tz.guess();
 
-  if (timeSeriesJobs.length === 0 || selectedJobId === undefined) {
+  if (timeSeriesJobs.length === 0) {
     return (
-      <TimeSeriesExplorerPage dateFormatTz={dateFormatTz} noSingleMetricJobsFound>
+      <TimeSeriesExplorerPage
+        dateFormatTz={dateFormatTz}
+        noSingleMetricJobsFound
+        handleJobSelectionChange={handleJobSelectionChange}
+      >
         <TimeseriesexplorerNoJobsFound />
+      </TimeSeriesExplorerPage>
+    );
+  }
+
+  if (selectedJobId === undefined) {
+    return (
+      <TimeSeriesExplorerPage
+        dateFormatTz={dateFormatTz}
+        handleJobSelectionChange={handleJobSelectionChange}
+      >
+        <AnomalyDetectionNoJobsSelected />
       </TimeSeriesExplorerPage>
     );
   }
 
   if (!bounds) {
     return (
-      <TimeSeriesExplorerPage dateFormatTz={dateFormatTz}>
+      <TimeSeriesExplorerPage
+        dateFormatTz={dateFormatTz}
+        handleJobSelectionChange={handleJobSelectionChange}
+        selectedJobId={[selectedJobId]}
+      >
         <TimeseriesexplorerNoChartData />
       </TimeSeriesExplorerPage>
     );
@@ -301,11 +340,12 @@ export const TimeSeriesExplorerUrlStateManager: FC<TimeSeriesExplorerUrlStateMan
         selectedEntities,
         selectedForecastId: selectedForecastIdProp,
         tableInterval: tableInterval.val,
-        tableSeverity: tableSeverity.val,
+        tableSeverity,
         timefilter,
         zoom: zoomProp,
         invalidTimeRangeError,
         functionDescription: selectedFunctionDescription,
+        handleJobSelectionChange,
       }}
     />
   );

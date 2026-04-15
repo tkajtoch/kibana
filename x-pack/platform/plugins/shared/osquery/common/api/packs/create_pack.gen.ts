@@ -14,11 +14,11 @@
  *   version: 2023-10-31
  */
 
-import { z } from '@kbn/zod';
+import { z } from '@kbn/zod/v4';
 
 import {
   PackName,
-  DescriptionOrUndefined,
+  PackDescriptionOrUndefined,
   EnabledOrUndefined,
   PolicyIdsOrUndefined,
   Shards,
@@ -28,9 +28,71 @@ import {
 export type CreatePacksRequestBody = z.infer<typeof CreatePacksRequestBody>;
 export const CreatePacksRequestBody = z.object({
   name: PackName.optional(),
-  description: DescriptionOrUndefined.optional(),
+  description: PackDescriptionOrUndefined.optional(),
   enabled: EnabledOrUndefined.optional(),
   policy_ids: PolicyIdsOrUndefined.optional(),
   shards: Shards.optional(),
   queries: ObjectQueries.optional(),
+});
+
+/**
+ * The response for creating a pack.
+ */
+export type CreatePacksResponse = z.infer<typeof CreatePacksResponse>;
+export const CreatePacksResponse = z.object({
+  /**
+   * The created pack.
+   */
+  data: z
+    .object({
+      /**
+       * The saved object ID of the pack.
+       */
+      saved_object_id: z.string().optional(),
+      /**
+       * The pack name.
+       */
+      name: z.string().optional(),
+      /**
+       * The pack description.
+       */
+      description: z.string().optional(),
+      /**
+       * The queries in the pack.
+       */
+      queries: z.object({}).optional(),
+      /**
+       * The pack version.
+       */
+      version: z.number().int().optional(),
+      /**
+       * Whether the pack is enabled.
+       */
+      enabled: z.boolean().optional(),
+      /**
+       * The creation timestamp.
+       */
+      created_at: z.string().optional(),
+      /**
+       * The user who created the pack.
+       */
+      created_by: z.string().optional(),
+      /**
+       * The last update timestamp.
+       */
+      updated_at: z.string().optional(),
+      /**
+       * The user who last updated the pack.
+       */
+      updated_by: z.string().optional(),
+      /**
+       * A list of agent policy IDs associated with the pack.
+       */
+      policy_ids: z.array(z.string()).optional(),
+      /**
+       * Shard configuration for the pack.
+       */
+      shards: z.object({}).optional(),
+    })
+    .optional(),
 });

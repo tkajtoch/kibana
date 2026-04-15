@@ -23,7 +23,9 @@
           },
           ">>"
         ],
-        "path": "src/plugins/telemetry_management_section/public/components/lazy_opt_in_example_flyout.tsx",
+        "path": "src/platform/plugins/shared/telemetry_management_section/public/components/lazy_opt_in_example_flyout.tsx",
+        "lineNumber": 18,
+        "columnNumber": 14,
         "deprecated": false,
         "trackAdoption": false,
         "returnComment": [],
@@ -39,6 +41,8 @@
               "P"
             ],
             "path": "node_modules/@types/react/ts5.0/index.d.ts",
+            "lineNumber": 630,
+            "columnNumber": 10,
             "deprecated": false,
             "trackAdoption": false
           }
@@ -56,7 +60,9 @@
         "description": [
           "\nOptInExampleFlyout props"
         ],
-        "path": "src/plugins/telemetry_management_section/public/components/opt_in_example_flyout.tsx",
+        "path": "src/platform/plugins/shared/telemetry_management_section/public/components/opt_in_example_flyout.tsx",
+        "lineNumber": 28,
+        "columnNumber": 1,
         "deprecated": false,
         "trackAdoption": false,
         "children": [
@@ -72,7 +78,9 @@
             "signature": [
               "() => Promise<unknown[]>"
             ],
-            "path": "src/plugins/telemetry_management_section/public/components/opt_in_example_flyout.tsx",
+            "path": "src/platform/plugins/shared/telemetry_management_section/public/components/opt_in_example_flyout.tsx",
+            "lineNumber": 32,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false,
             "children": [],
@@ -90,7 +98,9 @@
             "signature": [
               "() => void"
             ],
-            "path": "src/plugins/telemetry_management_section/public/components/opt_in_example_flyout.tsx",
+            "path": "src/platform/plugins/shared/telemetry_management_section/public/components/opt_in_example_flyout.tsx",
+            "lineNumber": 36,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false,
             "children": [],
@@ -130,7 +140,9 @@
         "signature": [
           "string[]"
         ],
-        "path": "src/plugins/telemetry_management_section/common/constants.ts",
+        "path": "src/platform/plugins/shared/telemetry_management_section/common/constants.ts",
+        "lineNumber": 16,
+        "columnNumber": 14,
         "deprecated": false,
         "trackAdoption": false,
         "initialIsOpen": false

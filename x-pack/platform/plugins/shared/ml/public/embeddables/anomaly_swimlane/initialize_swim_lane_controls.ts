@@ -5,38 +5,44 @@
  * 2.0.
  */
 
-import type { StateComparators } from '@kbn/presentation-publishing';
-import type { TitlesApi } from '@kbn/presentation-publishing/interfaces/titles/titles_api';
-import fastIsEqual from 'fast-deep-equal';
-import { BehaviorSubject, combineLatest } from 'rxjs';
+import type { StateComparators, TitlesApi } from '@kbn/presentation-publishing';
+import { BehaviorSubject, combineLatest, map, merge } from 'rxjs';
+import type { TypeOf } from '@kbn/config-schema';
 import type { AnomalySwimlaneEmbeddableUserInput } from '..';
 import type { JobId } from '../../../common/types/anomaly_detection_jobs';
 import type { SwimlaneType } from '../../application/explorer/explorer_constants';
 import { SWIM_LANE_DEFAULT_PAGE_SIZE } from '../../application/explorer/explorer_constants';
 import type { AnomalySwimLaneComponentApi, AnomalySwimLaneEmbeddableState } from './types';
+import type { anomalySwimLaneControlsStateSchema } from '../../../server/embeddable/schemas';
 
-export type AnomalySwimLaneControlsState = Pick<
-  AnomalySwimLaneEmbeddableState,
-  'jobIds' | 'swimlaneType' | 'viewBy' | 'perPage'
->;
+type AnomalySwimLaneControlsState = TypeOf<typeof anomalySwimLaneControlsStateSchema>;
+
+export const swimLaneComparators: StateComparators<AnomalySwimLaneControlsState> = {
+  jobIds: 'deepEquality',
+  swimlaneType: 'referenceEquality',
+  viewBy: 'referenceEquality',
+  perPage: 'referenceEquality',
+};
 
 export const initializeSwimLaneControls = (
-  rawState: AnomalySwimLaneEmbeddableState,
+  initialState: AnomalySwimLaneEmbeddableState,
   titlesApi: TitlesApi
 ) => {
-  const jobIds = new BehaviorSubject<JobId[]>(rawState.jobIds);
-  const swimlaneType = new BehaviorSubject<SwimlaneType>(rawState.swimlaneType);
-  const viewBy = new BehaviorSubject<string | undefined>(rawState.viewBy);
+  const jobIds = new BehaviorSubject<JobId[]>(initialState.jobIds);
+  const swimlaneType = new BehaviorSubject<SwimlaneType>(initialState.swimlaneType);
+  const viewBy = new BehaviorSubject<string | undefined>(
+    initialState.swimlaneType === 'viewBy' ? initialState.viewBy : undefined
+  );
   const fromPage = new BehaviorSubject<number>(1);
   const perPage = new BehaviorSubject<number | undefined>(
-    rawState.perPage ?? SWIM_LANE_DEFAULT_PAGE_SIZE
+    initialState.perPage ?? SWIM_LANE_DEFAULT_PAGE_SIZE
   );
 
   const updateUserInput = (update: AnomalySwimlaneEmbeddableUserInput) => {
     jobIds.next(update.jobIds);
     swimlaneType.next(update.swimlaneType);
     viewBy.next(update.viewBy);
-    titlesApi.setPanelTitle(update.panelTitle);
+    titlesApi.setTitle(update.panelTitle);
   };
 
   const updatePagination = (update: { perPage?: number; fromPage: number }) => {
@@ -50,7 +56,7 @@ export const initializeSwimLaneControls = (
     updatePagination({ fromPage: 1 });
   });
 
-  const serializeSwimLaneState = (): AnomalySwimLaneControlsState => {
+  const getLatestState = (): AnomalySwimLaneControlsState => {
     return {
       jobIds: jobIds.value,
       swimlaneType: swimlaneType.value,
@@ -59,15 +65,8 @@ export const initializeSwimLaneControls = (
     };
   };
 
-  const swimLaneComparators: StateComparators<AnomalySwimLaneControlsState> = {
-    jobIds: [jobIds, (arg) => jobIds.next(arg), fastIsEqual],
-    swimlaneType: [swimlaneType, (arg) => swimlaneType.next(arg)],
-    viewBy: [viewBy, (arg) => viewBy.next(arg)],
-    perPage: [perPage, (arg) => perPage.next(arg)],
-  };
-
   return {
-    swimLaneControlsApi: {
+    api: {
       jobIds,
       swimlaneType,
       viewBy,
@@ -76,9 +75,15 @@ export const initializeSwimLaneControls = (
       updateUserInput,
       updatePagination,
     } as unknown as AnomalySwimLaneComponentApi,
-    serializeSwimLaneState,
-    swimLaneComparators,
-    onSwimLaneDestroy: () => {
+    anyStateChange$: merge(jobIds, swimlaneType, viewBy, perPage).pipe(map(() => undefined)),
+    getLatestState,
+    reinitializeState: (lastSavedState: AnomalySwimLaneControlsState) => {
+      jobIds.next(lastSavedState.jobIds);
+      swimlaneType.next(lastSavedState.swimlaneType);
+      viewBy.next(lastSavedState.viewBy);
+      perPage.next(lastSavedState.perPage);
+    },
+    cleanup: () => {
       subscription.unsubscribe();
 
       jobIds.complete();

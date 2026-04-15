@@ -7,7 +7,7 @@
  * License v3.0 only", or the "Server Side Public License, v 1".
  */
 
-import { AgentEcs } from './agent';
+import type { AgentEcs } from './agent';
 import type { AuditdEcs } from './auditd';
 import type { CloudEcs } from './cloud';
 import type { CodeSignature, FileEcs } from './file';
@@ -37,6 +37,7 @@ import type { UrlEcs } from './url';
 import type { UserEcs } from './user';
 import type { WinlogEcs } from './winlog';
 import type { ZeekEcs } from './zeek';
+import type { ServiceEcs } from './service';
 export * from './ecs_fields';
 
 export { EventCategory, EventCode };
@@ -74,6 +75,7 @@ export type {
   UserEcs,
   WinlogEcs,
   ZeekEcs,
+  ServiceEcs,
 };
 
 // Security Solution Extension of the Elastic Common Schema
@@ -97,6 +99,7 @@ export interface EcsSecurityExtension {
   tls?: TlsEcs;
   url?: UrlEcs;
   user?: UserEcs;
+  service?: ServiceEcs;
 
   // Security Specific Ecs
   // exists only in security solution Ecs definition

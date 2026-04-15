@@ -12,8 +12,8 @@ import { FormattedMessage } from '@kbn/i18n-react';
 import { euiStyled } from '@kbn/kibana-react-plugin/common';
 import { useFetcher } from '@kbn/observability-shared-plugin/public';
 import { StepScreenshotDisplay } from '../../step_screenshot_display';
-import { JourneyStep } from '../../../../../../common/runtime_types/ping/synthetics';
-import { Ping } from '../../../../../../common/runtime_types/ping/ping';
+import type { JourneyStep } from '../../../../../../common/runtime_types/ping/synthetics';
+import type { Ping } from '../../../../../../common/runtime_types/ping/ping';
 import { fetchLastSuccessfulCheck } from '../../../../state/api/journey';
 import { ScreenshotLink } from './screenshot_link';
 import { getShortTimeStamp } from '../../../overview/monitor_list/columns/monitor_status_column';
@@ -42,6 +42,7 @@ export const StepScreenshots = ({ step }: Props) => {
     }
     // FIXME: Dario thinks there is a better way to do this but
     // he's getting tired and maybe the Uptime folks can fix it
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [step._id, step['@timestamp']]);
 
   const lastSuccessfulCheck: Ping | undefined = data;

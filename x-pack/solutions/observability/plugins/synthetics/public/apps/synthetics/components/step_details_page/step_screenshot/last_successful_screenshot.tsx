@@ -11,9 +11,9 @@ import { EuiSpacer } from '@elastic/eui';
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import { fetchLastSuccessfulCheck } from '../../../state';
-import { JourneyStep } from '../../../../../../common/runtime_types';
+import type { JourneyStep } from '../../../../../../common/runtime_types';
 import { JourneyStepScreenshotContainer } from '../../common/screenshot/journey_step_screenshot_container';
-import { ScreenshotImageSize } from '../../common/screenshot/screenshot_size';
+import type { ScreenshotImageSize } from '../../common/screenshot/screenshot_size';
 
 export const LastSuccessfulScreenshot = ({
   step,
@@ -37,6 +37,7 @@ export const LastSuccessfulScreenshot = ({
     });
     // FIXME: Dario thinks there is a better way to do this but
     // he's getting tired and maybe the Synthetics folks can fix it
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [step._id, step['@timestamp']]);
 
   return (

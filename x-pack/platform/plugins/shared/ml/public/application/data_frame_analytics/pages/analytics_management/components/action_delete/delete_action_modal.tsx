@@ -14,6 +14,8 @@ import {
   EuiFlexGroup,
   EuiFlexItem,
   EUI_MODAL_CONFIRM_BUTTON,
+  EuiSpacer,
+  useGeneratedHtmlId,
 } from '@elastic/eui';
 
 import type { DeleteAction } from './use_delete_action';
@@ -31,6 +33,8 @@ export const DeleteActionModal: FC<DeleteAction> = ({
   userCanDeleteIndex,
   userCanDeleteDataView,
 }) => {
+  const modalTitleId = useGeneratedHtmlId();
+
   if (item === undefined) {
     return null;
   }
@@ -40,10 +44,12 @@ export const DeleteActionModal: FC<DeleteAction> = ({
   return (
     <EuiConfirmModal
       data-test-subj="mlAnalyticsJobDeleteModal"
+      aria-labelledby={modalTitleId}
       title={i18n.translate('xpack.ml.dataframe.analyticsList.deleteModalTitle', {
         defaultMessage: 'Delete {analyticsId}?',
         values: { analyticsId: item.config.id },
       })}
+      titleProps={{ id: modalTitleId }}
       onCancel={closeModal}
       onConfirm={deleteAndCloseModal}
       cancelButtonText={i18n.translate('xpack.ml.dataframe.analyticsList.deleteModalCancelButton', {
@@ -79,16 +85,22 @@ export const DeleteActionModal: FC<DeleteAction> = ({
         </EuiFlexItem>
         <EuiFlexItem>
           {userCanDeleteIndex && dataViewExists && (
-            <EuiSwitch
-              data-test-subj="mlAnalyticsJobDeleteDataViewSwitch"
-              label={i18n.translate('xpack.ml.dataframe.analyticsList.deleteTargetDataViewTitle', {
-                defaultMessage: 'Delete data view {dataView}',
-                values: { dataView: indexName },
-              })}
-              checked={deleteDataView}
-              onChange={toggleDeleteDataView}
-              disabled={userCanDeleteDataView === false}
-            />
+            <>
+              <EuiSpacer size="s" />
+              <EuiSwitch
+                data-test-subj="mlAnalyticsJobDeleteDataViewSwitch"
+                label={i18n.translate(
+                  'xpack.ml.dataframe.analyticsList.deleteTargetDataViewTitle',
+                  {
+                    defaultMessage: 'Delete data view {dataView}',
+                    values: { dataView: indexName },
+                  }
+                )}
+                checked={deleteDataView}
+                onChange={toggleDeleteDataView}
+                disabled={userCanDeleteDataView === false}
+              />
+            </>
           )}
         </EuiFlexItem>
       </EuiFlexGroup>

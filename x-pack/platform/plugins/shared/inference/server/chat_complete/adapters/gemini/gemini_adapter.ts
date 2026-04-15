@@ -6,45 +6,75 @@
  */
 
 import * as Gemini from '@google/generative-ai';
-import { from, map, switchMap } from 'rxjs';
-import { Readable } from 'stream';
-import {
-  Message,
-  MessageRole,
-  ToolChoiceType,
-  ToolOptions,
-  ToolSchema,
-  ToolSchemaType,
-} from '@kbn/inference-common';
+import { defer, map } from 'rxjs';
+import type { Message, ToolOptions, ToolSchema, ToolSchemaType } from '@kbn/inference-common';
+import { MessageRole, ToolChoiceType } from '@kbn/inference-common';
 import type { InferenceConnectorAdapter } from '../../types';
+import { handleConnectorDataResponse, handleConnectorStreamResponse } from '../../utils';
 import { eventSourceStreamIntoObservable } from '../../../util/event_source_stream_into_observable';
-import { processVertexStream } from './process_vertex_stream';
-import type { GenerateContentResponseChunk, GeminiMessage, GeminiToolConfig } from './types';
+import { processVertexStream, processVertexResponse } from './process_vertex_stream';
+import type {
+  GenerateContentResponseChunk,
+  GeminiMessage,
+  GeminiToolConfig,
+  GenerateContentResponse,
+} from './types';
+import { getTemperatureIfValid } from '../../utils/get_temperature';
+import { mustUseThoughtSignature } from './utils';
 
 export const geminiAdapter: InferenceConnectorAdapter = {
-  chatComplete: ({ executor, system, messages, toolChoice, tools }) => {
-    return from(
-      executor.invoke({
-        subAction: 'invokeStream',
+  chatComplete: ({
+    executor,
+    system,
+    messages,
+    toolChoice,
+    tools,
+    temperature = 0,
+    modelName,
+    abortSignal,
+    metadata,
+    timeout,
+    stream = false,
+  }) => {
+    const connector = executor.getConnector();
+    const useThoughtSignature = mustUseThoughtSignature(
+      modelName ?? connector.config?.defaultModel
+    );
+
+    const connectorResult$ = defer(() => {
+      return executor.invoke({
+        subAction: stream ? 'invokeStream' : 'invokeAIRaw',
         subActionParams: {
-          messages: messagesToGemini({ messages }),
+          messages: messagesToGemini({ messages, useThoughtSignature }),
           systemInstruction: system,
           tools: toolsToGemini(tools),
           toolConfig: toolChoiceToConfig(toolChoice),
-          temperature: 0,
+          ...getTemperatureIfValid(temperature, { connector, modelName }),
+          model: modelName,
+          signal: abortSignal,
           stopSequences: ['\n\nHuman:'],
+          ...(metadata?.connectorTelemetry
+            ? { telemetryMetadata: metadata.connectorTelemetry }
+            : {}),
+          ...(typeof timeout === 'number' && isFinite(timeout) ? { timeout } : {}),
         },
-      })
-    ).pipe(
-      switchMap((response) => {
-        const readable = response.data as Readable;
-        return eventSourceStreamIntoObservable(readable);
-      }),
-      map((line) => {
-        return JSON.parse(line) as GenerateContentResponseChunk;
-      }),
-      processVertexStream()
-    );
+      });
+    });
+
+    if (stream) {
+      return connectorResult$.pipe(
+        handleConnectorStreamResponse({ processStream: eventSourceStreamIntoObservable }),
+        map((line) => JSON.parse(line) as GenerateContentResponseChunk),
+        processVertexStream(modelName)
+      );
+    } else {
+      return connectorResult$.pipe(
+        handleConnectorDataResponse({
+          parseData: (data) => data as GenerateContentResponse,
+        }),
+        processVertexResponse(modelName)
+      );
+    }
   },
 };
 
@@ -82,7 +112,7 @@ function toolsToGemini(tools: ToolOptions['tools']): Gemini.Tool[] {
                 parameters: schema
                   ? toolSchemaToGemini({ schema })
                   : {
-                      type: Gemini.FunctionDeclarationSchemaType.OBJECT,
+                      type: Gemini.SchemaType.OBJECT,
                       properties: {},
                     },
               };
@@ -102,49 +132,50 @@ function toolSchemaToGemini({ schema }: { schema: ToolSchema }): Gemini.Function
     switch (def.type) {
       case 'array':
         return {
-          type: Gemini.FunctionDeclarationSchemaType.ARRAY,
+          type: Gemini.SchemaType.ARRAY,
           description: def.description,
-          items: convertSchemaType({ def: def.items }) as Gemini.FunctionDeclarationSchema,
+          // @ts-expect-error - items is optional (empty object means any)
+          items: def.items ? convertSchemaType({ def: def.items }) : {},
         };
       case 'object':
         return {
-          type: Gemini.FunctionDeclarationSchemaType.OBJECT,
+          type: Gemini.SchemaType.OBJECT,
           description: def.description,
           required: def.required as string[],
           properties: def.properties
-            ? Object.entries(def.properties).reduce<
-                Record<string, Gemini.FunctionDeclarationSchema>
-              >((properties, [key, prop]) => {
-                properties[key] = convertSchemaType({
-                  def: prop,
-                }) as Gemini.FunctionDeclarationSchema;
-                return properties;
-              }, {})
-            : undefined,
+            ? Object.entries(def.properties).reduce<Record<string, Gemini.Schema>>(
+                (properties, [key, prop]) => {
+                  properties[key] = convertSchemaType({
+                    def: prop,
+                  }) as Gemini.Schema;
+                  return properties;
+                },
+                {}
+              )
+            : {},
         };
       case 'string':
         return {
-          type: Gemini.FunctionDeclarationSchemaType.STRING,
+          type: Gemini.SchemaType.STRING,
+          format: 'enum',
           description: def.description,
-          enum: def.enum ? (def.enum as string[]) : def.const ? [def.const] : undefined,
+          enum: def.enum ? (def.enum as string[]) : def.const ? [def.const] : [],
         };
       case 'boolean':
         return {
-          type: Gemini.FunctionDeclarationSchemaType.BOOLEAN,
+          type: Gemini.SchemaType.BOOLEAN,
           description: def.description,
-          enum: def.enum ? (def.enum as string[]) : def.const ? [def.const] : undefined,
         };
       case 'number':
         return {
-          type: Gemini.FunctionDeclarationSchemaType.NUMBER,
+          type: Gemini.SchemaType.NUMBER,
           description: def.description,
-          enum: def.enum ? (def.enum as string[]) : def.const ? [def.const] : undefined,
         };
     }
   };
 
   return {
-    type: Gemini.FunctionDeclarationSchemaType.OBJECT,
+    type: Gemini.SchemaType.OBJECT,
     required: schema.required as string[],
     properties: Object.entries(schema.properties ?? {}).reduce<
       Record<string, Gemini.FunctionDeclarationSchemaProperty>
@@ -155,9 +186,10 @@ function toolSchemaToGemini({ schema }: { schema: ToolSchema }): Gemini.Function
   };
 }
 
-function messagesToGemini({ messages }: { messages: Message[] }): GeminiMessage[] {
-  return messages.map(messageToGeminiMapper()).reduce<GeminiMessage[]>((output, message) => {
-    // merging consecutive messages from the same user, as Gemini requires multi-turn messages
+const skipThoughtSignatureHash = 'skip_thought_signature_validator';
+
+function mergeConsecutiveSameRole(messages: GeminiMessage[]): GeminiMessage[] {
+  return messages.reduce<GeminiMessage[]>((output, message) => {
     const previousMessage = output.length ? output[output.length - 1] : undefined;
     if (previousMessage?.role === message.role) {
       previousMessage.parts.push(...message.parts);
@@ -167,6 +199,39 @@ function messagesToGemini({ messages }: { messages: Message[] }): GeminiMessage[
     return output;
   }, []);
 }
+
+function messagesToGemini({
+  messages,
+  useThoughtSignature,
+}: {
+  messages: Message[];
+  useThoughtSignature: boolean;
+}): GeminiMessage[] {
+  // Filter empty-part messages first, then merge so roles always alternate.
+  const mapped = mergeConsecutiveSameRole(
+    messages.map(messageToGeminiMapper()).filter((message) => message.parts.length > 0)
+  );
+
+  if (useThoughtSignature) {
+    mapped.forEach((message, index) => {
+      if (index < mapped.length - 1) {
+        addThoughtSignatureToFirstFunctionCall(message);
+      }
+    });
+  }
+
+  return mapped;
+}
+
+const addThoughtSignatureToFirstFunctionCall = (message: GeminiMessage) => {
+  for (const part of message.parts) {
+    if (part.functionCall) {
+      // @ts-expect-error - Gemini types are not up to date, this is a valid property
+      part.thoughtSignature = skipThoughtSignatureHash;
+      break;
+    }
+  }
+};
 
 function messageToGeminiMapper() {
   return (message: Message): GeminiMessage => {
@@ -195,11 +260,21 @@ function messageToGeminiMapper() {
       case MessageRole.User:
         const userMessage: GeminiMessage = {
           role: 'user',
-          parts: [
-            {
-              text: message.content,
-            },
-          ],
+          parts: (typeof message.content === 'string' ? [message.content] : message.content).map(
+            (contentPart) => {
+              if (typeof contentPart === 'string') {
+                return { text: contentPart } satisfies Gemini.TextPart;
+              } else if (contentPart.type === 'text') {
+                return { text: contentPart.text } satisfies Gemini.TextPart;
+              }
+              return {
+                inlineData: {
+                  data: contentPart.source.data,
+                  mimeType: contentPart.source.mimeType,
+                },
+              } satisfies Gemini.InlineDataPart;
+            }
+          ),
         };
         return userMessage;
 
@@ -211,7 +286,11 @@ function messageToGeminiMapper() {
             {
               functionResponse: {
                 name: message.toolCallId,
-                response: message.response as object,
+                // gemini expects a structured response shape, making sure we're not sending a string
+                response:
+                  typeof message.response === 'string'
+                    ? { response: message.response }
+                    : message.response,
               },
             },
           ],

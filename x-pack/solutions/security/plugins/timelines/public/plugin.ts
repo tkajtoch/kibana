@@ -5,14 +5,15 @@
  * 2.0.
  */
 
-import { Store, Unsubscribe } from 'redux';
-import type { CoreSetup, Plugin, CoreStart } from '@kbn/core/public';
-import { getLastUpdatedLazy, getLoadingPanelLazy } from './methods';
-import type { TimelinesUIStart, TimelinesStartPlugins } from './types';
+import type { Store, Unsubscribe } from 'redux';
+import type { CoreSetup, CoreStart, Plugin } from '@kbn/core/public';
+import { getLastUpdatedLazy } from './methods';
+import type { TimelinesStartPlugins, TimelinesUIStart } from './types';
 import { useAddToTimeline, useAddToTimelineSensor } from './hooks/use_add_to_timeline';
-import { getHoverActions, HoverActionsConfig } from './components/hover_actions';
+import type { HoverActionsConfig } from './components/hover_actions';
+import { getHoverActions } from './components/hover_actions';
 import { timelineReducer } from './store/timeline/reducer';
-import { LastUpdatedAtProps, LoadingPanelProps } from './components';
+import type { LastUpdatedAtProps } from './components';
 
 export class TimelinesPlugin implements Plugin<void, TimelinesUIStart> {
   private _store: Store | undefined;
@@ -35,9 +36,6 @@ export class TimelinesPlugin implements Plugin<void, TimelinesUIStart> {
       },
       getTimelineReducer: () => {
         return timelineReducer;
-      },
-      getLoadingPanel: (props: LoadingPanelProps) => {
-        return getLoadingPanelLazy(props);
       },
       getLastUpdated: (props: LastUpdatedAtProps) => {
         return getLastUpdatedLazy(props);

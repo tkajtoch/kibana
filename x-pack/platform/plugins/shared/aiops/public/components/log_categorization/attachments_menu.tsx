@@ -30,10 +30,10 @@ import { useMemo } from 'react';
 import type { DataView } from '@kbn/data-views-plugin/common';
 import { EMBEDDABLE_PATTERN_ANALYSIS_TYPE } from '@kbn/aiops-log-pattern-analysis/constants';
 import { useTimeRangeUpdates } from '@kbn/ml-date-picker';
-import type { PatternAnalysisEmbeddableState } from '../../embeddables/pattern_analysis/types';
-import type { RandomSamplerOption, RandomSamplerProbability } from './sampling_menu/random_sampler';
+import type { RandomSamplerOption, RandomSamplerProbability } from '@kbn/ml-random-sampler-utils';
 import { useCasesModal } from '../../hooks/use_cases_modal';
 import { useAiopsAppContext } from '../../hooks/use_aiops_app_context';
+import { CASES_TOAST_MESSAGES_TITLES } from '../../cases/constants';
 
 const SavedObjectSaveModalDashboard = withSuspense(LazySavedObjectSaveModalDashboard);
 
@@ -66,36 +66,37 @@ export const AttachmentsMenu = ({
     update: false,
   };
 
-  const openCasesModalCallback = useCasesModal(EMBEDDABLE_PATTERN_ANALYSIS_TYPE);
+  const openCasesModalCallback = useCasesModal(
+    EMBEDDABLE_PATTERN_ANALYSIS_TYPE,
+    CASES_TOAST_MESSAGES_TITLES.PATTERN_ANALYSIS
+  );
 
   const timeRange = useTimeRangeUpdates();
 
-  const canEditDashboards = capabilities.dashboard.createNew;
+  const canEditDashboards = capabilities.dashboard_v2.createNew;
 
   const onSave: SaveModalDashboardProps['onSave'] = useCallback(
-    ({ dashboardId, newTitle, newDescription }) => {
+    async ({ dashboardId, newTitle, newDescription }) => {
       const stateTransfer = embeddable!.getStateTransfer();
 
-      const embeddableInput: Partial<PatternAnalysisEmbeddableState> = {
-        title: newTitle,
-        description: newDescription,
-        dataViewId: dataView.id,
-        fieldName: selectedField,
-        randomSamplerMode,
-        randomSamplerProbability,
-        minimumTimeRangeOption: 'No minimum',
-        ...(applyTimeRange && { timeRange }),
-      };
-
       const state = {
-        input: embeddableInput,
+        serializedState: {
+          title: newTitle,
+          description: newDescription,
+          dataViewId: dataView.id,
+          fieldName: selectedField,
+          randomSamplerMode,
+          randomSamplerProbability,
+          minimumTimeRangeOption: 'No minimum',
+          ...(applyTimeRange && { timeRange }),
+        },
         type: EMBEDDABLE_PATTERN_ANALYSIS_TYPE,
       };
 
       const path = dashboardId === 'new' ? '#/create' : `#/view/${dashboardId}`;
 
-      stateTransfer.navigateToWithEmbeddablePackage('dashboards', {
-        state,
+      stateTransfer.navigateToWithEmbeddablePackages('dashboards', {
+        state: [state],
         path,
       });
     },
@@ -123,6 +124,7 @@ export const AttachmentsMenu = ({
                     defaultMessage: 'Add to dashboard',
                   }),
                   panel: 'attachToDashboardPanel',
+                  icon: 'dashboardApp',
                   'data-test-subj': 'aiopsLogPatternAnalysisAttachToDashboardButton',
                 },
               ]
@@ -133,6 +135,7 @@ export const AttachmentsMenu = ({
                   name: i18n.translate('xpack.aiops.logCategorization.attachToCaseLabel', {
                     defaultMessage: 'Add to case',
                   }),
+                  icon: 'casesApp',
                   'data-test-subj': 'aiopsLogPatternAnalysisAttachToCaseButton',
                   onClick: () => {
                     setIsActionMenuOpen(false);
@@ -142,7 +145,7 @@ export const AttachmentsMenu = ({
                       minimumTimeRangeOption: 'No minimum',
                       randomSamplerMode,
                       randomSamplerProbability,
-                      timeRange,
+                      time_range: timeRange,
                     });
                   },
                 },
@@ -218,8 +221,11 @@ export const AttachmentsMenu = ({
                     defaultMessage: 'Attachments',
                   }
                 )}
-                iconType="boxesHorizontal"
+                size="m"
                 color="text"
+                display="base"
+                isSelected={isActionMenuOpen}
+                iconType="boxesVertical"
                 onClick={() => setIsActionMenuOpen(!isActionMenuOpen)}
               />
             }

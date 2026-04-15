@@ -14,17 +14,15 @@ import { pick } from 'lodash';
 import React, { useEffect, useMemo, useState, type FC } from 'react';
 import type { Observable } from 'rxjs';
 import { BehaviorSubject, combineLatest, distinctUntilChanged, map } from 'rxjs';
-import type { MinimumTimeRangeOption } from '../components/log_categorization/log_categorization_for_embeddable/minimum_time_range';
-import type {
-  RandomSamplerOption,
-  RandomSamplerProbability,
-} from '../components/log_categorization/sampling_menu/random_sampler';
+import type { PublishesFilters } from '@kbn/presentation-publishing';
+import type { RandomSamplerOption, RandomSamplerProbability } from '@kbn/ml-random-sampler-utils';
 import { PatternAnalysisEmbeddableWrapper } from '../embeddables/pattern_analysis/pattern_analysis_component_wrapper';
 import { AiopsAppContext, type AiopsAppContextValue } from '../hooks/use_aiops_app_context';
 import { DataSourceContextProvider } from '../hooks/use_data_source';
 import { FilterQueryContextProvider } from '../hooks/use_filters_query';
 import { ReloadContextProvider } from '../hooks/use_reload';
 import type { AiopsPluginStartDeps } from '../types';
+import type { MinimumTimeRangeOption } from '../../common/embeddables/pattern_analysis/types';
 
 /**
  * Only used to initialize internally
@@ -60,6 +58,7 @@ export interface PatternAnalysisProps {
   onLoading: (isLoading: boolean) => void;
   onRenderComplete: () => void;
   onError: (error: Error) => void;
+  filtersApi?: PublishesFilters;
 }
 
 const PatternAnalysisWrapper: FC<PatternAnalysisPropsWithDeps> = ({
@@ -79,10 +78,20 @@ const PatternAnalysisWrapper: FC<PatternAnalysisPropsWithDeps> = ({
   embeddingOrigin,
   lastReloadRequestTime,
   onChange,
+  filtersApi,
 }) => {
   const deps = useMemo(() => {
-    const { lens, data, usageCollection, fieldFormats, charts, share, storage, unifiedSearch } =
-      pluginStart;
+    const {
+      lens,
+      data,
+      usageCollection,
+      fieldFormats,
+      charts,
+      share,
+      storage,
+      unifiedSearch,
+      cps,
+    } = pluginStart;
 
     return {
       data,
@@ -93,12 +102,13 @@ const PatternAnalysisWrapper: FC<PatternAnalysisPropsWithDeps> = ({
       share,
       storage,
       unifiedSearch,
+      cps,
       ...coreStart,
     };
   }, [coreStart, pluginStart]);
 
   const datePickerDeps = {
-    ...pick(deps, ['data', 'http', 'notifications', 'theme', 'uiSettings', 'i18n']),
+    ...pick(deps, ['data', 'http', 'notifications', 'theme', 'uiSettings', 'userProfile', 'i18n']),
     uiSettingsKeys: UI_SETTINGS,
   };
 
@@ -145,7 +155,7 @@ const PatternAnalysisWrapper: FC<PatternAnalysisPropsWithDeps> = ({
               dataViews={pluginStart.data.dataViews}
               dataViewId={dataViewId}
             >
-              <FilterQueryContextProvider timeRange={timeRange}>
+              <FilterQueryContextProvider timeRange={timeRange} filtersApi={filtersApi}>
                 <PatternAnalysisEmbeddableWrapper
                   dataViewId={dataViewId}
                   timeRange={timeRange}

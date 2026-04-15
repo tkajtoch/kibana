@@ -23,6 +23,7 @@ import type {
   JobsSpacesResponse,
   TrainedModelsSpacesResponse,
   SyncCheckResponse,
+  CanSyncToAllSpacesResponse,
 } from '../../../../common/types/saved_objects';
 
 export const savedObjectsApiProvider = (httpService: HttpService) => ({
@@ -41,10 +42,10 @@ export const savedObjectsApiProvider = (httpService: HttpService) => ({
   ) {
     const body = JSON.stringify({ jobType, jobIds, spacesToAdd, spacesToRemove });
     return httpService.http<SavedObjectResult>({
-      path: `${ML_INTERNAL_BASE_PATH}/saved_objects/update_jobs_spaces`,
+      path: `${ML_EXTERNAL_BASE_PATH}/saved_objects/update_jobs_spaces`,
       method: 'POST',
       body,
-      version: '1',
+      version: '2023-10-31',
     });
   },
   removeItemFromCurrentSpace(mlSavedObjectType: MlSavedObjectType, ids: string[]) {
@@ -56,11 +57,11 @@ export const savedObjectsApiProvider = (httpService: HttpService) => ({
       version: '1',
     });
   },
-  syncSavedObjects(simulate: boolean = false) {
+  syncSavedObjects(simulate: boolean = false, addToAllSpaces?: boolean) {
     return httpService.http<SyncSavedObjectResponse>({
       path: `${ML_EXTERNAL_BASE_PATH}/saved_objects/sync`,
       method: 'GET',
-      query: { simulate },
+      query: { simulate, addToAllSpaces },
       version: '2023-10-31',
     });
   },
@@ -90,6 +91,15 @@ export const savedObjectsApiProvider = (httpService: HttpService) => ({
       version: '1',
     });
   },
+  canSyncToAllSpaces(mlSavedObjectType?: MlSavedObjectType) {
+    return httpService.http<CanSyncToAllSpacesResponse>({
+      path: `${ML_INTERNAL_BASE_PATH}/saved_objects/can_sync_to_all_spaces${
+        mlSavedObjectType !== undefined ? `/${mlSavedObjectType}` : ''
+      }`,
+      method: 'GET',
+      version: '1',
+    });
+  },
   trainedModelsSpaces() {
     return httpService.http<TrainedModelsSpacesResponse>({
       path: `${ML_INTERNAL_BASE_PATH}/saved_objects/trained_models_spaces`,
@@ -100,10 +110,10 @@ export const savedObjectsApiProvider = (httpService: HttpService) => ({
   updateModelsSpaces(modelIds: string[], spacesToAdd: string[], spacesToRemove: string[]) {
     const body = JSON.stringify({ modelIds, spacesToAdd, spacesToRemove });
     return httpService.http<SavedObjectResult>({
-      path: `${ML_INTERNAL_BASE_PATH}/saved_objects/update_trained_models_spaces`,
+      path: `${ML_EXTERNAL_BASE_PATH}/saved_objects/update_trained_models_spaces`,
       method: 'POST',
       body,
-      version: '1',
+      version: '2023-10-31',
     });
   },
 });

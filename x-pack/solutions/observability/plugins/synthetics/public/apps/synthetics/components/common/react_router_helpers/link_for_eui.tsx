@@ -7,14 +7,8 @@
 
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-import {
-  EuiLink,
-  EuiButton,
-  EuiButtonProps,
-  EuiButtonEmptyProps,
-  EuiLinkAnchorProps,
-  EuiButtonEmpty,
-} from '@elastic/eui';
+import type { EuiButtonProps, EuiButtonEmptyProps, EuiLinkAnchorProps } from '@elastic/eui';
+import { EuiLink, EuiButton, EuiButtonEmpty } from '@elastic/eui';
 
 import { letBrowserHandleEvent } from './link_events';
 
@@ -22,7 +16,7 @@ import { letBrowserHandleEvent } from './link_events';
  * Generates either an EuiLink or EuiButton with a React-Router-ified link
  *
  * Based off of EUI's recommendations for handling React Router:
- * https://github.com/elastic/eui/blob/master/wiki/react-router.md#react-router-51
+ * https://github.com/elastic/eui/blob/main/wiki/consuming-eui/react-router.md#react-router-51
  */
 
 interface IEuiReactRouterProps {
@@ -56,7 +50,7 @@ type TEuiReactRouterButtonEmptyProps = EuiButtonEmptyProps & IEuiReactRouterProp
 
 export const ReactRouterEuiLink: React.FC<TEuiReactRouterLinkProps> = ({ to, ...rest }) => (
   <ReactRouterHelperForEui to={to}>
-    <EuiLink data-test-subj="syntheticsReactRouterEuiLinkLink" {...rest} />
+    <EuiLink data-test-subj="syntheticsReactRouterEuiLink" {...rest} />
   </ReactRouterHelperForEui>
 );
 

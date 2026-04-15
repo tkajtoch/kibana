@@ -14,14 +14,15 @@
  *   version: 2023-10-31
  */
 
-import { z } from '@kbn/zod';
+import { z } from '@kbn/zod/v4';
 
 import {
   SavedQueryId,
-  DescriptionOrUndefined,
+  SavedQueryDescriptionOrUndefined,
   QueryOrUndefined,
   ECSMappingOrUndefined,
   VersionOrUndefined,
+  PlatformOrUndefined,
   Interval,
   SnapshotOrUndefined,
   RemovedOrUndefined,
@@ -30,15 +31,86 @@ import {
 export type CreateSavedQueryRequestBody = z.infer<typeof CreateSavedQueryRequestBody>;
 export const CreateSavedQueryRequestBody = z.object({
   id: SavedQueryId.optional(),
-  description: DescriptionOrUndefined.optional(),
+  description: SavedQueryDescriptionOrUndefined.optional(),
   query: QueryOrUndefined.optional(),
   ecs_mapping: ECSMappingOrUndefined.optional(),
   version: VersionOrUndefined.optional(),
-  platform: DescriptionOrUndefined.optional(),
+  platform: PlatformOrUndefined.optional(),
   interval: Interval.optional(),
   snapshot: SnapshotOrUndefined.optional(),
   removed: RemovedOrUndefined.optional(),
 });
 
-export type SuccessResponse = z.infer<typeof SuccessResponse>;
-export const SuccessResponse = z.object({});
+/**
+ * The response for creating a saved query.
+ */
+export type CreateSavedQueryResponse = z.infer<typeof CreateSavedQueryResponse>;
+export const CreateSavedQueryResponse = z.object({
+  /**
+   * The created saved query.
+   */
+  data: z
+    .object({
+      /**
+       * The saved object ID of the saved query.
+       */
+      saved_object_id: z.string().optional(),
+      /**
+       * The saved query ID.
+       */
+      id: z.string().optional(),
+      /**
+       * The saved query description.
+       */
+      description: z.string().optional(),
+      /**
+       * The SQL query.
+       */
+      query: z.string().optional(),
+      /**
+       * The query interval in seconds.
+       */
+      interval: z.string().optional(),
+      /**
+       * The query timeout in seconds.
+       */
+      timeout: z.number().int().optional(),
+      /**
+       * Whether the query is a snapshot query.
+       */
+      snapshot: z.boolean().optional(),
+      /**
+       * Whether to include results for removed processes.
+       */
+      removed: z.boolean().optional(),
+      /**
+       * The target platform(s).
+       */
+      platform: z.string().optional(),
+      /**
+       * The minimum osquery version.
+       */
+      version: z.string().optional(),
+      /**
+       * The ECS mapping configuration.
+       */
+      ecs_mapping: z.object({}).optional(),
+      /**
+       * The creation timestamp.
+       */
+      created_at: z.string().optional(),
+      /**
+       * The user who created the saved query.
+       */
+      created_by: z.string().optional(),
+      /**
+       * The last update timestamp.
+       */
+      updated_at: z.string().optional(),
+      /**
+       * The user who last updated the saved query.
+       */
+      updated_by: z.string().optional(),
+    })
+    .optional(),
+});

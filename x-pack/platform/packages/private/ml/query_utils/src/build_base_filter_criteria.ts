@@ -5,7 +5,7 @@
  * 2.0.
  */
 
-import type * as estypes from '@elastic/elasticsearch/lib/api/typesWithBodyKey';
+import type { estypes } from '@elastic/elasticsearch';
 import type { Query } from '@kbn/es-query';
 
 import { isDefaultQuery } from './default_query';
@@ -27,7 +27,7 @@ export function buildBaseFilterCriteria(
   latestMs?: number | string,
   query?: Query['query'],
   timeFormat = 'epoch_millis'
-): estypes.QueryDslQueryContainer[] {
+): NonNullable<estypes.QueryDslQueryContainer>[] {
   const filterCriteria = [];
 
   if (timeFieldName && earliestMs && latestMs) {

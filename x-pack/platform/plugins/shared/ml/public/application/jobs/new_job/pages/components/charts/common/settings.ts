@@ -8,18 +8,20 @@
 import type { IUiSettingsClient } from '@kbn/core/public';
 import type { TimeBuckets } from '@kbn/ml-time-buckets';
 import type { AreaSeriesStyle, LineSeriesStyle, RecursivePartial } from '@elastic/charts';
-import { useCurrentThemeVars } from '../../../../../../contexts/kibana';
+import { useEuiTheme } from '@elastic/eui';
 import type { JobCreatorType } from '../../../../common/job_creator';
 import { isMultiMetricJobCreator, isPopulationJobCreator } from '../../../../common/job_creator';
 import { getTimeBucketsFromCache } from '../../../../../../util/get_time_buckets_from_cache';
 
 export function useChartColors() {
-  const { euiTheme } = useCurrentThemeVars();
+  const { euiTheme, colorMode } = useEuiTheme();
+  const isDarkMode = colorMode === 'DARK';
+
   return {
-    LINE_COLOR: euiTheme.euiColorPrimary,
-    MODEL_COLOR: euiTheme.euiColorPrimary,
-    EVENT_RATE_COLOR: euiTheme.euiColorPrimary,
-    EVENT_RATE_COLOR_WITH_ANOMALIES: euiTheme.euiColorLightShade,
+    LINE_COLOR: isDarkMode ? euiTheme.colors.vis.euiColorVisGrey0 : euiTheme.colors.darkestShade,
+    MODEL_COLOR: euiTheme.colors.lightShade,
+    EVENT_RATE_COLOR: euiTheme.colors.vis.euiColorVis0,
+    EVENT_RATE_COLOR_WITH_ANOMALIES: euiTheme.colors.lightShade,
   };
 }
 
@@ -39,7 +41,7 @@ export const defaultChartSettings: ChartSettings = {
 
 export const lineSeriesStyle: RecursivePartial<LineSeriesStyle> = {
   line: {
-    strokeWidth: 2,
+    strokeWidth: 1,
     visible: true,
     opacity: 1,
   },
@@ -54,7 +56,7 @@ export const lineSeriesStyle: RecursivePartial<LineSeriesStyle> = {
 export const areaSeriesStyle: RecursivePartial<AreaSeriesStyle> = {
   ...lineSeriesStyle,
   area: {
-    opacity: 0.25,
+    opacity: 0.6,
     visible: false,
   },
 };

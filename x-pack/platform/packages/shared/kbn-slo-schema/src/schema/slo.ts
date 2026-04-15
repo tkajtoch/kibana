@@ -5,8 +5,8 @@
  * 2.0.
  */
 
+import type { Either } from 'fp-ts/Either';
 import * as t from 'io-ts';
-import { Either } from 'fp-ts/Either';
 import { allOrAnyStringOrArray, dateType } from './common';
 import { durationType } from './duration';
 import { indicatorSchema } from './indicators';
@@ -77,7 +77,7 @@ function isValidId(id: string): boolean {
   return validLength && /^[a-z0-9-_]+$/.test(id);
 }
 
-const sloDefinitionSchema = t.type({
+const requiredSloFields = t.type({
   id: sloIdSchema,
   name: t.string,
   description: t.string,
@@ -95,15 +95,33 @@ const sloDefinitionSchema = t.type({
   version: t.number,
 });
 
+const optionalSloFields = t.partial({
+  createdBy: t.string,
+  updatedBy: t.string,
+});
+
+const baseSloSchema = t.intersection([requiredSloFields, optionalSloFields]);
+
+const dashboardsWithIdSchema = t.partial({ dashboards: t.array(t.type({ id: t.string })) });
+const dashboardsWithRefIdSchema = t.partial({ dashboards: t.array(t.type({ refId: t.string })) });
+
+const artifactsWithIdSchema = t.partial({ artifacts: dashboardsWithIdSchema });
+const artifactsWithRefIdSchema = t.partial({ artifacts: dashboardsWithRefIdSchema });
+
+const sloDefinitionSchema = t.intersection([baseSloSchema, artifactsWithIdSchema]);
+const storedSloDefinitionSchema = t.intersection([baseSloSchema, artifactsWithRefIdSchema]);
+
 export {
   budgetingMethodSchema,
-  objectiveSchema,
+  dashboardsWithIdSchema,
   groupBySchema,
+  objectiveSchema,
   occurrencesBudgetingMethodSchema,
   optionalSettingsSchema,
   settingsSchema,
   sloDefinitionSchema,
   sloIdSchema,
+  storedSloDefinitionSchema,
   tagsSchema,
   targetSchema,
   timeslicesBudgetingMethodSchema,

@@ -9,9 +9,11 @@ import type { FC } from 'react';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { css } from '@emotion/react';
 
-import type * as estypes from '@elastic/elasticsearch/lib/api/typesWithBodyKey';
+import type { estypes } from '@elastic/elasticsearch';
 import type { EuiComboBoxOptionOption } from '@elastic/eui';
 import {
+  useEuiFontSize,
+  useEuiTheme,
   EuiCallOut,
   EuiComboBox,
   EuiFlexGroup,
@@ -36,9 +38,8 @@ import {
   type RuntimeMappings,
 } from '@kbn/ml-runtime-field-utils';
 import { getProcessedFields } from '@kbn/ml-data-grid';
-import { euiThemeVars } from '@kbn/ui-theme';
 
-import { useCurrentThemeVars, useMlApi, useMlKibana } from '../../contexts/kibana';
+import { useMlApi, useMlKibana } from '../../contexts/kibana';
 
 // Separate imports for lazy loadable VegaChart and related code
 import { VegaChart } from '../vega_chart';
@@ -50,17 +51,22 @@ import {
   OUTLIER_SCORE_FIELD,
 } from './scatterplot_matrix_vega_lite_spec';
 
-const cssOverrides = css({
-  // Prevent the chart from overflowing the container
-  overflowX: 'auto',
-  // Overrides for the outlier threshold slider
-  '.vega-bind': {
-    span: {
-      fontSize: euiThemeVars.euiFontSizeXS,
-      padding: `0 ${euiThemeVars.euiSizeXS}`,
+const useCssOverrides = () => {
+  const { euiTheme } = useEuiTheme();
+  const euiFontSizeXS = useEuiFontSize('xs').fontSize;
+
+  return css({
+    // Prevent the chart from overflowing the container
+    overflowX: 'auto',
+    // Overrides for the outlier threshold slider
+    '.vega-bind': {
+      span: {
+        fontSize: euiFontSizeXS,
+        padding: `0 ${euiTheme.size.xs}`,
+      },
     },
-  },
-});
+  });
+};
 
 const SCATTERPLOT_MATRIX_DEFAULT_FIELDS = 4;
 const SCATTERPLOT_MATRIX_DEFAULT_FETCH_SIZE = 1000;
@@ -114,6 +120,7 @@ export interface ScatterplotMatrixProps {
   legendType?: LegendType;
   searchQuery?: estypes.QueryDslQueryContainer;
   runtimeMappings?: RuntimeMappings;
+  projectRouting?: string;
   dataView?: DataView;
   query?: Query;
 }
@@ -126,6 +133,7 @@ export const ScatterplotMatrix: FC<ScatterplotMatrixProps> = ({
   legendType,
   searchQuery,
   runtimeMappings,
+  projectRouting,
   dataView,
   query,
 }) => {
@@ -161,7 +169,7 @@ export const ScatterplotMatrix: FC<ScatterplotMatrixProps> = ({
     { items: any[]; backgroundItems: any[]; columns: string[]; messages: string[] } | undefined
   >();
 
-  const { euiTheme } = useCurrentThemeVars();
+  const { euiTheme } = useEuiTheme();
 
   // formats the array of field names for EuiComboBox
   const fieldOptions = useMemo(
@@ -322,6 +330,7 @@ export const ScatterplotMatrix: FC<ScatterplotMatrixProps> = ({
           ...(isRuntimeMappings(combinedRuntimeMappings)
             ? { runtime_mappings: combinedRuntimeMappings }
             : {}),
+          ...(projectRouting ? { project_routing: projectRouting } : {}),
         };
 
         const promises = [
@@ -417,6 +426,8 @@ export const ScatterplotMatrix: FC<ScatterplotMatrixProps> = ({
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [resultsField, splom, color, legendType, dynamicSize]);
+
+  const cssOverrides = useCssOverrides();
 
   return (
     <>
@@ -552,7 +563,7 @@ export const ScatterplotMatrix: FC<ScatterplotMatrixProps> = ({
                       defaultMessage:
                         'Explore scatterplot charts in Vega based custom visualization',
                     })}
-                    type="visVega"
+                    type="code"
                     size="l"
                   />
                 </EuiLink>
@@ -563,7 +574,7 @@ export const ScatterplotMatrix: FC<ScatterplotMatrixProps> = ({
           {splom.messages.length > 0 && (
             <>
               <EuiSpacer size="m" />
-              <EuiCallOut color="warning">
+              <EuiCallOut announceOnMount color="warning">
                 {splom.messages.map((m) => (
                   <span key={stringHash(m)}>
                     {m}

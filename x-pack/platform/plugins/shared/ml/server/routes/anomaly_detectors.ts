@@ -5,7 +5,7 @@
  * 2.0.
  */
 
-import type * as estypes from '@elastic/elasticsearch/lib/api/types';
+import type { estypes } from '@elastic/elasticsearch';
 import { schema } from '@kbn/config-schema';
 import { ML_INTERNAL_BASE_PATH } from '../../common/constants/app';
 import { wrapError } from '../client/error_wrapper';
@@ -26,7 +26,6 @@ import {
   forceQuerySchema,
   getAnomalyDetectorsResponse,
 } from './schemas/anomaly_detectors_schema';
-import { getAuthorizationHeader } from '../lib/request_authorization';
 
 /**
  * Routes for the anomaly detectors
@@ -193,14 +192,11 @@ export function jobRoutes({ router, routeGuard }: RouteInitialization) {
       routeGuard.fullLicenseAPIGuard(async ({ mlClient, request, response }) => {
         try {
           const { jobId } = request.params;
-          const body = await mlClient.putJob(
-            {
-              job_id: jobId,
-              // @ts-expect-error job type custom_rules is incorrect
-              body: request.body,
-            },
-            getAuthorizationHeader(request)
-          );
+          const body = await mlClient.putJob({
+            job_id: jobId,
+            // @ts-expect-error job type custom_rules is incorrect
+            body: request.body,
+          });
 
           return response.ok({
             body,
@@ -479,7 +475,7 @@ export function jobRoutes({ router, routeGuard }: RouteInitialization) {
           const body = await mlClient.getBuckets({
             job_id: request.params.jobId,
             timestamp: request.params.timestamp,
-            body: request.body,
+            ...request.body,
           });
           return response.ok({
             body,
@@ -557,7 +553,7 @@ export function jobRoutes({ router, routeGuard }: RouteInitialization) {
         try {
           const body = await mlClient.getCategories({
             job_id: request.params.jobId,
-            category_id: request.params.categoryId,
+            category_id: Number(request.params.categoryId),
           });
           return response.ok({
             body,
@@ -666,7 +662,7 @@ export function jobRoutes({ router, routeGuard }: RouteInitialization) {
           const body = await mlClient.updateModelSnapshot({
             job_id: request.params.jobId,
             snapshot_id: request.params.snapshotId,
-            body: request.body,
+            ...request.body,
           });
           return response.ok({
             body,

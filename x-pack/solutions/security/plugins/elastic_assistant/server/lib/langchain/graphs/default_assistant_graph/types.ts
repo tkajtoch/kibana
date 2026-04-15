@@ -5,39 +5,33 @@
  * 2.0.
  */
 
-import { BaseMessage } from '@langchain/core/messages';
-import { AgentAction, AgentFinish, AgentStep } from '@langchain/core/agents';
+import type { BaseMessage } from '@langchain/core/messages';
 import type { Logger } from '@kbn/logging';
-import { ConversationResponse } from '@kbn/elastic-assistant-common';
-
-export interface AgentStateBase {
-  agentOutcome?: AgentAction | AgentFinish;
-  steps: AgentStep[];
-}
+import type { ContentReferencesStore } from '@kbn/elastic-assistant-common';
+import type { SavedObjectsClientContract } from '@kbn/core-saved-objects-api-server';
+import type { InferenceConnector } from '@kbn/inference-common';
+import type { AssistantStateAnnotation } from './state';
 
 export interface GraphInputs {
+  connectorId: string;
   conversationId?: string;
+  threadId: string;
   llmType?: string;
   isStream?: boolean;
   isOssModel?: boolean;
-  input: string;
+  /**
+   * The entire conversation history, including the new messages.
+   */
+  messages: BaseMessage[];
+  isRegeneration: boolean;
   responseLanguage?: string;
 }
 
-export interface AgentState extends AgentStateBase {
-  input: string;
-  messages: BaseMessage[];
-  chatTitle: string;
-  lastNode: string;
-  hasRespondStep: boolean;
-  isStream: boolean;
-  isOssModel: boolean;
-  llmType: string;
-  responseLanguage: string;
-  conversation: ConversationResponse | undefined;
-  conversationId: string;
-}
+export type AgentState = typeof AssistantStateAnnotation.State;
 
 export interface NodeParamsBase {
+  getInferenceConnectorById: (id: string) => Promise<InferenceConnector>;
   logger: Logger;
+  savedObjectsClient: SavedObjectsClientContract;
+  contentReferencesStore: ContentReferencesStore;
 }

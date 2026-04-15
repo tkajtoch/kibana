@@ -8,7 +8,7 @@
  */
 
 import type { ImportResolver } from '@kbn/import-resolver';
-import type { ModuleGroup, ModuleVisibility } from '@kbn/repo-info/types';
+import type { ModuleGroup, ModuleVisibility } from '@kbn/projects-solutions-groups';
 import type { KibanaPackageManifest } from '@kbn/repo-packages/modern/types';
 import type { ModuleId } from './module_id';
 import type { ModuleType } from './module_type';
@@ -17,7 +17,7 @@ import { RepoPath } from './repo_path';
 import { inferGroupAttrsFromPath } from './group';
 
 const STATIC_EXTS = new Set(
-  'json|woff|woff2|ttf|eot|svg|ico|png|jpg|gif|jpeg|html|md|txt|tmpl|xml'
+  'json|woff|woff2|ttf|eot|svg|ico|png|jpg|gif|jpeg|html|md|txt|tmpl|xml|yaml|yml'
     .split('|')
     .map((e) => `.${e}`)
 );
@@ -82,7 +82,7 @@ export class RepoSourceClassifier {
     const segs = path.getSegs();
     if (
       segs.includes('scripts') &&
-      !path.getRepoRel().startsWith('src/plugins/data/server/scripts/')
+      !path.getRepoRel().startsWith('src/platform/plugins/shared/data/server/scripts/')
     ) {
       return true;
     }
@@ -119,10 +119,6 @@ export class RepoSourceClassifier {
 
     if (root === 'i18n') {
       return 'common package';
-    }
-
-    if (root === 'shareable_runtime') {
-      return 'non-package';
     }
 
     if (root === 'tasks') {
@@ -166,7 +162,14 @@ export class RepoSourceClassifier {
 
     const { pkgId, rel } = pkgInfo;
 
-    if (pkgId === '@kbn/test' || pkgId === '@kbn/test-subj-selector') {
+    if (
+      pkgId === '@kbn/test' ||
+      pkgId === '@kbn/test-docker-servers' ||
+      pkgId === '@kbn/test-es-server' ||
+      pkgId === '@kbn/test-kibana-server' ||
+      pkgId === '@kbn/test-saml-auth' ||
+      pkgId === '@kbn/test-subj-selector'
+    ) {
       return 'common package';
     }
 

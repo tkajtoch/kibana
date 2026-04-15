@@ -7,6 +7,7 @@
 
 import React, { useMemo, useCallback } from 'react';
 import {
+  useEuiTheme,
   type EuiBasicTableColumn,
   EuiBadge,
   EuiCode,
@@ -14,7 +15,7 @@ import {
   EuiIconTip,
   EuiText,
 } from '@elastic/eui';
-import type * as estypes from '@elastic/elasticsearch/lib/api/typesWithBodyKey';
+import type { estypes } from '@elastic/elasticsearch';
 import { i18n } from '@kbn/i18n';
 import { FormattedMessage } from '@kbn/i18n-react';
 import { type SignificantItem, SIGNIFICANT_ITEM_TYPE } from '@kbn/ml-agg-utils';
@@ -35,7 +36,6 @@ import { getFailedTransactionsCorrelationImpactLabel } from './get_failed_transa
 import { FieldStatsPopover } from '../field_stats_popover';
 import { useAiopsAppContext } from '../../hooks/use_aiops_app_context';
 import { useDataSource } from '../../hooks/use_data_source';
-import { useEuiTheme } from '../../hooks/use_eui_theme';
 import { useViewInDiscoverAction } from './use_view_in_discover_action';
 import { useViewInLogPatternAnalysisAction } from './use_view_in_log_pattern_analysis_action';
 import { useCopyToClipboardAction } from './use_copy_to_clipboard_action';
@@ -99,7 +99,7 @@ const LogRateColumnName = (
       size="s"
       position="top"
       color="subdued"
-      type="questionInCircle"
+      type="question"
       className="eui-alignTop"
       content={logRateChangeMessage}
     />
@@ -117,7 +117,7 @@ const ImpactColumnName = (
       size="s"
       position="top"
       color="subdued"
-      type="questionInCircle"
+      type="question"
       className="eui-alignTop"
       content={i18n.translate('xpack.aiops.logRateAnalysis.resultsTable.impactLabelColumnTooltip', {
         defaultMessage: 'The level of impact of the field on the message rate difference.',
@@ -137,7 +137,7 @@ const GroupImpactColumnName = (
       size="s"
       position="top"
       color="subdued"
-      type="questionInCircle"
+      type="question"
       className="eui-alignTop"
       content={i18n.translate(
         'xpack.aiops.logRateAnalysis.resultsTableGroups.impactLabelColumnTooltip',
@@ -159,7 +159,7 @@ export const useColumns = (
 ): Array<EuiBasicTableColumn<SignificantItem>> => {
   const { data, uiSettings, fieldFormats, charts } = useAiopsAppContext();
   const { dataView } = useDataSource();
-  const euiTheme = useEuiTheme();
+  const { euiTheme } = useEuiTheme();
   const viewInDiscoverAction = useViewInDiscoverAction(dataView.id);
   const viewInLogPatternAnalysisAction = useViewInLogPatternAnalysisAction(dataView.id);
   const copyToClipBoardAction = useCopyToClipboardAction();
@@ -265,8 +265,8 @@ export const useColumns = (
                 <span
                   // match the margins of the FieldStatsPopover button
                   css={{
-                    marginLeft: euiTheme.euiSizeS,
-                    marginRight: euiTheme.euiSizeXS,
+                    marginLeft: euiTheme.size.s,
+                    marginRight: euiTheme.size.xs,
                   }}
                 >
                   <EuiIconTip
@@ -333,7 +333,7 @@ export const useColumns = (
               size="s"
               position="top"
               color="subdued"
-              type="questionInCircle"
+              type="question"
               className="eui-alignTop"
               content={isGroupsTable ? groupLogRateHelpMessage : logRateHelpMessage}
             />
@@ -378,7 +378,7 @@ export const useColumns = (
               size="s"
               position="top"
               color="subdued"
-              type="questionInCircle"
+              type="question"
               className="eui-alignTop"
               content={baselineRateMessage}
             />
@@ -421,7 +421,7 @@ export const useColumns = (
               size="s"
               position="top"
               color="subdued"
-              type="questionInCircle"
+              type="question"
               className="eui-alignTop"
               content={deviationRateMessage}
             />
@@ -488,7 +488,7 @@ export const useColumns = (
               size="s"
               position="top"
               color="subdued"
-              type="questionInCircle"
+              type="question"
               className="eui-alignTop"
               content={i18n.translate(
                 'xpack.aiops.logRateAnalysis.resultsTable.pValueColumnTooltip',

@@ -5,8 +5,8 @@
  * 2.0.
  */
 
-import { Replacements } from '@kbn/elastic-assistant-common';
-import { FindAnonymizationFieldsResponse } from '@kbn/elastic-assistant-common/impl/schemas/anonymization_fields/find_anonymization_fields_route.gen';
+import type { Replacements } from '@kbn/elastic-assistant-common';
+import type { FindAnonymizationFieldsResponse } from '@kbn/elastic-assistant-common/impl/schemas';
 import type { ReactNode } from 'react';
 
 /**
@@ -91,7 +91,7 @@ export interface SelectedPromptContext {
  * initializing it. This is used to provide 'category' options when users create Quick Prompts.
  * Also, useful for collating all of a solutions' prompts in one place.
  *
- * e.g. see Security Solution's x-pack/plugins/security_solution/public/assistant/prompt_contexts/index.tsx
+ * e.g. see Security Solution's x-pack/solutions/security/plugins/security_solution/public/assistant/prompt_contexts/index.tsx
  */
 export type PromptContextTemplate = Omit<PromptContext, 'id' | 'getPromptContext'>;
 

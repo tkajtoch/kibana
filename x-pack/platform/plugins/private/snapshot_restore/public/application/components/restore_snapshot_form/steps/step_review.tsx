@@ -25,7 +25,7 @@ import {
 } from '@elastic/eui';
 import { serializeRestoreSettings } from '../../../../../common/lib';
 import { useServices } from '../../../app_context';
-import { StepProps } from '.';
+import type { StepProps } from '.';
 import { CollapsibleIndicesList } from '../../collapsible_lists';
 import { PolicyFeatureStatesSummary } from '../../summaries';
 
@@ -301,7 +301,7 @@ export const RestoreSnapshotStepReview: React.FunctionComponent<StepProps> = ({
 
   return (
     <Fragment>
-      <EuiTitle>
+      <EuiTitle data-test-subj="reviewSnapshotTitle">
         <h2>
           <FormattedMessage
             id="xpack.snapshotRestore.restoreForm.stepReviewTitle"

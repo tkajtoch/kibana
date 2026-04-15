@@ -7,22 +7,22 @@
 
 import React, { Fragment, useEffect } from 'react';
 import { FormattedMessage } from '@kbn/i18n-react';
-import { RouteComponentProps } from 'react-router-dom';
+import type { RouteComponentProps } from 'react-router-dom';
 import { EuiButton, EuiCallOut, EuiSpacer, EuiPageTemplate, EuiLink } from '@elastic/eui';
 
 import { reactRouterNavigate } from '@kbn/kibana-react-plugin/public';
 
 import { i18n } from '@kbn/i18n';
+import type { Error } from '../../../../shared_imports';
 import {
   PageLoading,
   PageError,
-  Error,
   WithPrivileges,
   NotAuthorizedSection,
   useExecutionContext,
 } from '../../../../shared_imports';
 
-import { SlmPolicy } from '../../../../../common/types';
+import type { SlmPolicy } from '../../../../../common/types';
 import { APP_SLM_CLUSTER_PRIVILEGES } from '../../../../../common';
 import { BASE_PATH, SLM_STATE, UIM_POLICY_LIST_LOAD } from '../../../constants';
 import { useDecodedParams } from '../../../lib';
@@ -149,7 +149,7 @@ export const PolicyList: React.FunctionComponent<RouteComponentProps<MatchParams
           <EuiButton
             {...reactRouterNavigate(history, linkToAddPolicy())}
             fill
-            iconType="plusInCircle"
+            iconType="plusCircle"
             data-test-subj="createPolicyButton"
           >
             <FormattedMessage
@@ -162,8 +162,6 @@ export const PolicyList: React.FunctionComponent<RouteComponentProps<MatchParams
       />
     );
   } else {
-    const policySchedules = policies.map((policy: SlmPolicy) => policy.schedule);
-    const hasDuplicateSchedules = policySchedules.length > new Set(policySchedules).size;
     const hasRetention = Boolean(policies.find((policy: SlmPolicy) => policy.retention));
     const isSlmRunning = slmStatus?.operation_mode === SLM_STATE.RUNNING;
 
@@ -172,6 +170,7 @@ export const PolicyList: React.FunctionComponent<RouteComponentProps<MatchParams
         {!isSlmRunning ? (
           <Fragment>
             <EuiCallOut
+              announceOnMount={false}
               title={
                 <FormattedMessage
                   id="xpack.snapshotRestore.slmWarningTitle"
@@ -197,27 +196,6 @@ export const PolicyList: React.FunctionComponent<RouteComponentProps<MatchParams
                     </EuiLink>
                   ),
                 }}
-              />
-            </EuiCallOut>
-            <EuiSpacer />
-          </Fragment>
-        ) : null}
-
-        {hasDuplicateSchedules ? (
-          <Fragment>
-            <EuiCallOut
-              title={
-                <FormattedMessage
-                  id="xpack.snapshotRestore.policyScheduleWarningTitle"
-                  defaultMessage="Two or more policies have the same schedule"
-                />
-              }
-              color="warning"
-              iconType="warning"
-            >
-              <FormattedMessage
-                id="xpack.snapshotRestore.policyScheduleWarningDescription"
-                defaultMessage="Only one snapshot can be taken at a time. To avoid snapshot failures, edit the policies to run on different schedules, or delete redundant policies."
               />
             </EuiCallOut>
             <EuiSpacer />

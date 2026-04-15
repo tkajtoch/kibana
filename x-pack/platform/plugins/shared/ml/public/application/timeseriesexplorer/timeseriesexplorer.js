@@ -28,7 +28,6 @@ import {
   EuiCallOut,
   EuiFlexGroup,
   EuiFlexItem,
-  EuiFormRow,
   EuiSpacer,
   EuiPanel,
   EuiTitle,
@@ -57,14 +56,13 @@ import { AnnotationsTable } from '../components/annotations/annotations_table';
 import { AnomaliesTable } from '../components/anomalies_table/anomalies_table';
 import { LoadingIndicator } from '../components/loading_indicator/loading_indicator';
 import { SelectInterval } from '../components/controls/select_interval/select_interval';
-import { SelectSeverity } from '../components/controls/select_severity/select_severity';
+import { SelectSeverity } from '../components/controls/select_severity';
 import { forecastServiceFactory } from '../services/forecast_service';
 import { timeSeriesExplorerServiceFactory } from '../util/time_series_explorer_service';
 import { mlJobServiceFactory } from '../services/job_service';
 import { mlResultsServiceProvider } from '../services/results_service';
 import { toastNotificationServiceProvider } from '../services/toast_notification_service';
 
-import { ForecastingModal } from './components/forecasting_modal/forecasting_modal';
 import { TimeseriesexplorerNoChartData } from './components/timeseriesexplorer_no_chart_data';
 import { TimeSeriesExplorerPage } from './timeseriesexplorer_page';
 import { TimeSeriesExplorerHelpPopover } from './timeseriesexplorer_help_popover';
@@ -84,7 +82,7 @@ import { aggregationTypeTransform } from '@kbn/ml-anomaly-utils';
 import { isMetricDetector } from './get_function_description';
 import { getViewableDetectors } from './timeseriesexplorer_utils/get_viewable_detectors';
 import { TimeseriesexplorerChartDataError } from './components/timeseriesexplorer_chart_data_error';
-import { ExplorerNoJobsSelected } from '../explorer/components';
+import { AnomalyDetectionNoJobsSelected } from '../components/anomaly_detection_no_jobs_selected';
 import { getDataViewsAndIndicesWithGeoFields } from '../explorer/explorer_utils';
 import { indexServiceFactory } from '../util/index_service';
 import { TimeSeriesExplorerControls } from './components/timeseriesexplorer_controls';
@@ -113,8 +111,9 @@ export class TimeSeriesExplorer extends React.Component {
     selectedEntities: PropTypes.object,
     selectedForecastId: PropTypes.string,
     tableInterval: PropTypes.string,
-    tableSeverity: PropTypes.number,
+    tableSeverity: PropTypes.object,
     zoom: PropTypes.object,
+    handleJobSelectionChange: PropTypes.func,
   };
 
   state = getTimeseriesexplorerDefaultState();
@@ -338,7 +337,7 @@ export class TimeSeriesExplorer extends React.Component {
         this.getCriteriaFields(selectedDetectorIndex, entityControls),
         [],
         tableInterval,
-        tableSeverity,
+        tableSeverity.val,
         earliestMs,
         latestMs,
         dateFormatTz,
@@ -444,6 +443,7 @@ export class TimeSeriesExplorer extends React.Component {
               contextForecastData: undefined,
               focusChartData: undefined,
               focusForecastData: undefined,
+              showForecastCheckbox: false,
               modelPlotEnabled:
                 isModelPlotChartableForDetector(currentSelectedJob, selectedDetectorIndex) &&
                 isModelPlotEnabled(currentSelectedJob, selectedDetectorIndex, entityControls),
@@ -850,6 +850,9 @@ export class TimeSeriesExplorer extends React.Component {
             showModelBoundsCheckbox: modelPlotEnabled && refreshFocusData.focusChartData.length > 0,
             zoomFromFocusLoaded: selection.from,
             zoomToFocusLoaded: selection.to,
+            showForecastCheckbox: Boolean(
+              this.props.selectedForecastId && refreshFocusData.showForecastCheckbox
+            ),
             ...refreshFocusData,
             ...tableData,
           });
@@ -1009,8 +1012,12 @@ export class TimeSeriesExplorer extends React.Component {
 
     if (selectedDetectorIndex === undefined || mlJobService.getJob(selectedJobId) === undefined) {
       return (
-        <TimeSeriesExplorerPage dateFormatTz={dateFormatTz} resizeRef={this.resizeRef}>
-          <ExplorerNoJobsSelected />
+        <TimeSeriesExplorerPage
+          handleJobSelectionChange={this.props.handleJobSelectionChange}
+          dateFormatTz={dateFormatTz}
+          resizeRef={this.resizeRef}
+        >
+          <AnomalyDetectionNoJobsSelected />
         </TimeSeriesExplorerPage>
       );
     }
@@ -1039,10 +1046,16 @@ export class TimeSeriesExplorer extends React.Component {
     this.previousShowModelBounds = showModelBounds;
 
     return (
-      <TimeSeriesExplorerPage dateFormatTz={dateFormatTz} resizeRef={this.resizeRef}>
+      <TimeSeriesExplorerPage
+        dateFormatTz={dateFormatTz}
+        resizeRef={this.resizeRef}
+        handleJobSelectionChange={this.props.handleJobSelectionChange}
+        selectedJobId={[selectedJobId]}
+      >
         {fieldNamesWithEmptyValues.length > 0 && (
           <>
             <EuiCallOut
+              announceOnMount
               title={
                 <FormattedMessage
                   id="xpack.ml.timeSeriesExplorer.singleMetricRequiredMessage"
@@ -1054,7 +1067,7 @@ export class TimeSeriesExplorer extends React.Component {
                   }}
                 />
               }
-              iconType="help"
+              iconType="question"
               size="s"
             />
             <EuiSpacer size="m" />
@@ -1070,20 +1083,34 @@ export class TimeSeriesExplorer extends React.Component {
           setFunctionDescription={this.setFunctionDescription}
         >
           {arePartitioningFieldsProvided && (
-            <EuiFlexItem style={{ textAlign: 'right' }}>
-              <EuiFormRow hasEmptyLabelSpace style={{ maxWidth: '100%' }}>
-                <ForecastingModal
-                  job={selectedJob}
-                  jobState={selectedJob.state}
-                  detectorIndex={selectedDetectorIndex}
-                  entities={entityControls}
-                  earliestRecordTimestamp={selectedJob.data_counts.earliest_record_timestamp}
-                  latestRecordTimestamp={selectedJob.data_counts.latest_record_timestamp}
-                  setForecastId={this.setForecastId}
-                  className="forecast-controls"
-                  selectedForecastId={this.props.selectedForecastId}
-                />
-              </EuiFormRow>
+            <EuiFlexItem>
+              <TimeSeriesExplorerControls
+                forecastId={this.props.selectedForecastId}
+                selectedDetectorIndex={selectedDetectorIndex}
+                selectedEntities={selectedEntities}
+                selectedJob={selectedJob}
+                showAnnotationsCheckbox={showAnnotationsCheckbox}
+                showAnnotations={showAnnotations}
+                showForecastCheckbox={showForecastCheckbox}
+                showForecast={showForecast}
+                showModelBoundsCheckbox={showModelBoundsCheckbox}
+                showModelBounds={showModelBounds}
+                onShowModelBoundsChange={this.toggleShowModelBoundsHandler}
+                onShowAnnotationsChange={this.toggleShowAnnotationsHandler}
+                onShowForecastChange={this.toggleShowForecastHandler}
+                fullRefresh={fullRefresh}
+                loading={loading}
+                hasResults={hasResults}
+                setForecastId={this.setForecastId}
+                entities={entityControls}
+                jobs={jobs}
+                selectedJobId={selectedJobId}
+                // It seems like props below can be easily extracted from the selectedJob
+                // However, it seems like we are losing sync at some point and they need to be passed directly
+                jobState={selectedJob.state}
+                earliestRecordTimestamp={selectedJob.data_counts.earliest_record_timestamp}
+                latestRecordTimestamp={selectedJob.data_counts.latest_record_timestamp}
+              />
             </EuiFlexItem>
           )}
         </SeriesControls>
@@ -1182,22 +1209,6 @@ export class TimeSeriesExplorer extends React.Component {
                 </EuiFlexItem>
               </EuiFlexGroup>
 
-              <TimeSeriesExplorerControls
-                forecastId={this.props.selectedForecastId}
-                selectedDetectorIndex={selectedDetectorIndex}
-                selectedEntities={selectedEntities}
-                selectedJobId={selectedJobId}
-                showAnnotationsCheckbox={showAnnotationsCheckbox}
-                showAnnotations={showAnnotations}
-                showForecastCheckbox={showForecastCheckbox}
-                showForecast={showForecast}
-                showModelBoundsCheckbox={showModelBoundsCheckbox}
-                showModelBounds={showModelBounds}
-                onShowModelBoundsChange={this.toggleShowModelBoundsHandler}
-                onShowAnnotationsChange={this.toggleShowAnnotationsHandler}
-                onShowForecastChange={this.toggleShowForecastHandler}
-              />
-
               <TimeSeriesChartWithTooltips
                 chartProps={chartProps}
                 contextAggregationInterval={contextAggregationInterval}
@@ -1212,6 +1223,7 @@ export class TimeSeriesExplorer extends React.Component {
                 lastRefresh={lastRefresh}
                 tableData={tableData}
                 sourceIndicesWithGeoFields={sourceIndicesWithGeoFields}
+                telemetrySource={'single_metric_viewer_chart'}
               />
               {focusAnnotationError !== undefined && (
                 <>
@@ -1225,6 +1237,7 @@ export class TimeSeriesExplorer extends React.Component {
                   </EuiTitle>
                   <EuiPanel>
                     <EuiCallOut
+                      announceOnMount
                       title={i18n.translate(
                         'xpack.ml.timeSeriesExplorer.annotationsErrorCallOutTitle',
                         {
@@ -1305,20 +1318,24 @@ export class TimeSeriesExplorer extends React.Component {
               <EuiSpacer size="m" />
             </div>
           )}
-        {arePartitioningFieldsProvided && jobs.length > 0 && hasResults === true && (
-          <AnomaliesTable
-            bounds={bounds}
-            tableData={tableData}
-            filter={this.tableFilter}
-            sourceIndicesWithGeoFields={this.state.sourceIndicesWithGeoFields}
-            selectedJobs={[
-              {
-                id: selectedJob.job_id,
-                modelPlotEnabled,
-              },
-            ]}
-          />
-        )}
+        {arePartitioningFieldsProvided &&
+          jobs.length > 0 &&
+          hasResults === true &&
+          tableData?.anomalies && (
+            <AnomaliesTable
+              bounds={bounds}
+              tableData={tableData}
+              filter={this.tableFilter}
+              sourceIndicesWithGeoFields={this.state.sourceIndicesWithGeoFields}
+              selectedJobs={[
+                {
+                  id: selectedJob.job_id,
+                  modelPlotEnabled,
+                },
+              ]}
+              telemetrySource="single_metric_viewer_anomalies_table"
+            />
+          )}
       </TimeSeriesExplorerPage>
     );
   }

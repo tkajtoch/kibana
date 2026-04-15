@@ -5,19 +5,23 @@
  * 2.0.
  */
 
-import {
+import type {
   ChatCompletionChunkEvent,
-  ChatCompletionEventType,
   ChatCompletionTokenCountEvent,
   ChatCompletionMessageEvent,
   ChatCompletionTokenCount,
   ToolCall,
+  ChatCompletionChunkToolCall,
 } from '@kbn/inference-common';
+import { ChatCompletionEventType } from '@kbn/inference-common';
 
-export const chunkEvent = (content: string = 'chunk'): ChatCompletionChunkEvent => ({
+export const chunkEvent = (
+  content: string = 'chunk',
+  toolCalls: ChatCompletionChunkToolCall[] = []
+): ChatCompletionChunkEvent => ({
   type: ChatCompletionEventType.ChatCompletionChunk,
   content,
-  tool_calls: [],
+  tool_calls: toolCalls,
 });
 
 export const messageEvent = (
@@ -29,11 +33,15 @@ export const messageEvent = (
   toolCalls,
 });
 
-export const tokensEvent = (tokens?: ChatCompletionTokenCount): ChatCompletionTokenCountEvent => ({
+export const tokensEvent = (
+  tokens?: ChatCompletionTokenCount,
+  { model }: { model?: string } = {}
+): ChatCompletionTokenCountEvent => ({
   type: ChatCompletionEventType.ChatCompletionTokenCount,
   tokens: {
     prompt: tokens?.prompt ?? 10,
     completion: tokens?.completion ?? 20,
     total: tokens?.total ?? 30,
   },
+  model,
 });

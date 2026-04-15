@@ -12,18 +12,18 @@ import {
   EuiImage,
   EuiLoadingSpinner,
   EuiText,
+  useEuiTheme,
 } from '@elastic/eui';
 import styled from 'styled-components';
 import { i18n } from '@kbn/i18n';
 import { FormattedMessage } from '@kbn/i18n-react';
-import React, { useContext, useEffect, useMemo, useRef, useState, FC } from 'react';
+import type { FC } from 'react';
+import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import useIntersection from 'react-use/lib/useIntersection';
 import { useFetcher } from '@kbn/observability-shared-plugin/public';
-import {
-  isScreenshotRef as isAScreenshotRef,
-  ScreenshotRefImageData,
-} from '../../../../common/runtime_types';
-import { UptimeRefreshContext, UptimeSettingsContext, UptimeThemeContext } from '../../contexts';
+import type { ScreenshotRefImageData } from '../../../../common/runtime_types';
+import { isScreenshotRef as isAScreenshotRef } from '../../../../common/runtime_types';
+import { UptimeRefreshContext, UptimeSettingsContext } from '../../contexts';
 import { getJourneyScreenshot } from '../../state/api/journey';
 import { useCompositeImage } from '../../hooks';
 
@@ -103,9 +103,9 @@ export const StepScreenshotDisplay: FC<StepScreenshotDisplayProps> = ({
   lazyLoad = true,
 }) => {
   const containerRef = useRef(null);
-  const {
-    colors: { lightestShade: pageBackground },
-  } = useContext(UptimeThemeContext);
+
+  const theme = useEuiTheme();
+  const pageBackground = theme.euiTheme.colors.lightestShade;
 
   const { basePath } = useContext(UptimeSettingsContext);
 
@@ -137,6 +137,7 @@ export const StepScreenshotDisplay: FC<StepScreenshotDisplayProps> = ({
     }
     // FIXME: Dario thinks there is a better way to do this but
     // he's getting tired and maybe the Uptime folks can fix it
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [basePath, checkGroup, imgSrc, stepIndex, isScreenshotRef, lastRefresh]);
 
   const refDimensions = useMemo(() => {

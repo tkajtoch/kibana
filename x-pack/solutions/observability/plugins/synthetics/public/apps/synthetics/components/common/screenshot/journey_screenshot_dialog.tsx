@@ -5,14 +5,8 @@
  * 2.0.
  */
 
-import React, {
-  MouseEvent,
-  useContext,
-  useEffect,
-  useState,
-  useCallback,
-  KeyboardEvent,
-} from 'react';
+import type { MouseEvent, KeyboardEvent } from 'react';
+import React, { useContext, useEffect, useState, useCallback } from 'react';
 import { i18n } from '@kbn/i18n';
 import {
   EuiModal,
@@ -27,8 +21,7 @@ import {
   EuiOutsideClickDetector,
   useIsWithinMaxBreakpoint,
 } from '@elastic/eui';
-import { euiStyled } from '@kbn/kibana-react-plugin/common';
-
+import styled from '@emotion/styled';
 import { SYNTHETICS_API_URLS } from '../../../../../../common/constants';
 import { SyntheticsSettingsContext } from '../../../contexts';
 import { useRetrieveStepImage } from '../monitor_test_result/use_retrieve_step_image';
@@ -104,7 +97,10 @@ export const JourneyScreenshotDialog = ({
   return isOpen ? (
     <EuiOutsideClickDetector onOutsideClick={onClose}>
       <EuiModal
-        onClose={(evt?: KeyboardEvent<HTMLDivElement> | MouseEvent<HTMLButtonElement>) => {
+        aria-label={i18n.translate('xpack.synthetics.monitor.screenshotDialog.ariaLabel', {
+          defaultMessage: 'Journey screenshot dialog',
+        })}
+        onClose={(evt) => {
           // for table row click to work
           evt?.stopPropagation?.();
           onClose();
@@ -166,14 +162,14 @@ export const JourneyScreenshotDialog = ({
                   setStepNumber((s) => s - 1);
                   evt.preventDefault();
                 }}
-                iconType="arrowLeft"
+                iconType="chevronSingleLeft"
                 aria-label={prevAriaLabel}
               >
                 {prevAriaLabel}
               </EuiButtonEmpty>
             </EuiFlexItem>
             <EuiFlexItem grow={false} css={{ flexBasis: 'fit-content' }}>
-              <EuiText color={euiTheme.colors.text}>
+              <EuiText color={euiTheme.colors.textParagraph}>
                 {i18n.translate('xpack.synthetics.monitor.stepOfSteps', {
                   defaultMessage: 'Step: {stepNumber} of {totalSteps}',
                   values: {
@@ -192,7 +188,7 @@ export const JourneyScreenshotDialog = ({
                   setStepNumber((s) => s + 1);
                   evt.stopPropagation();
                 }}
-                iconType="arrowRight"
+                iconType="chevronSingleRight"
                 iconSide="right"
                 aria-label={nextAriaLabel}
               >
@@ -201,7 +197,7 @@ export const JourneyScreenshotDialog = ({
             </EuiFlexItem>
           </EuiFlexGroup>
           <EuiText
-            color={euiTheme.colors.text}
+            color={euiTheme.colors.textParagraph}
             css={{
               outline: 0,
               padding: euiTheme.size.m,
@@ -221,7 +217,7 @@ export const JourneyScreenshotDialog = ({
   ) : null;
 };
 
-const ModalBodyStyled = euiStyled(EuiModalBody)`
+const ModalBodyStyled = styled(EuiModalBody)`
   &&& {
     & > div {
       display: flex;

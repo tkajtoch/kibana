@@ -10,17 +10,21 @@
 import { routeValidationConfig } from './validation_config';
 import { createHandler } from './create_handler';
 
-import { RouteDependencies } from '../../..';
+import type { RouteDependencies } from '../../..';
 
 export const registerProxyRoute = (deps: RouteDependencies) => {
   deps.router.post(
     {
       path: '/api/console/proxy',
       options: {
-        tags: ['access:console'],
         body: {
           output: 'stream',
           parse: false,
+        },
+      },
+      security: {
+        authz: {
+          requiredPrivileges: ['console'],
         },
       },
       validate: routeValidationConfig,

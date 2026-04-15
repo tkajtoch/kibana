@@ -17,7 +17,7 @@ import { checkIfEntityDiscoveryAPIKeyIsValid, readEntityDiscoveryAPIKey } from '
 import { builtInDefinitions } from '../../lib/entities/built_in';
 import { findEntityDefinitions } from '../../lib/entities/find_entity_definition';
 import { getClientsFromAPIKey } from '../../lib/utils';
-import { EntityDefinitionWithState } from '../../lib/entities/types';
+import type { EntityDefinitionWithState } from '../../lib/entities/types';
 import { createEntityManagerServerRoute } from '../create_entity_manager_server_route';
 
 /**
@@ -68,7 +68,8 @@ export const checkEntityDiscoveryEnabledRoute = createEntityManagerServerRoute({
         return response.ok({ body: { enabled: false, reason: ERROR_API_KEY_NOT_VALID } });
       }
 
-      const { esClient, soClient } = getClientsFromAPIKey({ apiKey, server });
+      const { clusterClient, soClient } = getClientsFromAPIKey({ apiKey, server });
+      const esClient = clusterClient.asCurrentUser;
 
       const entityDiscoveryState = await Promise.all(
         builtInDefinitions.map(async (builtInDefinition) => {

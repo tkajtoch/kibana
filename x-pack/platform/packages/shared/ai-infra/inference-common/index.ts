@@ -10,6 +10,9 @@ export {
   ChatCompletionEventType,
   ToolChoiceType,
   type Message,
+  type MessageContentImage,
+  type MessageContentText,
+  type MessageContent,
   type AssistantMessage,
   type ToolMessage,
   type UserMessage,
@@ -20,13 +23,14 @@ export {
   type FromToolSchema,
   type ToolSchema,
   type UnvalidatedToolCall,
-  type ToolCallsOf,
   type ToolCall,
+  type ToolCallback,
   type ToolDefinition,
   type ToolOptions,
   type FunctionCallingMode,
   type ToolChoice,
   type ChatCompleteAPI,
+  type ChatCompleteAPIResponse,
   type ChatCompleteOptions,
   type ChatCompleteCompositeResponse,
   type ChatCompletionTokenCountEvent,
@@ -36,9 +40,9 @@ export {
   type ChatCompletionMessageEvent,
   type ChatCompleteStreamResponse,
   type ChatCompleteResponse,
+  type ChatCompleteRetryConfiguration,
   type ChatCompletionTokenCount,
   type BoundChatCompleteAPI,
-  type BoundChatCompleteOptions,
   type UnboundChatCompleteOptions,
   withoutTokenCountEvents,
   withoutChunkEvents,
@@ -51,9 +55,39 @@ export {
   type ChatCompletionToolValidationError,
   type ChatCompletionTokenLimitReachedError,
   isToolValidationError,
-  isTokenLimitReachedError,
+  isOutputTokenLimitReachedError,
   isToolNotFoundError,
+  type ChatCompleteMetadata,
+  type ConnectorTelemetryMetadata,
+  type ChatCompleteAnonymizationMetadata,
+  type ChatCompleteAnonymizationTarget,
+  type AnonymizationRule,
+  type RegexAnonymizationRule,
+  type NamedEntityRecognitionRule,
+  type AnonymizationEntity,
+  type Anonymization,
+  type Deanonymization,
+  type AnonymizationOutput,
+  type DeanonymizationOutput,
+  type DeanonymizedMessage,
+  type AnonymizationSettings,
+  type AnonymizationEntityClass,
+  type AnonymizationResponseMetadata,
+  type DeanonymizedMessageData,
+  type CustomToolChoice,
+  type ToolCallArgumentsOfToolDefinition,
+  type ToolCallOfToolDefinitions,
+  type ToolCallOfToolOptions,
+  type ToolCallbacksOfToolOptions,
+  type ToolNamesOf,
+  type ToolsOfChoice,
+  type ToolCallArguments,
+  type ToolCallbackResult,
+  type InferenceCallbacks,
+  type InferenceEventEmitter,
 } from './src/chat_complete';
+
+export type { BoundInferenceClient, InferenceClient } from './src/inference_client';
 export {
   OutputEventType,
   type OutputAPI,
@@ -66,7 +100,6 @@ export {
   type Output,
   type OutputEvent,
   type BoundOutputAPI,
-  type BoundOutputOptions,
   type UnboundOutputOptions,
   isOutputCompleteEvent,
   isOutputUpdateEvent,
@@ -84,11 +117,70 @@ export {
   type InferenceTaskErrorEvent,
   type InferenceTaskInternalError,
   type InferenceTaskRequestError,
+  type InferenceTaskAbortedError,
+  type InferenceTaskProviderError,
   createInferenceInternalError,
   createInferenceRequestError,
+  createInferenceRequestAbortedError,
+  createInferenceProviderError,
   isInferenceError,
   isInferenceInternalError,
   isInferenceRequestError,
+  isInferenceRequestAbortedError,
+  isInferenceProviderError,
 } from './src/errors';
 
+export { Tokenizer, generateFakeToolCallId, ShortIdTable } from './src/utils';
+
+export { elasticModelDictionary } from './src/const';
+
 export { truncateList } from './src/truncate_list';
+export {
+  InferenceConnectorType,
+  isSupportedConnectorType,
+  isSupportedConnector,
+  getConnectorDefaultModel,
+  getConnectorModel,
+  getConnectorFamily,
+  getConnectorPlatform,
+  getConnectorProvider,
+  connectorToInference,
+  getModelDefinition,
+  getContextWindowSize,
+  contextWindowFromModelName,
+  type InferenceConnector,
+  type InferenceConnectorCapabilities,
+  type RawConnector,
+  type RawInferenceConnector,
+} from './src/connectors';
+export {
+  defaultInferenceEndpoints,
+  InferenceEndpointProvider,
+  elasticModelIds,
+} from './src/inference_endpoints';
+
+export {
+  INFERENCE_CONNECTORS_INTERNAL_API_PATH,
+  type InferenceConnectorsApiResponseBody,
+} from './src/inference_connectors_api';
+
+export { type Model, ModelFamily, ModelPlatform, ModelProvider } from './src/model_provider';
+
+export {
+  type BoundPromptAPI,
+  type Prompt,
+  type PromptAPI,
+  type PromptCompositeResponse,
+  type PromptFactory,
+  type PromptOptions,
+  type PromptResponse,
+  type PromptStreamResponse,
+  type PromptVersion,
+  type ToolOptionsOfPrompt,
+  type UnboundPromptOptions,
+  createPrompt,
+} from './src/prompt';
+
+export { type BoundOptions, type UnboundOptions, bindApi } from './src/bind';
+
+export { aiAnonymizationSettings } from './src/ui_settings/settings_keys';

@@ -11,9 +11,14 @@ import { render } from '../../utils/testing/rtl_helpers';
 import { GettingStartedPage } from './getting_started_page';
 import * as privateLocationsHooks from '../settings/private_locations/hooks/use_locations_api';
 import * as settingsHooks from '../../contexts/synthetics_settings_context';
-import { SyntheticsSettingsContextValues } from '../../contexts/synthetics_settings_context';
+import type { SyntheticsSettingsContextValues } from '../../contexts/synthetics_settings_context';
 import { fireEvent } from '@testing-library/react';
 import { kibanaService } from '../../../../utils/kibana_service';
+
+jest.mock('@elastic/eui', () => ({
+  ...jest.requireActual('@elastic/eui'),
+  useGeneratedHtmlId: () => 'mocked-id',
+}));
 
 describe('GettingStartedPage', () => {
   beforeEach(() => {
@@ -21,9 +26,10 @@ describe('GettingStartedPage', () => {
       loading: false,
       privateLocations: [],
       deleteLoading: false,
-      onSubmit: jest.fn(),
-      onDelete: jest.fn(),
-      formData: undefined,
+      onCreateLocationAPI: jest.fn(),
+      onDeleteLocationAPI: jest.fn(),
+      onEditLocationAPI: jest.fn(),
+      createLoading: false,
     });
     jest.spyOn(permissionsHooks, 'useCanManagePrivateLocation').mockReturnValue(true);
   });
@@ -81,9 +87,11 @@ describe('GettingStartedPage', () => {
           locationsLoaded: true,
           loading: false,
         },
+        privateLocations: {
+          isPrivateLocationFlyoutVisible: true,
+        },
         agentPolicies: {
           data: [],
-          isAddingNewPrivateLocation: true,
         },
       },
     });
@@ -108,7 +116,9 @@ describe('GettingStartedPage', () => {
         },
         agentPolicies: {
           data: [{}],
-          isAddingNewPrivateLocation: true,
+        },
+        privateLocations: {
+          isPrivateLocationFlyoutVisible: true,
         },
       },
     });
@@ -145,7 +155,9 @@ describe('GettingStartedPage', () => {
           },
           agentPolicies: {
             data: [{}],
-            isAddingNewPrivateLocation: true,
+          },
+          privateLocations: {
+            isPrivateLocationFlyoutVisible: true,
           },
         },
       }

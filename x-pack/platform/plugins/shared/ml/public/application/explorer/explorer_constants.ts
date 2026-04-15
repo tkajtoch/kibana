@@ -11,21 +11,6 @@
 
 import { i18n } from '@kbn/i18n';
 
-export const DRAG_SELECT_ACTION = {
-  NEW_SELECTION: 'newSelection',
-  ELEMENT_SELECT: 'elementSelect',
-  DRAG_START: 'dragStart',
-} as const;
-
-export const EXPLORER_ACTION = {
-  CLEAR_EXPLORER_DATA: 'clearExplorerData',
-  CLEAR_INFLUENCER_FILTER_SETTINGS: 'clearInfluencerFilterSettings',
-  CLEAR_JOBS: 'clearJobs',
-  JOB_SELECTION_CHANGE: 'jobSelectionChange',
-  SET_CHARTS_DATA_LOADING: 'setChartsDataLoading',
-  SET_EXPLORER_DATA: 'setExplorerData',
-} as const;
-
 export const FILTER_ACTION = {
   ADD: '+',
   REMOVE: '-',
@@ -64,12 +49,6 @@ export const VIEW_BY_JOB_LABEL = i18n.translate('xpack.ml.explorer.jobIdLabel', 
 export const OVERALL_LABEL = i18n.translate('xpack.ml.explorer.overallLabel', {
   defaultMessage: 'Overall',
 });
-
-/**
- * Hard limitation for the size of terms
- * aggregations on influencers values.
- */
-export const ANOMALY_SWIM_LANE_HARD_LIMIT = 1000;
 
 /**
  * Default page size for the anomaly swim lane.

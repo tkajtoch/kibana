@@ -1,5 +1,5 @@
 {
-  "extends": "../../../../../tsconfig.base.json",
+  "extends": "@kbn/tsconfig-base/tsconfig.json",
   "compilerOptions": {
     "outDir": "target/types"
   },
@@ -18,7 +18,6 @@
     "@kbn/entities-schema",
     "@kbn/core",
     "@kbn/core-plugins-server",
-    "@kbn/server-route-repository-client",
     "@kbn/logging",
     "@kbn/core-http-server",
     "@kbn/security-plugin",
@@ -31,12 +30,11 @@
     "@kbn/datemath",
     "@kbn/server-route-repository",
     "@kbn/zod",
-    "@kbn/zod-helpers",
     "@kbn/encrypted-saved-objects-plugin",
     "@kbn/licensing-plugin",
     "@kbn/core-saved-objects-server",
-    "@kbn/es-types",
-    "@kbn/apm-utils",
     "@kbn/features-plugin",
+    "@kbn/zod-helpers",
+    "@kbn/core-elasticsearch-server-utils",
   ]
 }

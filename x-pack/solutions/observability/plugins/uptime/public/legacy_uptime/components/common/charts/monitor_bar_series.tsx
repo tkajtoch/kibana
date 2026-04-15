@@ -5,6 +5,7 @@
  * 2.0.
  */
 
+import type { BrushEndListener, XYChartElementEvent, ElementClickListener } from '@elastic/charts';
 import {
   Axis,
   BarSeries,
@@ -13,20 +14,18 @@ import {
   Settings,
   Position,
   timeFormatter,
-  BrushEndListener,
-  XYChartElementEvent,
-  ElementClickListener,
 } from '@elastic/charts';
 import { i18n } from '@kbn/i18n';
-import React, { useContext } from 'react';
+import React from 'react';
 import moment from 'moment';
 import { FormattedMessage } from '@kbn/i18n-react';
-import { EuiText, EuiToolTip } from '@elastic/eui';
-import { HistogramPoint } from '../../../../../common/runtime_types';
+import { EuiText, EuiToolTip, useEuiTheme } from '@elastic/eui';
+import { useKibana } from '@kbn/kibana-react-plugin/public';
+import type { HistogramPoint } from '../../../../../common/runtime_types';
 import { getChartDateLabel, seriesHasDownValues } from '../../../lib/helper';
 import { useUrlParams } from '../../../hooks';
-import { UptimeThemeContext } from '../../../contexts';
 import { getDateRangeFromChartElement } from './utils';
+import type { ClientPluginsStart } from '../../../../plugin';
 
 export interface MonitorBarSeriesProps {
   /**
@@ -44,9 +43,13 @@ export interface MonitorBarSeriesProps {
  */
 export const MonitorBarSeries = ({ histogramSeries, minInterval }: MonitorBarSeriesProps) => {
   const {
-    colors: { danger },
-    chartTheme,
-  } = useContext(UptimeThemeContext);
+    services: { charts },
+  } = useKibana<ClientPluginsStart>();
+  const baseTheme = charts.theme.useChartsBaseTheme();
+
+  const theme = useEuiTheme();
+  const danger = theme.euiTheme.colors.danger;
+
   const [getUrlParams, updateUrlParams] = useUrlParams();
   const { absoluteDateRangeStart, absoluteDateRangeEnd } = getUrlParams();
 
@@ -79,8 +82,7 @@ export const MonitorBarSeries = ({ histogramSeries, minInterval }: MonitorBarSer
           onBrushEnd={onBrushEnd}
           onElementClick={onBarClicked}
           locale={i18n.getLocale()}
-          // TODO connect to charts.theme service see src/plugins/charts/public/services/theme/README.md
-          {...chartTheme}
+          baseTheme={baseTheme}
         />
         <Axis
           hide
@@ -99,6 +101,7 @@ export const MonitorBarSeries = ({ histogramSeries, minInterval }: MonitorBarSer
           })}
           timeZone="local"
           xAccessor={0}
+          // Defaults to multi layer time axis as of Elastic Charts v70
           xScaleType={ScaleType.Time}
           yAccessors={[1]}
           yScaleType={ScaleType.Linear}
@@ -112,11 +115,21 @@ export const MonitorBarSeries = ({ histogramSeries, minInterval }: MonitorBarSer
         <FormattedMessage
           id="xpack.uptime.monitorList.noDownHistory"
           defaultMessage="This monitor has never been {emphasizedText} during the selected time range."
-          values={{ emphasizedText: <strong>down</strong> }}
+          values={{
+            emphasizedText: (
+              <strong>
+                {i18n.translate('xpack.uptime.monitorBarSeries.strong.downLabel', {
+                  defaultMessage: 'down',
+                })}
+              </strong>
+            ),
+          }}
         />
       }
     >
-      <EuiText color="success">--</EuiText>
+      <EuiText color="success" tabIndex={0}>
+        {i18n.translate('xpack.uptime.monitorBarSeries.TextLabel', { defaultMessage: '--' })}
+      </EuiText>
     </EuiToolTip>
   );
 };

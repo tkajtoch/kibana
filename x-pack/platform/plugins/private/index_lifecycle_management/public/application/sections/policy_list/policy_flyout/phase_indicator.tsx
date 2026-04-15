@@ -7,17 +7,12 @@
 
 import React from 'react';
 import { css } from '@emotion/react';
-import { euiThemeVars } from '@kbn/ui-theme';
 import type { Phase } from '../../../../../common/types';
+import { usePhaseColors } from '../../../lib';
 
-const phaseToIndicatorColors = {
-  hot: euiThemeVars.euiColorVis9,
-  warm: euiThemeVars.euiColorVis5,
-  cold: euiThemeVars.euiColorVis1,
-  frozen: euiThemeVars.euiColorVis4,
-  delete: euiThemeVars.euiColorLightShade,
-};
 export const PhaseIndicator = ({ phase }: { phase: Phase }) => {
+  const phaseToIndicatorColors = usePhaseColors();
+
   return (
     <div
       css={css`

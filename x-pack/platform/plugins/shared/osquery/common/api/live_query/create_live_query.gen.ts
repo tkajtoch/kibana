@@ -14,7 +14,7 @@
  *   version: 2023-10-31
  */
 
-import { z } from '@kbn/zod';
+import { z } from '@kbn/zod/v4';
 
 import {
   QueryOrUndefined,
@@ -26,17 +26,83 @@ import {
 
 export type CreateLiveQueryRequestBody = z.infer<typeof CreateLiveQueryRequestBody>;
 export const CreateLiveQueryRequestBody = z.object({
+  /**
+   * A list of agent IDs to run the query on.
+   */
   agent_ids: z.array(z.string()).optional(),
+  /**
+   * When `true`, the query runs on all agents.
+   */
   agent_all: z.boolean().optional(),
+  /**
+   * A list of agent platforms to run the query on.
+   */
   agent_platforms: z.array(z.string()).optional(),
+  /**
+   * A list of agent policy IDs to run the query on.
+   */
   agent_policy_ids: z.array(z.string()).optional(),
   query: QueryOrUndefined.optional(),
   queries: ArrayQueries.optional(),
   saved_query_id: SavedQueryIdOrUndefined.optional(),
   ecs_mapping: ECSMappingOrUndefined.optional(),
   pack_id: PackIdOrUndefined.optional(),
+  /**
+   * A list of alert IDs associated with the live query.
+   */
   alert_ids: z.array(z.string()).optional(),
+  /**
+   * A list of case IDs associated with the live query.
+   */
   case_ids: z.array(z.string()).optional(),
+  /**
+   * A list of event IDs associated with the live query.
+   */
   event_ids: z.array(z.string()).optional(),
+  /**
+   * Custom metadata object associated with the live query.
+   */
   metadata: z.object({}).nullable().optional(),
+});
+
+/**
+ * The response for creating a live query.
+ */
+export type CreateLiveQueryResponse = z.infer<typeof CreateLiveQueryResponse>;
+export const CreateLiveQueryResponse = z.object({
+  /**
+   * The live query action data.
+   */
+  data: z
+    .object({
+      /**
+       * The ID of the live query action.
+       */
+      action_id: z.string().optional(),
+      /**
+       * The expiration date and time of the live query.
+       */
+      expiration: z.string().optional(),
+      /**
+       * The action type.
+       */
+      type: z.string().optional(),
+      /**
+       * The input type for the action.
+       */
+      input_type: z.string().optional(),
+      /**
+       * A list of agent IDs targeted by the live query.
+       */
+      agents: z.array(z.string()).optional(),
+      /**
+       * The ID of the user who created the live query.
+       */
+      user_id: z.string().optional(),
+      /**
+       * The list of queries in the live query action.
+       */
+      queries: z.array(z.object({})).optional(),
+    })
+    .optional(),
 });

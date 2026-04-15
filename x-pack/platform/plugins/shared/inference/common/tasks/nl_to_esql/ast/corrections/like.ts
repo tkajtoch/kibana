@@ -5,7 +5,8 @@
  * 2.0.
  */
 
-import { Walker, type ESQLAstQueryExpression } from '@kbn/esql-ast';
+import { Walker } from '@elastic/esql';
+import type { ESQLAstQueryExpression } from '@elastic/esql/types';
 import { isLikeOperatorNode, isStringLiteralNode } from '../typeguards';
 import type { ESQLLikeOperator, ESQLStringLiteral } from '../types';
 import type { QueryCorrection } from './types';
@@ -41,6 +42,9 @@ function checkLikeNode(node: ESQLLikeOperator): QueryCorrection[] {
   const initialValue = likeExpression.value;
 
   likeExpression.value = likeExpression.value
+    .replaceAll(/(?<!\\)%/g, '*')
+    .replaceAll(/(?<!\\)_/g, '?');
+  likeExpression.valueUnquoted = likeExpression.valueUnquoted
     .replaceAll(/(?<!\\)%/g, '*')
     .replaceAll(/(?<!\\)_/g, '?');
 

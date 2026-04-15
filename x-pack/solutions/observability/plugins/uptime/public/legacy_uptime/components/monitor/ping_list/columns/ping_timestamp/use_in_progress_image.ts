@@ -8,7 +8,7 @@
 import { useRouteMatch } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useFetcher } from '@kbn/observability-shared-plugin/public';
-import {
+import type {
   ScreenshotImageBlob,
   ScreenshotRefImageData,
 } from '../../../../../../../common/runtime_types';
@@ -45,6 +45,7 @@ export const useInProgressImage = ({
     if (hasIntersected && !hasImage) return getJourneyScreenshot(imgPath);
     // FIXME: Dario thinks there is a better way to do this but
     // he's getting tired and maybe the Uptime folks can fix it
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hasIntersected, imgPath, skippedStep, retryLoading]);
 
   useEffect(() => {

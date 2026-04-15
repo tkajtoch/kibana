@@ -5,7 +5,7 @@
  * 2.0.
  */
 
-import { Client } from '@elastic/elasticsearch';
+import { Client, HttpConnection } from '@elastic/elasticsearch';
 import { run } from '@kbn/dev-cli-runner';
 import * as fastGlob from 'fast-glob';
 import yargs from 'yargs';
@@ -15,7 +15,7 @@ import { castArray, omit } from 'lodash';
 import Mocha from 'mocha';
 import Path from 'path';
 import * as table from 'table';
-import { TableUserConfig } from 'table';
+import type { TableUserConfig } from 'table';
 import { format, parse } from 'url';
 import { MessageRole } from '@kbn/observability-ai-assistant-plugin/common';
 import { EvaluateWith, options } from './cli';
@@ -23,7 +23,7 @@ import { getServiceUrls } from './get_service_urls';
 import { KibanaClient } from './kibana_client';
 import { initServices } from './services';
 import { setupSynthtrace } from './setup_synthtrace';
-import { EvaluationResult } from './types';
+import type { EvaluationResult } from './types';
 import { selectConnector } from './select_connector';
 
 function runEvaluations() {
@@ -37,9 +37,13 @@ function runEvaluations() {
             kibana: argv.kibana,
           });
 
+          log.info(`Elasticsearch URL: ${serviceUrls.esUrl}`);
+
           const kibanaClient = new KibanaClient(log, serviceUrls.kibanaUrl, argv.spaceId);
           const esClient = new Client({
             node: serviceUrls.esUrl,
+            Connection: HttpConnection,
+            requestTimeout: 30_000,
           });
 
           await kibanaClient.createSpaceIfNeeded();
@@ -100,7 +104,7 @@ function runEvaluations() {
             evaluationConnectorId: evaluationConnector.id!,
             persist: argv.persist,
             suite: mocha.suite,
-            scopes: ['all'],
+            scopes: ['observability'],
           });
 
           const header: string[][] = [

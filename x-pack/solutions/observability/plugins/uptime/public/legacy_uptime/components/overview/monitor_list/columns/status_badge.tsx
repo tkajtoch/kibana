@@ -5,12 +5,11 @@
  * 2.0.
  */
 
-import { EuiBadge, EuiToolTip } from '@elastic/eui';
-import React, { useContext } from 'react';
+import { EuiBadge, EuiToolTip, useEuiTheme } from '@elastic/eui';
+import React from 'react';
 import { STATUS } from '../../../../../../common/constants';
 import { getHealthMessage } from './monitor_status_column';
-import { UptimeThemeContext } from '../../../../contexts';
-import { PingError } from '../../../../../../common/runtime_types';
+import type { PingError } from '../../../../../../common/runtime_types';
 
 export const StatusBadge = ({
   status,
@@ -19,9 +18,9 @@ export const StatusBadge = ({
   status: string;
   summaryError?: PingError;
 }) => {
-  const {
-    colors: { dangerBehindText },
-  } = useContext(UptimeThemeContext);
+  const theme = useEuiTheme();
+
+  const dangerBehindText = theme.euiTheme.colors.vis.euiColorVis6;
 
   if (status === STATUS.UP) {
     return (
@@ -35,7 +34,7 @@ export const StatusBadge = ({
 
   return (
     <EuiToolTip content={errorMessage}>
-      <EuiBadge className="eui-textCenter" color={dangerBehindText}>
+      <EuiBadge tabIndex={0} className="eui-textCenter" color={dangerBehindText}>
         {getHealthMessage(status)}
       </EuiBadge>
     </EuiToolTip>

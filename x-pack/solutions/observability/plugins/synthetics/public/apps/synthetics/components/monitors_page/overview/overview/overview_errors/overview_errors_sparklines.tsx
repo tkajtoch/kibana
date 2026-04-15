@@ -9,7 +9,7 @@ import { useKibana } from '@kbn/kibana-react-plugin/public';
 import React, { useMemo } from 'react';
 import { useEuiTheme } from '@elastic/eui';
 import { ERRORS_LABEL } from '../../../../monitor_details/monitor_summary/monitor_errors_count';
-import { ClientPluginsStart } from '../../../../../../../plugin';
+import type { ClientPluginsStart } from '../../../../../../../plugin';
 import { useMonitorFilters } from '../../../hooks/use_monitor_filters';
 import { useMonitorQueryFilters } from '../../../hooks/use_monitor_query_filters';
 
@@ -30,6 +30,7 @@ export const OverviewErrorsSparklines = ({ from, to }: Props) => {
   return (
     <ExploratoryViewEmbeddable
       id="overviewErrorsSparklines"
+      dataTestSubj="overviewErrorsSparklines"
       reportType="kpi-over-time"
       axisTitlesVisibility={{ x: false, yRight: false, yLeft: false }}
       legendIsVisible={false}
@@ -45,7 +46,7 @@ export const OverviewErrorsSparklines = ({ from, to }: Props) => {
           dataType: 'synthetics',
           selectedMetricField: 'monitor_errors',
           name: ERRORS_LABEL,
-          color: euiTheme.colors.danger,
+          color: euiTheme.colors.vis.euiColorVis6,
           operationType: 'unique_count',
           filters,
         },

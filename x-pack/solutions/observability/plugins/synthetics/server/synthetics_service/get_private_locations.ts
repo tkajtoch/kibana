@@ -5,48 +5,60 @@
  * 2.0.
  */
 
-import {
-  SavedObject,
-  SavedObjectsClientContract,
-  SavedObjectsErrorHelpers,
-} from '@kbn/core/server';
+import type { SavedObject, SavedObjectsClientContract } from '@kbn/core/server';
+import { SavedObjectsErrorHelpers } from '@kbn/core/server';
 import { uniqBy } from 'lodash';
 import {
   legacyPrivateLocationsSavedObjectId,
   legacyPrivateLocationsSavedObjectName,
   privateLocationSavedObjectName,
 } from '../../common/saved_objects/private_locations';
-import {
+import type {
   PrivateLocationAttributes,
   SyntheticsPrivateLocationsAttributes,
 } from '../runtime_types/private_locations';
 
 export const getPrivateLocations = async (
-  client: SavedObjectsClientContract
+  client: SavedObjectsClientContract,
+  spaceId?: string
 ): Promise<SyntheticsPrivateLocationsAttributes['locations']> => {
   try {
-    const finder = client.createPointInTimeFinder<PrivateLocationAttributes>({
-      type: privateLocationSavedObjectName,
-      perPage: 1000,
-    });
+    const [results, legacyLocations] = await Promise.all([
+      getNewPrivateLocations(client, spaceId),
+      getLegacyPrivateLocations(client),
+    ]);
 
-    const results: Array<SavedObject<PrivateLocationAttributes>> = [];
-
-    for await (const response of finder.find()) {
-      results.push(...response.saved_objects);
-    }
-
-    finder.close().catch((e) => {});
-
-    const legacyLocations = await getLegacyPrivateLocations(client);
-
-    return uniqBy([...results.map((r) => r.attributes), ...legacyLocations], 'id');
+    return uniqBy([...results, ...legacyLocations], 'id');
   } catch (getErr) {
     if (SavedObjectsErrorHelpers.isNotFoundError(getErr)) {
       return [];
     }
     throw getErr;
   }
+};
+
+const getNewPrivateLocations = async (client: SavedObjectsClientContract, spaceId?: string) => {
+  const finder = client.createPointInTimeFinder<PrivateLocationAttributes>({
+    type: privateLocationSavedObjectName,
+    perPage: 1000,
+    ...(spaceId ? { namespaces: [spaceId] } : {}),
+  });
+
+  const results: Array<
+    SavedObject<PrivateLocationAttributes>['attributes'] & {
+      spaces: SavedObject<PrivateLocationAttributes>['namespaces'];
+      id: SavedObject<PrivateLocationAttributes>['id'];
+    }
+  > = [];
+
+  for await (const response of finder.find()) {
+    results.push(
+      ...response.saved_objects.map((r) => ({ ...r.attributes, id: r.id, spaces: r.namespaces }))
+    );
+  }
+
+  finder.close().catch((e) => {});
+  return results;
 };
 
 const getLegacyPrivateLocations = async (client: SavedObjectsClientContract) => {

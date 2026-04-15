@@ -5,6 +5,7 @@
  * 2.0.
  */
 
+import type { BrushEndListener, XYChartElementEvent, ElementClickListener } from '@elastic/charts';
 import {
   Axis,
   BarSeries,
@@ -12,21 +13,18 @@ import {
   Position,
   Settings,
   timeFormatter,
-  BrushEndListener,
-  XYChartElementEvent,
-  ElementClickListener,
   ScaleType,
 } from '@elastic/charts';
-import { EuiTitle, EuiFlexGroup, EuiFlexItem } from '@elastic/eui';
+import { EuiTitle, EuiFlexGroup, EuiFlexItem, useEuiTheme } from '@elastic/eui';
 import { i18n } from '@kbn/i18n';
-import React, { useContext } from 'react';
+import React from 'react';
 import { FormattedMessage } from '@kbn/i18n-react';
 import numeral from '@elastic/numeral';
 import moment from 'moment';
+import { useKibana } from '@kbn/kibana-react-plugin/public';
 import { getChartDateLabel } from '../../../lib/helper';
 import { ChartWrapper } from './chart_wrapper';
-import { UptimeThemeContext } from '../../../contexts';
-import { HistogramResult } from '../../../../../common/runtime_types';
+import type { HistogramResult } from '../../../../../common/runtime_types';
 import { useUrlParams } from '../../../hooks';
 import { ChartEmptyState } from './chart_empty_state';
 import { getDateRangeFromChartElement } from './utils';
@@ -34,6 +32,7 @@ import {
   STATUS_DOWN_LABEL,
   STATUS_UP_LABEL,
 } from '../../../../../common/translations/translations';
+import type { ClientPluginsStart } from '../../../../plugin';
 
 export interface PingHistogramComponentProps {
   /**
@@ -72,9 +71,13 @@ export const PingHistogramComponent: React.FC<PingHistogramComponentProps> = ({
   timeZone,
 }) => {
   const {
-    colors: { danger, gray },
-    chartTheme,
-  } = useContext(UptimeThemeContext);
+    services: { charts },
+  } = useKibana<ClientPluginsStart>();
+  const baseTheme = charts.theme.useChartsBaseTheme();
+
+  const theme = useEuiTheme();
+  const danger = theme.euiTheme.colors.danger;
+  const gray = theme.euiTheme.colors.lightShade;
 
   const [_getUrlParams, updateUrlParams] = useUrlParams();
 
@@ -120,9 +123,7 @@ export const PingHistogramComponent: React.FC<PingHistogramComponentProps> = ({
     });
 
     content = (
-      <ChartWrapper
-        height={height}
-        loading={loading}
+      <div
         aria-label={i18n.translate('xpack.uptime.snapshotHistogram.description', {
           defaultMessage:
             'Bar Chart showing uptime status over time from {startTime} to {endTime}.',
@@ -132,59 +133,61 @@ export const PingHistogramComponent: React.FC<PingHistogramComponentProps> = ({
           },
         })}
       >
-        <Chart>
-          <Settings
-            xDomain={{
-              minInterval,
-              min: absoluteStartDate,
-              max: absoluteEndDate,
-            }}
-            showLegend={false}
-            onBrushEnd={onBrushEnd}
-            onElementClick={onBarClicked}
-            locale={i18n.getLocale()}
-            // TODO connect to charts.theme service see src/plugins/charts/public/services/theme/README.md
-            {...chartTheme}
-          />
-          <Axis
-            id={i18n.translate('xpack.uptime.snapshotHistogram.xAxisId', {
-              defaultMessage: 'Ping X Axis',
-            })}
-            position={Position.Bottom}
-            showOverlappingTicks={false}
-            tickFormat={timeFormatter(getChartDateLabel(absoluteStartDate, absoluteEndDate))}
-          />
-          <Axis
-            id={i18n.translate('xpack.uptime.snapshotHistogram.yAxisId', {
-              defaultMessage: 'Ping Y Axis',
-            })}
-            position="left"
-            tickFormat={(d) => numeral(d).format('0')}
-            labelFormat={(d) => numeral(d).format('0a')}
-            title={i18n.translate('xpack.uptime.snapshotHistogram.yAxis.title', {
-              defaultMessage: 'Pings',
-              description:
-                'The label on the y-axis of a chart that displays the number of times Heartbeat has pinged a set of services/websites.',
-            })}
-          />
+        <ChartWrapper height={height} loading={loading}>
+          <Chart>
+            <Settings
+              xDomain={{
+                minInterval,
+                min: absoluteStartDate,
+                max: absoluteEndDate,
+              }}
+              showLegend={false}
+              onBrushEnd={onBrushEnd}
+              onElementClick={onBarClicked}
+              locale={i18n.getLocale()}
+              baseTheme={baseTheme}
+            />
+            <Axis
+              id={i18n.translate('xpack.uptime.snapshotHistogram.xAxisId', {
+                defaultMessage: 'Ping X Axis',
+              })}
+              position={Position.Bottom}
+              showOverlappingTicks={false}
+              tickFormat={timeFormatter(getChartDateLabel(absoluteStartDate, absoluteEndDate))}
+            />
+            <Axis
+              id={i18n.translate('xpack.uptime.snapshotHistogram.yAxisId', {
+                defaultMessage: 'Ping Y Axis',
+              })}
+              position="left"
+              tickFormat={(d) => numeral(d).format('0')}
+              labelFormat={(d) => numeral(d).format('0a')}
+              title={i18n.translate('xpack.uptime.snapshotHistogram.yAxis.title', {
+                defaultMessage: 'Pings',
+                description:
+                  'The label on the y-axis of a chart that displays the number of times Heartbeat has pinged a set of services/websites.',
+              })}
+            />
 
-          <BarSeries
-            color={[danger, gray]}
-            data={barData}
-            id={STATUS_DOWN_LABEL}
-            name={i18n.translate('xpack.uptime.snapshotHistogram.series.pings', {
-              defaultMessage: 'Monitor Pings',
-            })}
-            stackAccessors={['x']}
-            splitSeriesAccessors={['type']}
-            timeZone={timeZone}
-            xAccessor="x"
-            xScaleType={ScaleType.Time}
-            yAccessors={['y']}
-            yScaleType={ScaleType.Linear}
-          />
-        </Chart>
-      </ChartWrapper>
+            <BarSeries
+              color={[danger, gray]}
+              data={barData}
+              id={STATUS_DOWN_LABEL}
+              name={i18n.translate('xpack.uptime.snapshotHistogram.series.pings', {
+                defaultMessage: 'Monitor Pings',
+              })}
+              stackAccessors={['x']}
+              splitSeriesAccessors={['type']}
+              timeZone={timeZone}
+              xAccessor="x"
+              // Defaults to multi layer time axis as of Elastic Charts v70
+              xScaleType={ScaleType.Time}
+              yAccessors={['y']}
+              yScaleType={ScaleType.Linear}
+            />
+          </Chart>
+        </ChartWrapper>
+      </div>
     );
   }
 

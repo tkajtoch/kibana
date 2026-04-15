@@ -5,18 +5,17 @@
  * 2.0.
  */
 
-import { act, renderHook } from '@testing-library/react-hooks';
-import {
-  useDeleteKnowledgeBaseEntries,
-  UseDeleteKnowledgeEntriesParams,
-} from './use_delete_knowledge_base_entries';
+import { renderHook, act } from '@testing-library/react';
+import type { UseDeleteKnowledgeEntriesParams } from './use_delete_knowledge_base_entries';
+import { useDeleteKnowledgeBaseEntries } from './use_delete_knowledge_base_entries';
 import { useInvalidateKnowledgeBaseEntries } from './use_knowledge_base_entries';
+import { API_VERSIONS } from '@kbn/elastic-assistant-common';
 
 jest.mock('./use_knowledge_base_entries', () => ({
   useInvalidateKnowledgeBaseEntries: jest.fn(),
 }));
 
-jest.mock('@tanstack/react-query', () => ({
+jest.mock('@kbn/react-query', () => ({
   useMutation: jest.fn().mockImplementation((queryKey, fn, opts) => {
     return {
       mutate: async (variables: unknown) => {
@@ -66,7 +65,7 @@ describe('useDeleteKnowledgeBaseEntries', () => {
       expect.any(String),
       expect.objectContaining({
         body: JSON.stringify({ delete: { query: '', ids: ['1'] } }),
-        version: '1',
+        version: API_VERSIONS.public.v1,
       })
     );
     expect(invalidateKnowledgeBaseEntries).toHaveBeenCalled();

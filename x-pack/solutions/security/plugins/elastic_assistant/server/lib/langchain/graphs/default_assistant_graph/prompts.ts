@@ -5,60 +5,91 @@
  * 2.0.
  */
 
-import { ChatPromptTemplate } from '@langchain/core/prompts';
-import {
-  BEDROCK_SYSTEM_PROMPT,
-  DEFAULT_SYSTEM_PROMPT,
-  GEMINI_SYSTEM_PROMPT,
-  GEMINI_USER_PROMPT,
-  STRUCTURED_SYSTEM_PROMPT,
-} from './nodes/translations';
+import { ChatPromptTemplate, MessagesPlaceholder, PromptTemplate } from '@langchain/core/prompts';
+import type { BaseMessage } from '@langchain/core/messages';
+import type { ContentReferencesStore, DocumentEntry } from '@kbn/elastic-assistant-common';
+import { enrichDocument } from '@kbn/elastic-assistant-common';
+import type { Logger } from '@kbn/logging';
+import type { SavedObjectsClientContract } from '@kbn/core/server';
+import type { InferenceConnector } from '@kbn/inference-common';
+import type { ChatPromptValueInterface } from '@langchain/core/prompt_values';
+import { enrichConversation } from '../../utils/enrich_graph_input_messages';
+import type { AIAssistantKnowledgeBaseDataClient } from '../../../../ai_assistant_data_clients/knowledge_base';
+import { INCLUDE_CITATIONS } from '../../../prompt/prompts';
 
-export const formatPrompt = (prompt: string, additionalPrompt?: string) =>
-  ChatPromptTemplate.fromMessages([
-    ['system', additionalPrompt ? `${prompt}\n\n${additionalPrompt}` : prompt],
-    ['placeholder', '{knowledge_history}'],
-    ['placeholder', '{chat_history}'],
-    ['human', '{input}'],
-    ['placeholder', '{agent_scratchpad}'],
-  ]);
+interface ChatPromptTemplateInputValues {
+  systemPrompt: string;
+  messages: BaseMessage[];
+  knowledgeHistory: string;
+}
 
-export const systemPrompts = {
-  openai: DEFAULT_SYSTEM_PROMPT,
-  bedrock: `${DEFAULT_SYSTEM_PROMPT} ${BEDROCK_SYSTEM_PROMPT}`,
-  // The default prompt overwhelms gemini, do not prepend
-  gemini: GEMINI_SYSTEM_PROMPT,
-  structuredChat: STRUCTURED_SYSTEM_PROMPT,
+interface Inputs {
+  prompt: string;
+  additionalPrompt?: string;
+  contentReferencesStore: ContentReferencesStore;
+  kbClient?: AIAssistantKnowledgeBaseDataClient;
+  conversationMessages: BaseMessage[];
+  logger: Logger;
+  formattedTime: string;
+  getInferenceConnectorById: (id: string) => Promise<InferenceConnector>;
+  savedObjectsClient: SavedObjectsClientContract;
+  connectorId: string;
+  llmType: string | undefined;
+}
+
+export const DEFAULT_ASSISTANT_GRAPH_PROMPT_TEMPLATE = ChatPromptTemplate.fromMessages<{
+  systemPrompt: string;
+  messages: BaseMessage[];
+}>([['system', '{systemPrompt}\n\n{knowledgeHistory}'], new MessagesPlaceholder('messages')]);
+
+const KNOWLEDGE_HISTORY_PREFIX = 'Knowledge History:';
+const NO_KNOWLEDGE_HISTORY = '[No existing knowledge history]';
+
+const formatKnowledgeHistory = <T extends { text: string }>(knowledgeHistory: T[]) => {
+  return knowledgeHistory.length
+    ? `${KNOWLEDGE_HISTORY_PREFIX}\n${knowledgeHistory.map((e) => e.text).join('\n')}`
+    : NO_KNOWLEDGE_HISTORY;
 };
 
-export const openAIFunctionAgentPrompt = formatPrompt(systemPrompts.openai);
-
-export const bedrockToolCallingAgentPrompt = formatPrompt(systemPrompts.bedrock);
-
-export const geminiToolCallingAgentPrompt = formatPrompt(systemPrompts.gemini);
-
-export const formatPromptStructured = (prompt: string, additionalPrompt?: string) =>
-  ChatPromptTemplate.fromMessages([
-    ['system', additionalPrompt ? `${prompt}\n\n${additionalPrompt}` : prompt],
-    ['placeholder', '{knowledge_history}'],
-    ['placeholder', '{chat_history}'],
-    [
-      'human',
-      '{input}\n\n{agent_scratchpad}\n\n(reminder to respond in a JSON blob no matter what)',
-    ],
-  ]);
-
-export const structuredChatAgentPrompt = formatPromptStructured(systemPrompts.structuredChat);
-
 /**
- * If Gemini is the llmType,
- * Adds a user prompt for the latest message in a conversation
- * @param prompt
- * @param llmType
+ * Factory that creates a ChatPromptValueInterface from a ChatPromptTemplate with the given inputs.
+ * This should be used to create the initial messages state for the graph.
  */
-export const formatLatestUserMessage = (prompt: string, llmType?: string): string => {
-  if (llmType === 'gemini') {
-    return `${GEMINI_USER_PROMPT}${prompt}`;
-  }
-  return prompt;
+export const chatPromptFactory = async (
+  chatPromptTemplate: ChatPromptTemplate<ChatPromptTemplateInputValues>,
+  inputs: Inputs
+): Promise<ChatPromptValueInterface> => {
+  const knowledgeHistoryPromise: Promise<DocumentEntry[]> =
+    inputs.kbClient?.getRequiredKnowledgeBaseDocumentEntries() ?? Promise.resolve([]);
+
+  const knowledgeHistory = await knowledgeHistoryPromise;
+  const citedKnowledgeHistory = knowledgeHistory.map(enrichDocument(inputs.contentReferencesStore));
+  const formattedKnowledgeHistory = formatKnowledgeHistory(citedKnowledgeHistory);
+
+  const templatedSystemPrompt = inputs.additionalPrompt
+    ? `${inputs.prompt}\n\n${inputs.additionalPrompt}`
+    : inputs.prompt;
+
+  const systemPromptTemplate = PromptTemplate.fromTemplate(templatedSystemPrompt);
+
+  const systemPrompt = await systemPromptTemplate.format({
+    citations_prompt: inputs.contentReferencesStore.options?.disabled ? '' : INCLUDE_CITATIONS,
+    formattedTime: inputs.formattedTime ?? '',
+  });
+
+  const enrichedMessages = await enrichConversation({
+    getInferenceConnectorById: inputs.getInferenceConnectorById,
+    savedObjectsClient: inputs.savedObjectsClient,
+    connectorId: inputs.connectorId,
+    llmType: inputs.llmType,
+    messages: inputs.conversationMessages,
+  });
+
+  const chatPrompt = await chatPromptTemplate.invoke({
+    systemPrompt,
+    messages: enrichedMessages,
+    knowledgeHistory: formattedKnowledgeHistory,
+  });
+
+  return chatPrompt;
 };

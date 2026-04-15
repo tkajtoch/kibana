@@ -7,19 +7,19 @@
 
 import { errors } from '@elastic/elasticsearch';
 
-import { RequestHandler } from '@kbn/core/server';
+import type { RequestHandler } from '@kbn/core/server';
 
 import { httpServerMock, httpServiceMock, coreMock } from '@kbn/core/server/mocks';
 
 import { kibanaResponseFactory } from '@kbn/core/server';
 import { licensingMock } from '@kbn/licensing-plugin/server/mocks';
 
-import { API_BASE_PATH } from '../../../common/constants';
+import { API_BASE_PATH, SECURITY_MODEL } from '../../../common/constants';
 
 import { handleEsError } from '../../shared_imports';
 
 import { register } from './get_route';
-import { ScopedClusterClientMock } from './types';
+import type { ScopedClusterClientMock } from './types';
 
 // Re-implement the mock that was imported directly from `x-pack/mocks`
 function createCoreRequestHandlerContextMock() {
@@ -127,7 +127,8 @@ describe('GET remote clusters', () => {
           skipUnavailable: false,
           isConfiguredByNode: false,
           mode: 'sniff',
-          securityModel: 'certificate',
+          securityModel: SECURITY_MODEL.CERTIFICATE,
+          nodeConnections: null,
         },
       ]);
 

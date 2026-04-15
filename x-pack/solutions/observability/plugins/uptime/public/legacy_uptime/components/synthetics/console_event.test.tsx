@@ -46,7 +46,7 @@ describe('ConsoleEvent component', () => {
           grow={false}
           style={
             Object {
-              "color": "#bd271e",
+              "color": "#C61E25",
             }
           }
         >

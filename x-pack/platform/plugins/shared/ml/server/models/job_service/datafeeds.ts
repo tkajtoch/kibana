@@ -5,7 +5,7 @@
  * 2.0.
  */
 
-import type * as estypes from '@elastic/elasticsearch/lib/api/typesWithBodyKey';
+import type { estypes } from '@elastic/elasticsearch';
 import { i18n } from '@kbn/i18n';
 import type { IScopedClusterClient } from '@kbn/core/server';
 import { JOB_STATE, DATAFEED_STATE } from '../../../common/constants/states';
@@ -106,20 +106,19 @@ export function datafeedsProvider(client: IScopedClusterClient, mlClient: MlClie
   async function startDatafeed(datafeedId: string, start?: number, end?: number) {
     return mlClient.startDatafeed({
       datafeed_id: datafeedId,
-      body: {
-        start: start !== undefined ? String(start) : undefined,
-        end: end !== undefined ? String(end) : undefined,
-      },
+      start: start !== undefined ? String(start) : undefined,
+      end: end !== undefined ? String(end) : undefined,
     });
   }
 
-  async function stopDatafeeds(datafeedIds: string[]) {
+  async function stopDatafeeds(datafeedIds: string[], closeJobs: boolean = true) {
     const results: Results = Object.create(null);
 
     for (const datafeedId of datafeedIds) {
       try {
         const body = await mlClient.stopDatafeed({
           datafeed_id: datafeedId,
+          close_job: closeJobs,
         });
         results[datafeedId] = { stopped: body.stopped };
       } catch (error) {

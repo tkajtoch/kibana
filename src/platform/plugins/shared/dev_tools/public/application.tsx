@@ -9,11 +9,11 @@
 
 import React, { useEffect, useRef } from 'react';
 import ReactDOM from 'react-dom';
-import { Redirect, RouteComponentProps } from 'react-router-dom';
+import type { RouteComponentProps } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import { HashRouter as Router, Routes, Route } from '@kbn/shared-ux-router';
-import { EuiTab, EuiTabs, EuiToolTip, EuiBetaBadge } from '@elastic/eui';
+import { EuiTab, EuiTabs, EuiToolTip, EuiBetaBadge, useEuiTheme } from '@elastic/eui';
 import { i18n } from '@kbn/i18n';
-import { euiThemeVars } from '@kbn/ui-theme';
 
 import type {
   ApplicationStart,
@@ -22,10 +22,11 @@ import type {
   ExecutionContextStart,
 } from '@kbn/core/public';
 import { KibanaRenderContextProvider } from '@kbn/react-kibana-context-render';
+import { css } from '@emotion/react';
 import type { DocTitleService, BreadcrumbService } from './services';
 
-import { DevToolApp } from './dev_tool';
-import { DevToolsStartServices } from './types';
+import type { DevToolApp } from './dev_tool';
+import type { DevToolsStartServices } from './types';
 
 export interface AppServices {
   docTitleService: DocTitleService;
@@ -48,6 +49,37 @@ interface MountedDevToolDescriptor {
   unmountHandler: () => void;
 }
 
+const devAppContainerStyles = css`
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+
+  > * {
+    flex-shrink: 0;
+  }
+`;
+
+export const staticStyles = {
+  devAppContainer: devAppContainerStyles,
+
+  devApp: devAppContainerStyles,
+
+  devAppTabBeta: css`
+    vertical-align: middle;
+  `,
+};
+
+const useStyles = () => {
+  const { euiTheme } = useEuiTheme();
+
+  return {
+    ...staticStyles,
+    tabs: css`
+      padding-left: ${euiTheme.size.s};
+    `,
+  };
+};
+
 function DevToolsWrapper({
   devTools,
   activeDevTool,
@@ -56,6 +88,7 @@ function DevToolsWrapper({
   location,
   startServices,
 }: DevToolsWrapperProps) {
+  const styles = useStyles();
   const { docTitleService, breadcrumbService } = appServices;
   const mountedTool = useRef<MountedDevToolDescriptor | null>(null);
 
@@ -74,8 +107,8 @@ function DevToolsWrapper({
   }, [activeDevTool, docTitleService, breadcrumbService]);
 
   return (
-    <main className="devApp">
-      <EuiTabs css={{ paddingLeft: euiThemeVars.euiSizeS }} size="l">
+    <main css={styles.devApp}>
+      <EuiTabs css={styles.tabs} size="l">
         {devTools.map((currentDevTool) => (
           <EuiTab
             key={currentDevTool.id}
@@ -88,12 +121,12 @@ function DevToolsWrapper({
             }}
           >
             <EuiToolTip content={currentDevTool.tooltipContent}>
-              <span>
+              <span tabIndex={0}>
                 {currentDevTool.title}{' '}
                 {currentDevTool.isBeta && (
                   <EuiBetaBadge
                     size="s"
-                    className="devApp__tabBeta"
+                    css={styles.devAppTabBeta}
                     label={i18n.translate('devTools.badge.betaLabel', {
                       defaultMessage: 'Beta',
                     })}
@@ -105,7 +138,7 @@ function DevToolsWrapper({
         ))}
       </EuiTabs>
       <div
-        className="devApp__container"
+        css={styles.devAppContainer}
         role="tabpanel"
         data-test-subj={activeDevTool.id}
         ref={async (element) => {
@@ -160,7 +193,7 @@ function setBadge(application: ApplicationStart, chrome: ChromeStart) {
     tooltip: i18n.translate('devTools.badge.readOnly.tooltip', {
       defaultMessage: 'Unable to save',
     }),
-    iconType: 'glasses',
+    iconType: 'readOnly',
   });
 }
 

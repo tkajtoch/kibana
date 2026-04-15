@@ -7,71 +7,93 @@
 
 import { combineReducers } from '@reduxjs/toolkit';
 
-import { certsListReducer, CertsListState } from './certs';
-import { certificatesReducer, CertificatesState } from './certificates/certificates';
-import { globalParamsReducer, GlobalParamsState } from './global_params';
-import { overviewStatusReducer, OverviewStatusStateReducer } from './overview_status';
+import type { MaintenanceWindowsState } from './maintenance_windows';
+import { maintenanceWindowsReducer } from './maintenance_windows';
+import type { CertsListState } from './certs';
+import { certsListReducer } from './certs';
+import type { CertificatesState } from './certificates/certificates';
+import { certificatesReducer } from './certificates/certificates';
+import type { GlobalParamsState } from './global_params';
+import { globalParamsReducer } from './global_params';
+import type { OverviewStatusStateReducer } from './overview_status';
+import { overviewStatusReducer } from './overview_status';
 import { browserJourneyReducer } from './browser_journey';
-import { defaultAlertingReducer, DefaultAlertingState } from './alert_rules';
-import { manualTestRunsReducer, ManualTestRunsState } from './manual_test_runs';
-import {
-  dynamicSettingsReducer,
-  DynamicSettingsState,
-  settingsReducer,
-  SettingsState,
-} from './settings';
-import { elasticsearchReducer, QueriesState } from './elasticsearch';
-import { agentPoliciesReducer, AgentPoliciesState } from './private_locations';
-import { networkEventsReducer, NetworkEventsState } from './network_events';
-import { monitorDetailsReducer, MonitorDetailsState } from './monitor_details';
-import { uiReducer, UiState } from './ui';
-import { syntheticsEnablementReducer, SyntheticsEnablementState } from './synthetics_enablement';
-import { monitorListReducer, MonitorListState } from './monitor_list';
-import { serviceLocationsReducer, ServiceLocationsState } from './service_locations';
-import { monitorOverviewReducer, MonitorOverviewState } from './overview';
-import { BrowserJourneyState } from './browser_journey/models';
-import { monitorStatusHeatmapReducer, MonitorStatusHeatmap } from './status_heatmap';
+import type { DefaultAlertingState } from './alert_rules';
+import { defaultAlertingReducer } from './alert_rules';
+import type { ManualTestRunsState } from './manual_test_runs';
+import { manualTestRunsReducer } from './manual_test_runs';
+import type { DynamicSettingsState } from './settings';
+import { dynamicSettingsReducer } from './settings';
+import type { QueriesState } from './elasticsearch';
+import { elasticsearchReducer } from './elasticsearch';
+import type { PrivateLocationsState } from './private_locations';
+import { privateLocationsStateReducer } from './private_locations';
+import type { NetworkEventsState } from './network_events';
+import { networkEventsReducer } from './network_events';
+import type { MonitorDetailsState } from './monitor_details';
+import { monitorDetailsReducer } from './monitor_details';
+import type { UiState } from './ui';
+import { uiReducer } from './ui';
+import type { SyntheticsEnablementState } from './synthetics_enablement';
+import { syntheticsEnablementReducer } from './synthetics_enablement';
+import type { MonitorListState } from './monitor_list';
+import { monitorListReducer } from './monitor_list';
+import type { ServiceLocationsState } from './service_locations';
+import { serviceLocationsReducer } from './service_locations';
+import type { MonitorOverviewState } from './overview';
+import { monitorOverviewReducer } from './overview';
+import type { BrowserJourneyState } from './browser_journey/models';
+import type { MonitorStatusHeatmap } from './status_heatmap';
+import { monitorStatusHeatmapReducer } from './status_heatmap';
+import type { AgentPoliciesState } from './agent_policies';
+import { agentPoliciesReducer } from './agent_policies';
+import type { MonitorHealthState } from './monitor_health';
+import { monitorHealthReducer } from './monitor_health';
 
 export interface SyntheticsAppState {
-  ui: UiState;
-  settings: SettingsState;
-  elasticsearch: QueriesState;
-  monitorList: MonitorListState;
-  overview: MonitorOverviewState;
-  certificates: CertificatesState;
-  globalParams: GlobalParamsState;
-  networkEvents: NetworkEventsState;
   agentPolicies: AgentPoliciesState;
-  manualTestRuns: ManualTestRunsState;
-  monitorDetails: MonitorDetailsState;
   browserJourney: BrowserJourneyState;
+  certificates: CertificatesState;
   certsList: CertsListState;
   defaultAlerting: DefaultAlertingState;
   dynamicSettings: DynamicSettingsState;
-  serviceLocations: ServiceLocationsState;
-  overviewStatus: OverviewStatusStateReducer;
-  syntheticsEnablement: SyntheticsEnablementState;
+  elasticsearch: QueriesState;
+  globalParams: GlobalParamsState;
+  manualTestRuns: ManualTestRunsState;
+  monitorDetails: MonitorDetailsState;
+  monitorList: MonitorListState;
   monitorStatusHeatmap: MonitorStatusHeatmap;
+  networkEvents: NetworkEventsState;
+  overview: MonitorOverviewState;
+  overviewStatus: OverviewStatusStateReducer;
+  privateLocations: PrivateLocationsState;
+  serviceLocations: ServiceLocationsState;
+  syntheticsEnablement: SyntheticsEnablementState;
+  ui: UiState;
+  maintenanceWindows: MaintenanceWindowsState;
+  monitorHealth: MonitorHealthState;
 }
 
 export const rootReducer = combineReducers<SyntheticsAppState>({
-  ui: uiReducer,
-  settings: settingsReducer,
-  monitorList: monitorListReducer,
-  overview: monitorOverviewReducer,
-  globalParams: globalParamsReducer,
-  networkEvents: networkEventsReducer,
-  elasticsearch: elasticsearchReducer,
   agentPolicies: agentPoliciesReducer,
-  monitorDetails: monitorDetailsReducer,
   browserJourney: browserJourneyReducer,
-  manualTestRuns: manualTestRunsReducer,
-  overviewStatus: overviewStatusReducer,
-  defaultAlerting: defaultAlertingReducer,
-  dynamicSettings: dynamicSettingsReducer,
-  serviceLocations: serviceLocationsReducer,
-  syntheticsEnablement: syntheticsEnablementReducer,
   certificates: certificatesReducer,
   certsList: certsListReducer,
+  defaultAlerting: defaultAlertingReducer,
+  dynamicSettings: dynamicSettingsReducer,
+  elasticsearch: elasticsearchReducer,
+  globalParams: globalParamsReducer,
+  manualTestRuns: manualTestRunsReducer,
+  monitorDetails: monitorDetailsReducer,
+  monitorList: monitorListReducer,
   monitorStatusHeatmap: monitorStatusHeatmapReducer,
+  networkEvents: networkEventsReducer,
+  overview: monitorOverviewReducer,
+  overviewStatus: overviewStatusReducer,
+  privateLocations: privateLocationsStateReducer,
+  serviceLocations: serviceLocationsReducer,
+  syntheticsEnablement: syntheticsEnablementReducer,
+  ui: uiReducer,
+  maintenanceWindows: maintenanceWindowsReducer,
+  monitorHealth: monitorHealthReducer,
 });

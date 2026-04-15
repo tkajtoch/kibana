@@ -25,7 +25,9 @@
         "tags": [],
         "label": "KbnPalettes",
         "description": [],
-        "path": "packages/kbn-palettes/classes/palettes.ts",
+        "path": "src/platform/packages/shared/kbn-palettes/classes/palettes.ts",
+        "lineNumber": 12,
+        "columnNumber": 1,
         "deprecated": false,
         "trackAdoption": false,
         "children": [
@@ -47,7 +49,9 @@
               },
               ">"
             ],
-            "path": "packages/kbn-palettes/classes/palettes.ts",
+            "path": "src/platform/packages/shared/kbn-palettes/classes/palettes.ts",
+            "lineNumber": 13,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           },
@@ -61,7 +65,9 @@
             "signature": [
               "Map<string, string>"
             ],
-            "path": "packages/kbn-palettes/classes/palettes.ts",
+            "path": "src/platform/packages/shared/kbn-palettes/classes/palettes.ts",
+            "lineNumber": 14,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           },
@@ -81,7 +87,9 @@
                 "text": "IKbnPalette"
               }
             ],
-            "path": "packages/kbn-palettes/classes/palettes.ts",
+            "path": "src/platform/packages/shared/kbn-palettes/classes/palettes.ts",
+            "lineNumber": 15,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           },
@@ -95,7 +103,9 @@
             "signature": [
               "any"
             ],
-            "path": "packages/kbn-palettes/classes/palettes.ts",
+            "path": "src/platform/packages/shared/kbn-palettes/classes/palettes.ts",
+            "lineNumber": 17,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false,
             "children": [
@@ -116,7 +126,9 @@
                   },
                   "[]"
                 ],
-                "path": "packages/kbn-palettes/classes/palettes.ts",
+                "path": "src/platform/packages/shared/kbn-palettes/classes/palettes.ts",
+                "lineNumber": 17,
+                "columnNumber": 15,
                 "deprecated": false,
                 "trackAdoption": false,
                 "isRequired": true
@@ -137,7 +149,9 @@
                     "text": "IKbnPalette"
                   }
                 ],
-                "path": "packages/kbn-palettes/classes/palettes.ts",
+                "path": "src/platform/packages/shared/kbn-palettes/classes/palettes.ts",
+                "lineNumber": 17,
+                "columnNumber": 40,
                 "deprecated": false,
                 "trackAdoption": false,
                 "isRequired": true
@@ -163,7 +177,9 @@
               },
               " | undefined"
             ],
-            "path": "packages/kbn-palettes/classes/palettes.ts",
+            "path": "src/platform/packages/shared/kbn-palettes/classes/palettes.ts",
+            "lineNumber": 23,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false,
             "children": [
@@ -177,7 +193,9 @@
                 "signature": [
                   "string"
                 ],
-                "path": "packages/kbn-palettes/classes/palettes.ts",
+                "path": "src/platform/packages/shared/kbn-palettes/classes/palettes.ts",
+                "lineNumber": 23,
+                "columnNumber": 12,
                 "deprecated": false,
                 "trackAdoption": false,
                 "isRequired": true
@@ -202,7 +220,9 @@
                 "text": "IKbnPalette"
               }
             ],
-            "path": "packages/kbn-palettes/classes/palettes.ts",
+            "path": "src/platform/packages/shared/kbn-palettes/classes/palettes.ts",
+            "lineNumber": 28,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false,
             "children": [
@@ -216,7 +236,9 @@
                 "signature": [
                   "string"
                 ],
-                "path": "packages/kbn-palettes/classes/palettes.ts",
+                "path": "src/platform/packages/shared/kbn-palettes/classes/palettes.ts",
+                "lineNumber": 28,
+                "columnNumber": 10,
                 "deprecated": false,
                 "trackAdoption": false,
                 "isRequired": true
@@ -242,7 +264,9 @@
               },
               "[]"
             ],
-            "path": "packages/kbn-palettes/classes/palettes.ts",
+            "path": "src/platform/packages/shared/kbn-palettes/classes/palettes.ts",
+            "lineNumber": 32,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false,
             "children": [],
@@ -255,6 +279,45 @@
     "functions": [
       {
         "parentPluginId": "@kbn/palettes",
+        "id": "def-common.getAppendedTag",
+        "type": "Function",
+        "tags": [],
+        "label": "getAppendedTag",
+        "description": [
+          "\nText wrapper to remove text-decoration from `EuiText`"
+        ],
+        "signature": [
+          "(label?: string | undefined) => \"\" | React.JSX.Element | undefined"
+        ],
+        "path": "src/platform/packages/shared/kbn-palettes/components/index.tsx",
+        "lineNumber": 17,
+        "columnNumber": 14,
+        "deprecated": false,
+        "trackAdoption": false,
+        "children": [
+          {
+            "parentPluginId": "@kbn/palettes",
+            "id": "def-common.getAppendedTag.$1",
+            "type": "string",
+            "tags": [],
+            "label": "label",
+            "description": [],
+            "signature": [
+              "string | undefined"
+            ],
+            "path": "src/platform/packages/shared/kbn-palettes/components/index.tsx",
+            "lineNumber": 17,
+            "columnNumber": 32,
+            "deprecated": false,
+            "trackAdoption": false,
+            "isRequired": false
+          }
+        ],
+        "returnComment": [],
+        "initialIsOpen": false
+      },
+      {
+        "parentPluginId": "@kbn/palettes",
         "id": "def-common.getKbnPalettes",
         "type": "Function",
         "tags": [],
@@ -262,13 +325,7 @@
         "description": [],
         "signature": [
           "({ name, darkMode }: ",
-          {
-            "pluginId": "@kbn/core-theme-browser",
-            "scope": "public",
-            "docId": "kibKbnCoreThemeBrowserPluginApi",
-            "section": "def-public.CoreTheme",
-            "text": "CoreTheme"
-          },
+          "CoreTheme",
           ") => ",
           {
             "pluginId": "@kbn/palettes",
@@ -278,7 +335,9 @@
             "text": "KbnPalettes"
           }
         ],
-        "path": "packages/kbn-palettes/palettes/get_kbn_palettes.ts",
+        "path": "src/platform/packages/shared/kbn-palettes/palettes/get_kbn_palettes.ts",
+        "lineNumber": 14,
+        "columnNumber": 1,
         "deprecated": false,
         "trackAdoption": false,
         "children": [
@@ -290,15 +349,11 @@
             "label": "{ name, darkMode }",
             "description": [],
             "signature": [
-              {
-                "pluginId": "@kbn/core-theme-browser",
-                "scope": "public",
-                "docId": "kibKbnCoreThemeBrowserPluginApi",
-                "section": "def-public.CoreTheme",
-                "text": "CoreTheme"
-              }
+              "CoreTheme"
             ],
-            "path": "packages/kbn-palettes/palettes/get_kbn_palettes.ts",
+            "path": "src/platform/packages/shared/kbn-palettes/palettes/get_kbn_palettes.ts",
+            "lineNumber": 14,
+            "columnNumber": 32,
             "deprecated": false,
             "trackAdoption": false,
             "isRequired": true
@@ -324,7 +379,9 @@
             "text": "KbnPalettes"
           }
         ],
-        "path": "packages/kbn-palettes/palettes/index.ts",
+        "path": "src/platform/packages/shared/kbn-palettes/palettes/index.ts",
+        "lineNumber": 75,
+        "columnNumber": 14,
         "deprecated": false,
         "trackAdoption": false,
         "children": [
@@ -338,7 +395,9 @@
             "signature": [
               "boolean"
             ],
-            "path": "packages/kbn-palettes/palettes/index.ts",
+            "path": "src/platform/packages/shared/kbn-palettes/palettes/index.ts",
+            "lineNumber": 75,
+            "columnNumber": 29,
             "deprecated": false,
             "trackAdoption": false,
             "isRequired": true
@@ -364,7 +423,9 @@
             "text": "KbnPalettes"
           }
         ],
-        "path": "packages/kbn-palettes/hooks/use_kbn_palettes.ts",
+        "path": "src/platform/packages/shared/kbn-palettes/hooks/use_kbn_palettes.ts",
+        "lineNumber": 14,
+        "columnNumber": 1,
         "deprecated": false,
         "trackAdoption": false,
         "children": [],
@@ -382,20 +443,27 @@
         "description": [
           "\nCommon palette definition used throughout kibana"
         ],
-        "path": "packages/kbn-palettes/classes/types.ts",
+        "path": "src/platform/packages/shared/kbn-palettes/classes/types.ts",
+        "lineNumber": 17,
+        "columnNumber": 1,
         "deprecated": false,
         "trackAdoption": false,
         "children": [
           {
             "parentPluginId": "@kbn/palettes",
             "id": "def-common.IKbnPalette.id",
-            "type": "string",
+            "type": "CompoundType",
             "tags": [],
             "label": "id",
             "description": [
               "\nUnique identifier for the palette"
             ],
-            "path": "packages/kbn-palettes/classes/types.ts",
+            "signature": [
+              "\"status\" | \"severity\" | \"default\" | \"complementary\" | \"temperature\" | \"elastic_line_optimized\" | \"neutral\" | \"eui_amsterdam\" | \"behind_text\" | \"kibana_v7_legacy\" | \"elastic_brand_2023\" | \"cool\" | \"gray\" | \"red\" | \"green\" | \"warm\" | \"compare_to\" | \"log_level\" | \"eui_amsterdam_color_blind\""
+            ],
+            "path": "src/platform/packages/shared/kbn-palettes/classes/types.ts",
+            "lineNumber": 21,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           },
@@ -408,7 +476,27 @@
             "description": [
               "\nDisplay name of this palette."
             ],
-            "path": "packages/kbn-palettes/classes/types.ts",
+            "path": "src/platform/packages/shared/kbn-palettes/classes/types.ts",
+            "lineNumber": 25,
+            "columnNumber": 3,
+            "deprecated": false,
+            "trackAdoption": false
+          },
+          {
+            "parentPluginId": "@kbn/palettes",
+            "id": "def-common.IKbnPalette.tag",
+            "type": "string",
+            "tags": [],
+            "label": "tag",
+            "description": [
+              "\nA tag for the palette displayed opposite of the `name`."
+            ],
+            "signature": [
+              "string | undefined"
+            ],
+            "path": "src/platform/packages/shared/kbn-palettes/classes/types.ts",
+            "lineNumber": 29,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           },
@@ -424,7 +512,9 @@
             "signature": [
               "\"gradient\" | \"categorical\""
             ],
-            "path": "packages/kbn-palettes/classes/types.ts",
+            "path": "src/platform/packages/shared/kbn-palettes/classes/types.ts",
+            "lineNumber": 33,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           },
@@ -437,7 +527,9 @@
             "description": [
               "\nNumber of colors to display"
             ],
-            "path": "packages/kbn-palettes/classes/types.ts",
+            "path": "src/platform/packages/shared/kbn-palettes/classes/types.ts",
+            "lineNumber": 37,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           },
@@ -450,7 +542,9 @@
             "description": [
               "\nPalette belongs to an outdated theme set"
             ],
-            "path": "packages/kbn-palettes/classes/types.ts",
+            "path": "src/platform/packages/shared/kbn-palettes/classes/types.ts",
+            "lineNumber": 41,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           },
@@ -466,7 +560,9 @@
             "signature": [
               "string[]"
             ],
-            "path": "packages/kbn-palettes/classes/types.ts",
+            "path": "src/platform/packages/shared/kbn-palettes/classes/types.ts",
+            "lineNumber": 45,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           },
@@ -482,7 +578,9 @@
             "signature": [
               "boolean | undefined"
             ],
-            "path": "packages/kbn-palettes/classes/types.ts",
+            "path": "src/platform/packages/shared/kbn-palettes/classes/types.ts",
+            "lineNumber": 49,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           },
@@ -498,7 +596,9 @@
             "signature": [
               "(n?: number | undefined) => string[]"
             ],
-            "path": "packages/kbn-palettes/classes/types.ts",
+            "path": "src/platform/packages/shared/kbn-palettes/classes/types.ts",
+            "lineNumber": 55,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false,
             "children": [
@@ -512,7 +612,9 @@
                 "signature": [
                   "number | undefined"
                 ],
-                "path": "packages/kbn-palettes/classes/types.ts",
+                "path": "src/platform/packages/shared/kbn-palettes/classes/types.ts",
+                "lineNumber": 58,
+                "columnNumber": 12,
                 "deprecated": false,
                 "trackAdoption": false,
                 "isRequired": false
@@ -532,7 +634,9 @@
             "signature": [
               "(colorIndex: number, numberOfColors?: number | undefined) => string"
             ],
-            "path": "packages/kbn-palettes/classes/types.ts",
+            "path": "src/platform/packages/shared/kbn-palettes/classes/types.ts",
+            "lineNumber": 59,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false,
             "children": [
@@ -546,7 +650,9 @@
                 "signature": [
                   "number"
                 ],
-                "path": "packages/kbn-palettes/classes/types.ts",
+                "path": "src/platform/packages/shared/kbn-palettes/classes/types.ts",
+                "lineNumber": 62,
+                "columnNumber": 14,
                 "deprecated": false,
                 "trackAdoption": false,
                 "isRequired": true
@@ -561,7 +667,9 @@
                 "signature": [
                   "number | undefined"
                 ],
-                "path": "packages/kbn-palettes/classes/types.ts",
+                "path": "src/platform/packages/shared/kbn-palettes/classes/types.ts",
+                "lineNumber": 62,
+                "columnNumber": 34,
                 "deprecated": false,
                 "trackAdoption": false,
                 "isRequired": false
@@ -585,7 +693,26 @@
         "signature": [
           "\"default\""
         ],
-        "path": "packages/kbn-palettes/constants.ts",
+        "path": "src/platform/packages/shared/kbn-palettes/constants.ts",
+        "lineNumber": 10,
+        "columnNumber": 14,
+        "deprecated": false,
+        "trackAdoption": false,
+        "initialIsOpen": false
+      },
+      {
+        "parentPluginId": "@kbn/palettes",
+        "id": "def-common.KbnPaletteId",
+        "type": "Type",
+        "tags": [],
+        "label": "KbnPaletteId",
+        "description": [],
+        "signature": [
+          "\"status\" | \"severity\" | \"default\" | \"complementary\" | \"temperature\" | \"elastic_line_optimized\" | \"neutral\" | \"eui_amsterdam\" | \"behind_text\" | \"kibana_v7_legacy\" | \"elastic_brand_2023\" | \"cool\" | \"gray\" | \"red\" | \"green\" | \"warm\" | \"compare_to\" | \"log_level\" | \"eui_amsterdam_color_blind\""
+        ],
+        "path": "src/platform/packages/shared/kbn-palettes/classes/types.ts",
+        "lineNumber": 15,
+        "columnNumber": 1,
         "deprecated": false,
         "trackAdoption": false,
         "initialIsOpen": false
@@ -600,13 +727,32 @@
         "signature": [
           "\"gradient\" | \"categorical\""
         ],
-        "path": "packages/kbn-palettes/classes/types.ts",
+        "path": "src/platform/packages/shared/kbn-palettes/classes/types.ts",
+        "lineNumber": 13,
+        "columnNumber": 1,
         "deprecated": false,
         "trackAdoption": false,
         "initialIsOpen": false
       }
     ],
     "objects": [
+      {
+        "parentPluginId": "@kbn/palettes",
+        "id": "def-common.elasticLineOptimizedPalette",
+        "type": "Object",
+        "tags": [],
+        "label": "elasticLineOptimizedPalette",
+        "description": [],
+        "signature": [
+          "KbnColorFnPalette"
+        ],
+        "path": "src/platform/packages/shared/kbn-palettes/palettes/categorical/elastic_line_optimized.ts",
+        "lineNumber": 58,
+        "columnNumber": 14,
+        "deprecated": false,
+        "trackAdoption": false,
+        "initialIsOpen": false
+      },
       {
         "parentPluginId": "@kbn/palettes",
         "id": "def-common.elasticPalette",
@@ -619,7 +765,9 @@
         "signature": [
           "KbnColorFnPalette"
         ],
-        "path": "packages/kbn-palettes/palettes/categorical/elastic.ts",
+        "path": "src/platform/packages/shared/kbn-palettes/palettes/categorical/elastic.ts",
+        "lineNumber": 19,
+        "columnNumber": 14,
         "deprecated": false,
         "trackAdoption": false,
         "initialIsOpen": false
@@ -633,7 +781,9 @@
         "description": [
           "\nEnum of all kbn palette ids, including by type"
         ],
-        "path": "packages/kbn-palettes/constants.ts",
+        "path": "src/platform/packages/shared/kbn-palettes/constants.ts",
+        "lineNumber": 74,
+        "columnNumber": 14,
         "deprecated": false,
         "trackAdoption": false,
         "children": [
@@ -649,7 +799,9 @@
             "signature": [
               "any"
             ],
-            "path": "packages/kbn-palettes/constants.ts",
+            "path": "src/platform/packages/shared/kbn-palettes/constants.ts",
+            "lineNumber": 76,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           },
@@ -665,7 +817,9 @@
             "signature": [
               "any"
             ],
-            "path": "packages/kbn-palettes/constants.ts",
+            "path": "src/platform/packages/shared/kbn-palettes/constants.ts",
+            "lineNumber": 79,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           },
@@ -681,7 +835,9 @@
             "signature": [
               "any"
             ],
-            "path": "packages/kbn-palettes/constants.ts",
+            "path": "src/platform/packages/shared/kbn-palettes/constants.ts",
+            "lineNumber": 82,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           },
@@ -697,7 +853,9 @@
             "signature": [
               "\"eui_amsterdam_color_blind\""
             ],
-            "path": "packages/kbn-palettes/constants.ts",
+            "path": "src/platform/packages/shared/kbn-palettes/constants.ts",
+            "lineNumber": 85,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           }
@@ -713,7 +871,9 @@
         "description": [
           "\nDefines a palette to be used directly and does not fully implement IKbnPalette"
         ],
-        "path": "packages/kbn-palettes/palettes/semantic/log_level.ts",
+        "path": "src/platform/packages/shared/kbn-palettes/palettes/semantic/log_level.ts",
+        "lineNumber": 31,
+        "columnNumber": 14,
         "deprecated": false,
         "trackAdoption": false,
         "children": [
@@ -727,7 +887,9 @@
             "signature": [
               "\"log_level\""
             ],
-            "path": "packages/kbn-palettes/palettes/semantic/log_level.ts",
+            "path": "src/platform/packages/shared/kbn-palettes/palettes/semantic/log_level.ts",
+            "lineNumber": 32,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           },
@@ -738,7 +900,9 @@
             "tags": [],
             "label": "name",
             "description": [],
-            "path": "packages/kbn-palettes/palettes/semantic/log_level.ts",
+            "path": "src/platform/packages/shared/kbn-palettes/palettes/semantic/log_level.ts",
+            "lineNumber": 33,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           },
@@ -752,7 +916,9 @@
             "signature": [
               "(key: \"Error\" | \"Other\" | \"Debug\" | \"Info\" | \"Notice\" | \"Alert\" | \"Emerg\" | \"Crit\" | \"Warn\") => string"
             ],
-            "path": "packages/kbn-palettes/palettes/semantic/log_level.ts",
+            "path": "src/platform/packages/shared/kbn-palettes/palettes/semantic/log_level.ts",
+            "lineNumber": 36,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false,
             "children": [
@@ -766,7 +932,9 @@
                 "signature": [
                   "\"Error\" | \"Other\" | \"Debug\" | \"Info\" | \"Notice\" | \"Alert\" | \"Emerg\" | \"Crit\" | \"Warn\""
                 ],
-                "path": "packages/kbn-palettes/palettes/semantic/log_level.ts",
+                "path": "src/platform/packages/shared/kbn-palettes/palettes/semantic/log_level.ts",
+                "lineNumber": 36,
+                "columnNumber": 14,
                 "deprecated": false,
                 "trackAdoption": false,
                 "isRequired": true
@@ -784,7 +952,9 @@
             "signature": [
               "{ Emerg: string; Alert: string; Crit: string; Error: string; Warn: string; Notice: string; Info: string; Debug: string; Other: string; }"
             ],
-            "path": "packages/kbn-palettes/palettes/semantic/log_level.ts",
+            "path": "src/platform/packages/shared/kbn-palettes/palettes/semantic/log_level.ts",
+            "lineNumber": 39,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           }

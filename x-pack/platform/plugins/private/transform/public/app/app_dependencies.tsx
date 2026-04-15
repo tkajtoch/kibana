@@ -15,9 +15,9 @@ import type {
   IUiSettingsClient,
   NotificationsStart,
   OverlayStart,
-  SavedObjectsStart,
   ScopedHistory,
   ThemeServiceStart,
+  UserProfileService,
 } from '@kbn/core/public';
 import type { DataPublicPluginStart } from '@kbn/data-plugin/public';
 import type { DataViewsPublicPluginStart } from '@kbn/data-views-plugin/public';
@@ -37,12 +37,16 @@ import type { FieldFormatsStart } from '@kbn/field-formats-plugin/public';
 import type { SavedObjectsManagementPluginStart } from '@kbn/saved-objects-management-plugin/public';
 import type { SettingsStart } from '@kbn/core-ui-settings-browser';
 import type { DataViewEditorStart } from '@kbn/data-view-editor-plugin/public';
+import type { FieldsMetadataPublicStart } from '@kbn/fields-metadata-plugin/public';
+import type { KqlPluginStart } from '@kbn/kql/public';
+import type { CPSPluginStart } from '@kbn/cps/public';
 
 export interface AppDependencies {
   analytics: AnalyticsServiceStart;
   application: ApplicationStart;
   charts: ChartsPluginStart;
   chrome: ChromeStart;
+  cps?: CPSPluginStart;
   data: DataPublicPluginStart;
   dataViewEditor?: DataViewEditorStart;
   dataViews: DataViewsPublicPluginStart;
@@ -52,20 +56,22 @@ export interface AppDependencies {
   i18n: I18nStart;
   notifications: NotificationsStart;
   uiSettings: IUiSettingsClient;
-  savedObjects: SavedObjectsStart;
   savedSearch: SavedSearchPublicPluginStart;
   storage: Storage;
   overlays: OverlayStart;
   theme: ThemeServiceStart;
+  userProfile: UserProfileService;
   history: ScopedHistory;
   share: SharePluginStart;
   spaces?: SpacesPluginStart;
   triggersActionsUi: TriggersAndActionsUIPublicPluginStart;
   unifiedSearch: UnifiedSearchPublicPluginStart;
+  kql: KqlPluginStart;
   usageCollection?: UsageCollectionStart;
   savedObjectsManagement: SavedObjectsManagementPluginStart;
   settings: SettingsStart;
   contentManagement: ContentManagementPublicStart;
+  fieldsMetadata: FieldsMetadataPublicStart;
 }
 
 export const useAppDependencies = () => {

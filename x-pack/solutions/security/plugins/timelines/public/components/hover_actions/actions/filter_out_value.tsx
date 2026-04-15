@@ -12,10 +12,10 @@ import { EuiButtonIcon, EuiToolTip } from '@elastic/eui';
 import { stopPropagationAndPreventDefault } from '../../../../common/utils/accessibility';
 import { TooltipWithKeyboardShortcut } from '../../tooltip_with_keyboard_shortcut';
 import { createFilter, getAdditionalScreenReaderOnlyContext } from '../utils';
-import { HoverActionComponentProps, FilterValueFnArgs } from './types';
+import type { HoverActionComponentProps, FilterValueFnArgs } from './types';
 
 export const FILTER_OUT_VALUE = i18n.translate('xpack.timelines.hoverActions.filterOut', {
-  defaultMessage: 'Filter Out',
+  defaultMessage: 'Filter out',
 });
 
 export const FILTER_OUT_VALUE_KEYBOARD_SHORTCUT = 'o';
@@ -74,7 +74,7 @@ const FilterOutValueButton: React.FC<HoverActionComponentProps & FilterValueFnAr
             aria-label={FILTER_OUT_VALUE}
             buttonRef={defaultFocusedButtonRef}
             data-test-subj="filter-out-value"
-            iconType="minusInCircle"
+            iconType="minusCircle"
             onClick={filterOutValueFn}
             size={size}
             title={FILTER_OUT_VALUE}
@@ -88,7 +88,7 @@ const FilterOutValueButton: React.FC<HoverActionComponentProps & FilterValueFnAr
             className="timelines__hoverActionButton"
             data-test-subj="filter-out-value"
             iconSize="s"
-            iconType="minusInCircle"
+            iconType="minusCircle"
             onClick={filterOutValueFn}
             size={size}
           />

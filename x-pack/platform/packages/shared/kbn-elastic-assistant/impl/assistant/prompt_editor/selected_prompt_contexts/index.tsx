@@ -5,12 +5,18 @@
  * 2.0.
  */
 
-import { EuiAccordion, EuiButtonIcon, EuiFlexGroup, EuiFlexItem, EuiToolTip } from '@elastic/eui';
+import {
+  EuiAccordion,
+  EuiButtonIcon,
+  EuiFlexGroup,
+  EuiFlexItem,
+  EuiToolTip,
+  useEuiTheme,
+} from '@elastic/eui';
 import { isEmpty, omit } from 'lodash/fp';
 import React, { useCallback } from 'react';
 import { css } from '@emotion/react';
-import { euiThemeVars } from '@kbn/ui-theme';
-import { Conversation } from '../../../assistant_context/types';
+import type { Conversation } from '../../../assistant_context/types';
 import { DataAnonymizationEditor } from '../../../data_anonymization_editor';
 import type { PromptContext, SelectedPromptContext } from '../../prompt_context/types';
 import * as i18n from './translations';
@@ -30,6 +36,8 @@ const SelectedPromptContextsComponent: React.FC<Props> = ({
   setSelectedPromptContexts,
   currentReplacements,
 }) => {
+  const { euiTheme } = useEuiTheme();
+
   const unselectPromptContext = useCallback(
     (unselectedId: string) => {
       setSelectedPromptContexts((prev) => omit(unselectedId, prev));
@@ -53,7 +61,7 @@ const SelectedPromptContextsComponent: React.FC<Props> = ({
                 'data-test-subj': `selectedPromptContext-${i}-button`,
               }}
               extraAction={
-                <EuiToolTip content={i18n.REMOVE_CONTEXT}>
+                <EuiToolTip content={i18n.REMOVE_CONTEXT} disableScreenReaderOutput>
                   <EuiButtonIcon
                     aria-label={i18n.REMOVE_CONTEXT}
                     data-test-subj={`removePromptContext-${id}`}
@@ -65,12 +73,12 @@ const SelectedPromptContextsComponent: React.FC<Props> = ({
               id={id}
               paddingSize="s"
               css={css`
-                background: ${euiThemeVars.euiPageBackgroundColor};
-                border-radius: ${euiThemeVars.euiBorderRadius};
+                background: ${euiTheme.colors.backgroundBaseSubdued};
+                border-radius: ${euiTheme.border.radius.medium};
 
                 > div:first-child {
-                  color: ${euiThemeVars.euiColorPrimary};
-                  padding: ${euiThemeVars.euiFormControlPadding};
+                  color: ${euiTheme.colors.textPrimary};
+                  padding: ${euiTheme.size.m};
                 }
               `}
               borders={'all'}

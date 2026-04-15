@@ -6,9 +6,9 @@
  */
 
 import { isEmpty } from 'lodash/fp';
-import { TimelineKpiRequestOptions } from '../../../../../../common/api/search_strategy/timeline/kpi';
+import type { TimelineKpiRequestOptions } from '../../../../../../common/api/search_strategy/timeline/kpi';
 
-import { TimerangeFilter, TimerangeInput } from '../../../../../../common/search_strategy';
+import type { TimerangeFilter, TimerangeInput } from '../../../../../../common/search_strategy';
 import { createQueryFilterClauses } from '../../../../../utils/filters';
 
 export const buildTimelineKpiQuery = ({
@@ -44,41 +44,39 @@ export const buildTimelineKpiQuery = ({
     allow_no_indices: true,
     index: defaultIndex,
     ignore_unavailable: true,
-    body: {
-      aggs: {
-        userCount: {
-          cardinality: {
-            field: 'user.id',
-          },
-        },
-        destinationIpCount: {
-          cardinality: {
-            field: 'destination.ip',
-          },
-        },
-        hostCount: {
-          cardinality: {
-            field: 'host.id',
-          },
-        },
-        processCount: {
-          cardinality: {
-            field: 'process.entity_id',
-          },
-        },
-        sourceIpCount: {
-          cardinality: {
-            field: 'source.ip',
-          },
+    aggs: {
+      userCount: {
+        cardinality: {
+          field: 'user.id',
         },
       },
-      query: {
-        bool: {
-          filter,
+      destinationIpCount: {
+        cardinality: {
+          field: 'destination.ip',
         },
       },
-      track_total_hits: true,
+      hostCount: {
+        cardinality: {
+          field: 'host.id',
+        },
+      },
+      processCount: {
+        cardinality: {
+          field: 'process.entity_id',
+        },
+      },
+      sourceIpCount: {
+        cardinality: {
+          field: 'source.ip',
+        },
+      },
     },
+    query: {
+      bool: {
+        filter,
+      },
+    },
+    track_total_hits: true,
   };
 
   return dslQuery;

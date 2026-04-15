@@ -6,6 +6,7 @@
  */
 
 import React, { useState } from 'react';
+import type { EuiBasicTableColumn } from '@elastic/eui';
 import {
   EuiBadge,
   EuiButton,
@@ -17,20 +18,26 @@ import {
 } from '@elastic/eui';
 import { i18n } from '@kbn/i18n';
 import { useDispatch } from 'react-redux';
-import { Criteria } from '@elastic/eui/src/components/basic_table/basic_table';
+import type { Criteria } from '@elastic/eui/src/components/basic_table/basic_table';
+import { useKibana } from '@kbn/kibana-react-plugin/public';
 import { CopyName } from './copy_name';
 import { ViewLocationMonitors } from './view_location_monitors';
 import { TableTitle } from '../../common/components/table_title';
 import { TAGS_LABEL } from '../components/tags_field';
 import { useSyntheticsSettingsContext } from '../../../contexts';
-import { setAddingNewPrivateLocation } from '../../../state/private_locations';
 import { PrivateLocationDocsLink, START_ADDING_LOCATIONS_DESCRIPTION } from './empty_locations';
-import { PrivateLocation } from '../../../../../../common/runtime_types';
+import type { PrivateLocation } from '../../../../../../common/runtime_types';
 import { NoPermissionsTooltip } from '../../common/components/permissions';
-import { DeleteLocation } from './delete_location';
 import { useLocationMonitors } from './hooks/use_location_monitors';
 import { PolicyName } from './policy_name';
 import { LOCATION_NAME_LABEL } from './location_form';
+import { setIsPrivateLocationFlyoutVisible } from '../../../state/private_locations/actions';
+import type { ClientPluginsStart } from '../../../../../plugin';
+import { UnhealthyCountBadge } from './unhealthy_count_badge';
+import { ResetMonitorModal } from '../../monitors_page/management/monitor_list_table/reset_monitor_modal';
+import { useMonitorIntegrationHealth } from '../../common/hooks/use_monitor_integration_health';
+import { isFixableByResetStatus } from '../../common/hooks/status_labels';
+import { DeleteLocationModal } from './delete_location_modal';
 
 interface ListItem extends PrivateLocation {
   monitors: number;
@@ -39,27 +46,41 @@ interface ListItem extends PrivateLocation {
 export const PrivateLocationsTable = ({
   deleteLoading,
   onDelete,
+  onEdit,
   privateLocations,
 }: {
-  deleteLoading: boolean;
+  deleteLoading?: boolean;
   onDelete: (id: string) => void;
+  onEdit: (privateLocation: PrivateLocation) => void;
   privateLocations: PrivateLocation[];
 }) => {
   const dispatch = useDispatch();
 
   const [pageIndex, setPageIndex] = useState(0);
   const [pageSize, setPageSize] = useState(10);
+  const [monitorPendingReset, setMonitorPendingReset] = useState<{
+    resetIds: string[];
+    skippedMonitors: Array<{ id: string; name: string }>;
+  } | null>(null);
+  const { resetMonitors, getUnhealthyLocationStatuses, getUnhealthyMonitorsForLocation } =
+    useMonitorIntegrationHealth();
+
+  const [locationPendingDelete, setLocationPendingDelete] = useState<string | null>(null);
 
   const { locationMonitors, loading } = useLocationMonitors();
 
   const { canSave, canManagePrivateLocations } = useSyntheticsSettingsContext();
+
+  const { services } = useKibana<ClientPluginsStart>();
+
+  const LazySpaceList = services.spaces?.ui.components.getSpaceList ?? (() => null);
 
   const tagsList = privateLocations.reduce((acc, item) => {
     const tags = item.tags || [];
     return new Set([...acc, ...tags]);
   }, new Set<string>());
 
-  const columns = [
+  const columns: Array<EuiBasicTableColumn<ListItem>> = [
     {
       field: 'label',
       name: LOCATION_NAME_LABEL,
@@ -68,9 +89,16 @@ export const PrivateLocationsTable = ({
     {
       field: 'monitors',
       name: MONITORS,
-      render: (monitors: number, item: ListItem) => (
-        <ViewLocationMonitors count={monitors} locationName={item.label} />
-      ),
+      render: (monitors: number, item: ListItem) => {
+        return (
+          <EuiFlexGroup gutterSize="s" alignItems="center" responsive={false}>
+            <EuiFlexItem grow={false}>
+              <ViewLocationMonitors count={monitors} locationName={item.label} />
+            </EuiFlexItem>
+            <UnhealthyCountBadge item={item} />
+          </EuiFlexGroup>
+        );
+      },
     },
     {
       field: 'agentPolicyId',
@@ -98,20 +126,78 @@ export const PrivateLocationsTable = ({
       },
     },
     {
+      name: 'Spaces',
+      field: 'spaces',
+      sortable: true,
+      render: (spaces: string[]) => {
+        return <LazySpaceList namespaces={spaces} behaviorContext="outside-space" />;
+      },
+    },
+    {
       name: ACTIONS_LABEL,
       actions: [
         {
+          name: EDIT_LOCATION,
+          description: EDIT_LOCATION,
+          isPrimary: true,
+          'data-test-subj': 'action-edit',
+          onClick: onEdit,
+          icon: 'pencil',
+          type: 'icon',
+        },
+        {
+          name: RESET_MONITORS_LABEL,
+          description: RESET_MONITORS_LABEL,
+          icon: 'refresh',
+          type: 'icon' as const,
+          color: 'warning',
+          isPrimary: false,
+          'data-test-subj': 'action-reset',
+          available: (item: ListItem) => {
+            const unhealthyMonitors = getUnhealthyMonitorsForLocation(item.id);
+            return unhealthyMonitors.some((monitor) => {
+              const locationStatuses = getUnhealthyLocationStatuses(monitor.configId);
+              const locationStatus = locationStatuses.find((s) => s.locationId === item.id);
+              return locationStatus != null && isFixableByResetStatus(locationStatus.status);
+            });
+          },
+          onClick: (item: ListItem) => {
+            const unhealthyMonitors = getUnhealthyMonitorsForLocation(item.id);
+
+            const resetIds: string[] = [];
+            const skippedMonitors: Array<{ id: string; name: string }> = [];
+
+            for (const monitor of unhealthyMonitors) {
+              const locationStatuses = getUnhealthyLocationStatuses(monitor.configId);
+              const locationStatus = locationStatuses.find((s) => s.locationId === item.id);
+              if (locationStatus && isFixableByResetStatus(locationStatus.status)) {
+                resetIds.push(monitor.configId);
+              } else {
+                skippedMonitors.push({
+                  id: monitor.configId,
+                  name: monitor.name,
+                });
+              }
+            }
+
+            if (resetIds.length > 0) {
+              setMonitorPendingReset({ resetIds, skippedMonitors });
+            }
+          },
+        },
+        {
           name: DELETE_LOCATION,
-          description: DELETE_LOCATION,
-          render: (item: ListItem) => (
-            <DeleteLocation
-              id={item.id}
-              label={item.label}
-              locationMonitors={locationMonitors}
-              onDelete={onDelete}
-              loading={deleteLoading}
-            />
-          ),
+          description: (item: ListItem) => getDeleteDescription(item.monitors === 0, item.monitors),
+          icon: 'trash',
+          type: 'icon' as const,
+          color: 'danger',
+          enabled: (item: ListItem) => {
+            const canDelete = item.monitors === 0;
+            return canDelete && canSave;
+          },
+          onClick: (item: ListItem) => {
+            setLocationPendingDelete(item.id);
+          },
           isPrimary: true,
           'data-test-subj': 'action-delete',
         },
@@ -124,7 +210,7 @@ export const PrivateLocationsTable = ({
     monitors: locationMonitors?.find((l) => l.id === location.id)?.count ?? 0,
   }));
 
-  const setIsAddingNew = (val: boolean) => dispatch(setAddingNewPrivateLocation(val));
+  const openFlyout = () => dispatch(setIsPrivateLocationFlyoutVisible(true));
 
   const renderToolRight = () => {
     return [
@@ -138,8 +224,8 @@ export const PrivateLocationsTable = ({
           data-test-subj={'addPrivateLocationButton'}
           isLoading={loading}
           disabled={!canSave || !canManagePrivateLocations}
-          onClick={() => setIsAddingNew(true)}
-          iconType="plusInCircle"
+          onClick={openFlyout}
+          iconType="plusCircle"
         >
           {ADD_LABEL}
         </EuiButton>
@@ -195,6 +281,25 @@ export const PrivateLocationsTable = ({
           ],
         }}
       />
+      {monitorPendingReset && (
+        <ResetMonitorModal
+          configIds={monitorPendingReset.resetIds}
+          onClose={() => setMonitorPendingReset(null)}
+          resetMonitors={resetMonitors}
+          skippedMonitors={monitorPendingReset.skippedMonitors}
+        />
+      )}
+      {locationPendingDelete && (
+        <DeleteLocationModal
+          label={items.find((item) => item.id === locationPendingDelete)?.label ?? ''}
+          locationId={locationPendingDelete}
+          onDelete={(id) => {
+            onDelete(id);
+          }}
+          onCancel={() => setLocationPendingDelete(null)}
+          loading={deleteLoading ?? false}
+        />
+      )}
     </div>
   );
 };
@@ -222,6 +327,18 @@ const DELETE_LOCATION = i18n.translate(
   }
 );
 
+const getDeleteDescription = (canDelete: boolean, monCount: number) =>
+  canDelete
+    ? DELETE_LOCATION
+    : i18n.translate('xpack.synthetics.monitorManagement.cannotDelete.description', {
+        defaultMessage: `You can't delete this location because it is used in {monCount, number} {monCount, plural,one {monitor} other {monitors}}. Remove all monitors from this location first.`,
+        values: { monCount },
+      });
+
+const EDIT_LOCATION = i18n.translate('xpack.synthetics.settingsRoute.privateLocations.editLabel', {
+  defaultMessage: 'Edit private location',
+});
+
 const ADD_LABEL = i18n.translate('xpack.synthetics.monitorManagement.createLocation', {
   defaultMessage: 'Create location',
 });
@@ -229,3 +346,10 @@ const ADD_LABEL = i18n.translate('xpack.synthetics.monitorManagement.createLocat
 export const LEARN_MORE = i18n.translate('xpack.synthetics.privateLocations.learnMore.label', {
   defaultMessage: 'Learn more.',
 });
+
+const RESET_MONITORS_LABEL = i18n.translate(
+  'xpack.synthetics.settingsRoute.privateLocations.resetMonitors',
+  {
+    defaultMessage: 'Reset monitors',
+  }
+);

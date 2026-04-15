@@ -20,16 +20,12 @@
         "description": [],
         "signature": [
           "(req: ",
-          {
-            "pluginId": "@kbn/core-http-server",
-            "scope": "server",
-            "docId": "kibKbnCoreHttpServerPluginApi",
-            "section": "def-server.KibanaRequest",
-            "text": "KibanaRequest"
-          },
+          "KibanaRequest",
           "<P, Q, B, any>) => boolean"
         ],
-        "path": "packages/core/http/core-http-server-utils/src/request.ts",
+        "path": "src/core/packages/http/server-utils/src/request.ts",
+        "lineNumber": 33,
+        "columnNumber": 1,
         "deprecated": false,
         "trackAdoption": false,
         "children": [
@@ -41,16 +37,12 @@
             "label": "req",
             "description": [],
             "signature": [
-              {
-                "pluginId": "@kbn/core-http-server",
-                "scope": "server",
-                "docId": "kibKbnCoreHttpServerPluginApi",
-                "section": "def-server.KibanaRequest",
-                "text": "KibanaRequest"
-              },
+              "KibanaRequest",
               "<P, Q, B, any>"
             ],
-            "path": "packages/core/http/core-http-server-utils/src/request.ts",
+            "path": "src/core/packages/http/server-utils/src/request.ts",
+            "lineNumber": 33,
+            "columnNumber": 46,
             "deprecated": false,
             "trackAdoption": false,
             "isRequired": true
@@ -70,32 +62,16 @@
         ],
         "signature": [
           "(req: ",
-          {
-            "pluginId": "@kbn/core-http-server",
-            "scope": "server",
-            "docId": "kibKbnCoreHttpServerPluginApi",
-            "section": "def-server.RawRequest",
-            "text": "RawRequest"
-          },
+          "RawRequest",
           ", routeSchemas: ",
-          {
-            "pluginId": "@kbn/core-http-server",
-            "scope": "server",
-            "docId": "kibKbnCoreHttpServerPluginApi",
-            "section": "def-server.RouteValidator",
-            "text": "RouteValidator"
-          },
+          "RouteValidator",
           "<P, Q, B> | undefined, withoutSecretHeaders: boolean) => ",
-          {
-            "pluginId": "@kbn/core-http-server",
-            "scope": "server",
-            "docId": "kibKbnCoreHttpServerPluginApi",
-            "section": "def-server.KibanaRequest",
-            "text": "KibanaRequest"
-          },
+          "KibanaRequest",
           "<P, Q, B, any>"
         ],
-        "path": "packages/core/http/core-http-server-utils/src/request.ts",
+        "path": "src/core/packages/http/server-utils/src/request.ts",
+        "lineNumber": 18,
+        "columnNumber": 1,
         "deprecated": false,
         "trackAdoption": false,
         "children": [
@@ -109,15 +85,11 @@
               "The raw request to build from"
             ],
             "signature": [
-              {
-                "pluginId": "@kbn/core-http-server",
-                "scope": "server",
-                "docId": "kibKbnCoreHttpServerPluginApi",
-                "section": "def-server.RawRequest",
-                "text": "RawRequest"
-              }
+              "RawRequest"
             ],
-            "path": "packages/core/http/core-http-server-utils/src/request.ts",
+            "path": "src/core/packages/http/server-utils/src/request.ts",
+            "lineNumber": 26,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false,
             "isRequired": true
@@ -132,16 +104,12 @@
               "The route schemas"
             ],
             "signature": [
-              {
-                "pluginId": "@kbn/core-http-server",
-                "scope": "server",
-                "docId": "kibKbnCoreHttpServerPluginApi",
-                "section": "def-server.RouteValidator",
-                "text": "RouteValidator"
-              },
+              "RouteValidator",
               "<P, Q, B> | undefined"
             ],
-            "path": "packages/core/http/core-http-server-utils/src/request.ts",
+            "path": "src/core/packages/http/server-utils/src/request.ts",
+            "lineNumber": 27,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false,
             "isRequired": false
@@ -158,7 +126,9 @@
             "signature": [
               "boolean"
             ],
-            "path": "packages/core/http/core-http-server-utils/src/request.ts",
+            "path": "src/core/packages/http/server-utils/src/request.ts",
+            "lineNumber": 28,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false,
             "isRequired": true

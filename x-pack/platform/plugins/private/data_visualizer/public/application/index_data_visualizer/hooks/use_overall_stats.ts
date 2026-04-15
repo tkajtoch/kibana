@@ -18,7 +18,7 @@ import { extractErrorProperties } from '@kbn/ml-error-utils';
 import { getProcessedFields } from '@kbn/ml-data-grid';
 import { isDefined } from '@kbn/ml-is-defined';
 import type { FieldSpec } from '@kbn/data-views-plugin/common';
-import type { MappingRuntimeFields } from '@elastic/elasticsearch/lib/api/typesWithBodyKey';
+import type { MappingRuntimeFields } from '@elastic/elasticsearch/lib/api/types';
 import { useDataVisualizerKibana } from '../../kibana_context';
 import type {
   AggregatableFieldOverallStats,
@@ -31,6 +31,7 @@ import {
   isAggregatableFieldOverallStats,
   isNonAggregatableFieldOverallStats,
   isNonAggregatableSampledDocs,
+  isUnsupportedVectorField,
   processAggregatableFieldsExistResponse,
   processNonAggregatableFieldsExistResponse,
 } from '../search_strategy/requests/overall_stats';
@@ -107,7 +108,8 @@ export function useOverallStats<TParams extends OverallStatsSearchStrategyParams
       // so don't try again
       if (!searchStrategyParams || populatedFieldsInIndexWithoutRuntimeFields === null) return;
 
-      const { index, searchQuery, timeFieldName, earliest, latest } = searchStrategyParams;
+      const { index, searchQuery, timeFieldName, earliest, latest, projectRouting } =
+        searchStrategyParams;
 
       const fetchPopulatedFields = async () => {
         populatedFieldsAbortCtrl.current.abort();
@@ -132,6 +134,7 @@ export function useOverallStats<TParams extends OverallStatsSearchStrategyParams
               },
             },
             includeEmptyFields: false,
+            projectRouting,
           }),
           populatedFieldsAbortCtrl.current
         );
@@ -159,6 +162,7 @@ export function useOverallStats<TParams extends OverallStatsSearchStrategyParams
       // eslint-disable-next-line react-hooks/exhaustive-deps
       JSON.stringify({ query: searchStrategyParams?.searchQuery }),
       searchStrategyParams?.index,
+      searchStrategyParams?.projectRouting,
     ]
   );
 
@@ -199,6 +203,7 @@ export function useOverallStats<TParams extends OverallStatsSearchStrategyParams
         samplingOption,
         sessionId,
         embeddableExecutionContext,
+        projectRouting,
       } = searchStrategyParams;
 
       const searchOptions: ISearchOptions = {
@@ -214,6 +219,9 @@ export function useOverallStats<TParams extends OverallStatsSearchStrategyParams
       const nonAggregatableFields = hasPopulatedFieldsInfo
         ? originalNonAggregatableFields.filter((fieldName) => populatedFieldsInIndex.has(fieldName))
         : originalNonAggregatableFields;
+      const supportedNonAggregatableFields = nonAggregatableFields.filter((fieldName) => {
+        return !isUnsupportedVectorField(fieldName);
+      });
 
       const documentCountStats = await getDocumentCountStats(
         data.search,
@@ -227,7 +235,7 @@ export function useOverallStats<TParams extends OverallStatsSearchStrategyParams
         .search<IKibanaSearchRequest, IKibanaSearchResponse>(
           {
             params: getSampleOfDocumentsForNonAggregatableFields(
-              nonAggregatableFields,
+              supportedNonAggregatableFields,
               index,
               searchQuery,
               timeFieldName,
@@ -244,7 +252,7 @@ export function useOverallStats<TParams extends OverallStatsSearchStrategyParams
           })
         );
 
-      const nonAggregatableFieldsObs = nonAggregatableFields.map((fieldName: string) =>
+      const nonAggregatableFieldsObs = supportedNonAggregatableFields.map((fieldName: string) =>
         data.search
           .search<IKibanaSearchRequest, IKibanaSearchResponse>(
             {
@@ -289,7 +297,8 @@ export function useOverallStats<TParams extends OverallStatsSearchStrategyParams
                 earliest,
                 latest,
                 undefined,
-                runtimeFieldMap
+                runtimeFieldMap,
+                projectRouting
               ),
             },
             searchOptions

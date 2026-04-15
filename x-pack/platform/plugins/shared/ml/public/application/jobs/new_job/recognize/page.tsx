@@ -46,6 +46,7 @@ import type { JobId } from '../../../../../common/types/anomaly_detection_jobs';
 import { ML_PAGES } from '../../../../../common/constants/locator';
 import { JobsAwaitingNodeWarning } from '../../../components/jobs_awaiting_node_warning';
 import { MlPageHeader } from '../../../components/page_header';
+import { PageTitle } from '../../../components/page_title';
 
 export interface ModuleJobUI extends ModuleJob {
   datafeedResult?: DatafeedResponse;
@@ -94,7 +95,7 @@ export const Page: FC<PageProps> = ({ moduleId, existingGroupIds }) => {
   const { selectedSavedSearch, selectedDataView: dataView, combinedQuery } = useDataSource();
   const pageTitle = selectedSavedSearch
     ? i18n.translate('xpack.ml.newJob.recognize.savedSearchPageTitle', {
-        defaultMessage: 'saved search {savedSearchTitle}',
+        defaultMessage: 'Discover session {savedSearchTitle}',
         values: { savedSearchTitle: selectedSavedSearch.title ?? '' },
       })
     : i18n.translate('xpack.ml.newJob.recognize.dataViewPageTitle', {
@@ -288,16 +289,21 @@ export const Page: FC<PageProps> = ({ moduleId, existingGroupIds }) => {
   return (
     <>
       <MlPageHeader>
-        <FormattedMessage
-          id="xpack.ml.newJob.recognize.newJobFromTitle"
-          defaultMessage="New job from {pageTitle}"
-          values={{ pageTitle }}
+        <PageTitle
+          title={
+            <FormattedMessage
+              id="xpack.ml.newJob.recognize.newJobFromTitle"
+              defaultMessage="New job from {pageTitle}"
+              values={{ pageTitle }}
+            />
+          }
         />
       </MlPageHeader>
 
       {displayQueryWarning && (
         <>
           <EuiCallOut
+            announceOnMount={false}
             title={
               <FormattedMessage
                 id="xpack.ml.newJob.recognize.searchWillBeOverwrittenLabel"
@@ -310,7 +316,7 @@ export const Page: FC<PageProps> = ({ moduleId, existingGroupIds }) => {
             <EuiText size="s">
               <FormattedMessage
                 id="xpack.ml.newJob.recognize.usingSavedSearchDescription"
-                defaultMessage="Using a saved search will mean the query used in the datafeeds will be different from the default ones we supply in the {moduleId} module."
+                defaultMessage="Using a saved Discover session will mean the query used in the datafeeds will be different from the default ones we supply in the {moduleId} module."
                 values={{ moduleId }}
               />
             </EuiText>

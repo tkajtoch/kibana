@@ -6,13 +6,14 @@
  */
 
 import moment from 'moment';
-import { QueryDslQueryContainer } from '@elastic/elasticsearch/lib/api/types';
-import type { EsQueryConfig, Filter } from '@kbn/es-query';
-import {
-  Aggregators,
+import type { estypes } from '@elastic/elasticsearch';
+import type { QueryDslQueryContainer } from '@elastic/elasticsearch/lib/api/types';
+import type { DataViewBase, EsQueryConfig, Filter } from '@kbn/es-query';
+import type {
   CustomMetricExpressionParams,
   SearchConfigurationType,
 } from '../../../../../common/custom_threshold_rule/types';
+import { Aggregators } from '../../../../../common/custom_threshold_rule/types';
 import { getSearchConfigurationBoolQuery } from '../../../../utils/get_parsed_filtered_query';
 import { createCustomMetricsAggregations } from './create_custom_metrics_aggregations';
 import {
@@ -24,6 +25,7 @@ import {
 } from '../utils';
 import { createBucketSelector } from './create_bucket_selector';
 import { wrapInCurrentPeriod } from './wrap_in_period';
+import { isPopulatedObject } from './is_populated_object';
 
 export const calculateCurrentTimeFrame = (
   metricParams: CustomMetricExpressionParams,
@@ -52,6 +54,7 @@ export const createBoolQuery = (
   timeframe: { start: number; end: number },
   timeFieldName: string,
   searchConfiguration: SearchConfigurationType,
+  dataView: DataViewBase | undefined,
   esQueryConfig: EsQueryConfig,
   additionalQueries: QueryDslQueryContainer[] = []
 ) => {
@@ -65,7 +68,7 @@ export const createBoolQuery = (
   };
   const filters = QueryDslQueryContainerToFilter([rangeQuery, ...additionalQueries]);
 
-  return getSearchConfigurationBoolQuery(searchConfiguration, filters, esQueryConfig);
+  return getSearchConfigurationBoolQuery(searchConfiguration, filters, dataView, esQueryConfig);
 };
 
 export const getElasticsearchMetricQuery = (
@@ -75,7 +78,9 @@ export const getElasticsearchMetricQuery = (
   compositeSize: number,
   alertOnGroupDisappear: boolean,
   searchConfiguration: SearchConfigurationType,
+  dataView: DataViewBase | undefined,
   esQueryConfig: EsQueryConfig,
+  runtimeMappings?: estypes.MappingRuntimeFields,
   lastPeriodEnd?: number,
   groupBy?: string | string[],
   afterKey?: Record<string, string>,
@@ -93,7 +98,8 @@ export const getElasticsearchMetricQuery = (
     metricParams.metrics,
     currentTimeFrame,
     timeFieldName,
-    metricParams.equation
+    metricParams.equation,
+    dataView
   );
 
   const bucketSelectorAggregations = createBucketSelector(
@@ -206,11 +212,18 @@ export const getElasticsearchMetricQuery = (
     aggs.groupings.composite.after = afterKey;
   }
 
-  const query = createBoolQuery(timeframe, timeFieldName, searchConfiguration, esQueryConfig);
+  const query = createBoolQuery(
+    timeframe,
+    timeFieldName,
+    searchConfiguration,
+    dataView,
+    esQueryConfig
+  );
 
   return {
     track_total_hits: true,
     query,
+    ...(isPopulatedObject(runtimeMappings) ? { runtime_mappings: runtimeMappings } : {}),
     size: 0,
     aggs,
   };

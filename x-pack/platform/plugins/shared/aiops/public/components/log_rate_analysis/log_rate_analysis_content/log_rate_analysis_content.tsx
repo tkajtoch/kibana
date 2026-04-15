@@ -9,7 +9,7 @@ import { isEqual } from 'lodash';
 import React, { useCallback, useEffect, useMemo, useRef, type FC } from 'react';
 import { EuiButton, EuiEmptyPrompt, EuiSpacer, EuiPanel } from '@elastic/eui';
 
-import type * as estypes from '@elastic/elasticsearch/lib/api/typesWithBodyKey';
+import type { estypes } from '@elastic/elasticsearch';
 import type { BarStyleAccessor } from '@elastic/charts/dist/chart_types/xy_chart/utils/specs';
 
 import { FormattedMessage } from '@kbn/i18n-react';
@@ -17,7 +17,7 @@ import {
   getWindowParametersForTrigger,
   getSnappedTimestamps,
   getSnappedWindowParameters,
-  LOG_RATE_ANALYSIS_HIGHLIGHT_COLOR,
+  useLogRateAnalysisBarColors,
   LOG_RATE_ANALYSIS_TYPE,
   type WindowParameters,
 } from '@kbn/aiops-log-rate-analysis';
@@ -40,8 +40,8 @@ import {
 import { useAiopsAppContext } from '../../../hooks/use_aiops_app_context';
 import { LogRateAnalysisAttachmentsMenu } from './log_rate_analysis_attachments_menu';
 
-export const DEFAULT_SEARCH_QUERY: estypes.QueryDslQueryContainer = { match_all: {} };
-const DEFAULT_SEARCH_BAR_QUERY: estypes.QueryDslQueryContainer = {
+export const DEFAULT_SEARCH_QUERY: NonNullable<estypes.QueryDslQueryContainer> = { match_all: {} };
+const DEFAULT_SEARCH_BAR_QUERY: NonNullable<estypes.QueryDslQueryContainer> = {
   bool: {
     filter: [],
     must: [
@@ -130,7 +130,7 @@ export const LogRateAnalysisContent: FC<LogRateAnalysisContentProps> = ({
   const barStyle = {
     rect: {
       opacity: 1,
-      fill: LOG_RATE_ANALYSIS_HIGHLIGHT_COLOR,
+      fill: useLogRateAnalysisBarColors().barHighlightColor,
     },
   };
 
@@ -282,7 +282,7 @@ export const LogRateAnalysisContent: FC<LogRateAnalysisContentProps> = ({
           hasBorder={false}
           css={{ minWidth: '100%' }}
           title={
-            <h2>
+            <h3>
               {changePointType === LOG_RATE_ANALYSIS_TYPE.SPIKE && (
                 <FormattedMessage
                   id="xpack.aiops.logRateAnalysis.page.changePointSpikePromptTitle"
@@ -302,7 +302,7 @@ export const LogRateAnalysisContent: FC<LogRateAnalysisContentProps> = ({
                     defaultMessage="Log rate change point detected"
                   />
                 )}
-            </h2>
+            </h3>
           }
           titleSize="xs"
           body={
@@ -334,12 +334,12 @@ export const LogRateAnalysisContent: FC<LogRateAnalysisContentProps> = ({
           hasBorder={false}
           css={{ minWidth: '100%' }}
           title={
-            <h2>
+            <h3>
               <FormattedMessage
                 id="xpack.aiops.logRateAnalysis.page.emptyPromptTitle"
                 defaultMessage="Start by clicking a spike or dip in the histogram chart."
               />
-            </h2>
+            </h3>
           }
           titleSize="xs"
           body={

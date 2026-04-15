@@ -7,7 +7,7 @@
 
 import { schema } from '@kbn/config-schema';
 import { addBasePath } from '../../../services';
-import { RouteDependencies } from '../../../types';
+import type { RouteDependencies } from '../../../types';
 
 /**
  * Pause auto-follow pattern(s)
@@ -24,6 +24,12 @@ export const registerPauseRoute = ({
   router.post(
     {
       path: addBasePath('/auto_follow_patterns/{id}/pause'),
+      security: {
+        authz: {
+          enabled: false,
+          reason: 'Relies on es client for authorization',
+        },
+      },
       validate: {
         params: paramsSchema,
       },

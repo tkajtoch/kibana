@@ -14,12 +14,34 @@
  *   version: 2023-10-31
  */
 
-import { z } from '@kbn/zod';
+import { z } from '@kbn/zod/v4';
 
-import { FindSavedQueryRequestQuery } from './find_saved_query.gen';
-import { DefaultSuccessResponse, SavedQueryId } from '../model/schema/common_attributes.gen';
-import { CreateSavedQueryRequestBody } from './create_saved_query.gen';
-import { UpdateSavedQueryRequestBody } from './update_saved_query.gen';
+import {
+  PageOrUndefined,
+  PageSizeOrUndefined,
+  SortOrUndefined,
+  SortOrderOrUndefined,
+  SavedQueryId,
+  DefaultSuccessResponse,
+} from '../model/schema/common_attributes.gen';
+import { FindSavedQueryResponse, FindSavedQueryDetailResponse } from './find_saved_query.gen';
+import { CreateSavedQueryRequestBody, CreateSavedQueryResponse } from './create_saved_query.gen';
+import { UpdateSavedQueryRequestBody, UpdateSavedQueryResponse } from './update_saved_query.gen';
+import { CopySavedQueryResponse } from './copy_saved_query.gen';
+
+export type OsqueryCopySavedQueryRequestParams = z.infer<typeof OsqueryCopySavedQueryRequestParams>;
+export const OsqueryCopySavedQueryRequestParams = z.object({
+  /**
+   * The ID of the saved query to copy.
+   */
+  id: SavedQueryId,
+});
+export type OsqueryCopySavedQueryRequestParamsInput = z.input<
+  typeof OsqueryCopySavedQueryRequestParams
+>;
+
+export type OsqueryCopySavedQueryResponse = z.infer<typeof OsqueryCopySavedQueryResponse>;
+export const OsqueryCopySavedQueryResponse = CopySavedQueryResponse;
 
 export type OsqueryCreateSavedQueryRequestBody = z.infer<typeof OsqueryCreateSavedQueryRequestBody>;
 export const OsqueryCreateSavedQueryRequestBody = CreateSavedQueryRequestBody;
@@ -28,12 +50,15 @@ export type OsqueryCreateSavedQueryRequestBodyInput = z.input<
 >;
 
 export type OsqueryCreateSavedQueryResponse = z.infer<typeof OsqueryCreateSavedQueryResponse>;
-export const OsqueryCreateSavedQueryResponse = DefaultSuccessResponse;
+export const OsqueryCreateSavedQueryResponse = CreateSavedQueryResponse;
 
 export type OsqueryDeleteSavedQueryRequestParams = z.infer<
   typeof OsqueryDeleteSavedQueryRequestParams
 >;
 export const OsqueryDeleteSavedQueryRequestParams = z.object({
+  /**
+   * The saved query ID.
+   */
   id: SavedQueryId,
 });
 export type OsqueryDeleteSavedQueryRequestParamsInput = z.input<
@@ -46,19 +71,37 @@ export type OsqueryFindSavedQueriesRequestQuery = z.infer<
   typeof OsqueryFindSavedQueriesRequestQuery
 >;
 export const OsqueryFindSavedQueriesRequestQuery = z.object({
-  query: FindSavedQueryRequestQuery,
+  /**
+   * The page number to return.
+   */
+  page: PageOrUndefined.optional(),
+  /**
+   * The number of results to return per page.
+   */
+  pageSize: PageSizeOrUndefined.optional(),
+  /**
+   * The field to sort results by.
+   */
+  sort: SortOrUndefined.optional(),
+  /**
+   * The sort order.
+   */
+  sortOrder: SortOrderOrUndefined.optional(),
 });
 export type OsqueryFindSavedQueriesRequestQueryInput = z.input<
   typeof OsqueryFindSavedQueriesRequestQuery
 >;
 
 export type OsqueryFindSavedQueriesResponse = z.infer<typeof OsqueryFindSavedQueriesResponse>;
-export const OsqueryFindSavedQueriesResponse = DefaultSuccessResponse;
+export const OsqueryFindSavedQueriesResponse = FindSavedQueryResponse;
 
 export type OsqueryGetSavedQueryDetailsRequestParams = z.infer<
   typeof OsqueryGetSavedQueryDetailsRequestParams
 >;
 export const OsqueryGetSavedQueryDetailsRequestParams = z.object({
+  /**
+   * The saved query ID.
+   */
   id: SavedQueryId,
 });
 export type OsqueryGetSavedQueryDetailsRequestParamsInput = z.input<
@@ -68,12 +111,15 @@ export type OsqueryGetSavedQueryDetailsRequestParamsInput = z.input<
 export type OsqueryGetSavedQueryDetailsResponse = z.infer<
   typeof OsqueryGetSavedQueryDetailsResponse
 >;
-export const OsqueryGetSavedQueryDetailsResponse = DefaultSuccessResponse;
+export const OsqueryGetSavedQueryDetailsResponse = FindSavedQueryDetailResponse;
 
 export type OsqueryUpdateSavedQueryRequestParams = z.infer<
   typeof OsqueryUpdateSavedQueryRequestParams
 >;
 export const OsqueryUpdateSavedQueryRequestParams = z.object({
+  /**
+   * The saved query ID.
+   */
   id: SavedQueryId,
 });
 export type OsqueryUpdateSavedQueryRequestParamsInput = z.input<
@@ -87,4 +133,4 @@ export type OsqueryUpdateSavedQueryRequestBodyInput = z.input<
 >;
 
 export type OsqueryUpdateSavedQueryResponse = z.infer<typeof OsqueryUpdateSavedQueryResponse>;
-export const OsqueryUpdateSavedQueryResponse = DefaultSuccessResponse;
+export const OsqueryUpdateSavedQueryResponse = UpdateSavedQueryResponse;

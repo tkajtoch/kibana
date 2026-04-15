@@ -8,21 +8,30 @@
 import { schema } from '@kbn/config-schema';
 
 export const nameParameterSchema = schema.object({
-  name: schema.string(),
+  name: schema.string({ maxLength: 1000 }),
 });
 
 const snapshotConfigSchema = schema.object({
-  indices: schema.maybe(schema.oneOf([schema.string(), schema.arrayOf(schema.string())])),
+  indices: schema.maybe(
+    schema.oneOf([
+      schema.string({ maxLength: 1000 }),
+      schema.arrayOf(schema.string({ maxLength: 1000 }), { maxSize: 1000 }),
+    ])
+  ),
   ignoreUnavailable: schema.maybe(schema.boolean()),
   includeGlobalState: schema.maybe(schema.boolean()),
-  featureStates: schema.maybe(schema.arrayOf(schema.string())),
+  featureStates: schema.maybe(
+    schema.arrayOf(schema.string({ maxLength: 1000 }), { maxSize: 1000 })
+  ),
   partial: schema.maybe(schema.boolean()),
-  metadata: schema.maybe(schema.recordOf(schema.string(), schema.string())),
+  metadata: schema.maybe(
+    schema.recordOf(schema.string({ maxLength: 1000 }), schema.string({ maxLength: 1000 }))
+  ),
 });
 
 const snapshotRetentionSchema = schema.object({
   expireAfterValue: schema.maybe(schema.oneOf([schema.number(), schema.literal('')])),
-  expireAfterUnit: schema.maybe(schema.string()),
+  expireAfterUnit: schema.maybe(schema.string({ maxLength: 1000 })),
   maxCount: schema.maybe(schema.oneOf([schema.number(), schema.literal('')])),
   minCount: schema.maybe(schema.oneOf([schema.number(), schema.literal('')])),
 });
@@ -45,6 +54,7 @@ export const snapshotListSchema = schema.object({
       schema.literal('snapshot'),
       schema.literal('repository'),
       schema.literal('policyName'),
+      schema.literal('state'),
     ])
   ),
   searchValue: schema.maybe(schema.string()),
@@ -55,76 +65,64 @@ export const snapshotListSchema = schema.object({
 export const policySchema = schema.object({
   name: schema.string({ maxLength: 1000 }),
   snapshotName: schema.string({ maxLength: 1000 }),
-  schedule: schema.string(),
-  repository: schema.string(),
+  schedule: schema.string({ maxLength: 1000 }),
+  repository: schema.string({ maxLength: 1000 }),
   config: schema.maybe(snapshotConfigSchema),
   retention: schema.maybe(snapshotRetentionSchema),
   isManagedPolicy: schema.boolean(),
 });
 
 // Only validate required settings, everything else is optional
-const fsRepositorySettings = schema.object({ location: schema.string() }, { unknowns: 'allow' });
-
-const fsRepositorySchema = schema.object({
-  name: schema.string({ maxLength: 1000 }),
-  type: schema.string(),
-  settings: fsRepositorySettings,
-});
+const fsRepositorySettings = schema.object(
+  { location: schema.string({ maxLength: 1000 }) },
+  { unknowns: 'allow' }
+);
 
 const readOnlyRepositorySettings = schema.object({
-  url: schema.string(),
-});
-
-const readOnlyRepository = schema.object({
-  name: schema.string({ maxLength: 1000 }),
-  type: schema.string(),
-  settings: readOnlyRepositorySettings,
+  url: schema.string({ maxLength: 1000 }),
 });
 
 // Only validate required settings, everything else is optional
-const s3RepositorySettings = schema.object({ bucket: schema.string() }, { unknowns: 'allow' });
-
-const s3Repository = schema.object({
-  name: schema.string({ maxLength: 1000 }),
-  type: schema.string(),
-  settings: s3RepositorySettings,
-});
+const s3RepositorySettings = schema.object(
+  { bucket: schema.string({ maxLength: 1000 }) },
+  { unknowns: 'allow' }
+);
 
 // Only validate required settings, everything else is optional
 const hdsRepositorySettings = schema.object(
   {
-    uri: schema.string(),
-    path: schema.string(),
+    uri: schema.string({ maxLength: 1000 }),
+    path: schema.string({ maxLength: 1000 }),
   },
   { unknowns: 'allow' }
 );
 
-const hdsfRepository = schema.object({
-  name: schema.string({ maxLength: 1000 }),
-  type: schema.string(),
-  settings: hdsRepositorySettings,
-});
-
 const azureRepositorySettings = schema.object({}, { unknowns: 'allow' });
 
-const azureRepository = schema.object({
-  name: schema.string({ maxLength: 1000 }),
-  type: schema.string(),
-  settings: azureRepositorySettings,
-});
-
 // Only validate required settings, everything else is optional
-const gcsRepositorySettings = schema.object({ bucket: schema.string() }, { unknowns: 'allow' });
+const gcsRepositorySettings = schema.object(
+  { bucket: schema.string({ maxLength: 1000 }) },
+  { unknowns: 'allow' }
+);
 
-const gcsRepository = schema.object({
-  name: schema.string({ maxLength: 1000 }),
-  type: schema.string(),
-  settings: gcsRepositorySettings,
-});
+const sourceRepositorySettings = schema.oneOf([
+  fsRepositorySettings,
+  readOnlyRepositorySettings,
+  s3RepositorySettings,
+  hdsRepositorySettings,
+  azureRepositorySettings,
+  gcsRepositorySettings,
+  schema.object(
+    {
+      delegateType: schema.string({ maxLength: 1000 }),
+    },
+    { unknowns: 'allow' }
+  ),
+]);
 
-const sourceRepository = schema.object({
+export const repositorySchema = schema.object({
   name: schema.string({ maxLength: 1000 }),
-  type: schema.string(),
+  type: schema.string({ maxLength: 1000 }),
   settings: schema.oneOf([
     fsRepositorySettings,
     readOnlyRepositorySettings,
@@ -132,34 +130,28 @@ const sourceRepository = schema.object({
     hdsRepositorySettings,
     azureRepositorySettings,
     gcsRepositorySettings,
-    schema.object(
-      {
-        delegateType: schema.string(),
-      },
-      { unknowns: 'allow' }
-    ),
+    sourceRepositorySettings,
   ]),
 });
 
-export const repositorySchema = schema.oneOf([
-  fsRepositorySchema,
-  readOnlyRepository,
-  sourceRepository,
-  s3Repository,
-  hdsfRepository,
-  azureRepository,
-  gcsRepository,
-]);
-
 export const restoreSettingsSchema = schema.object({
-  indices: schema.maybe(schema.oneOf([schema.string(), schema.arrayOf(schema.string())])),
-  renamePattern: schema.maybe(schema.string()),
-  renameReplacement: schema.maybe(schema.string()),
+  indices: schema.maybe(
+    schema.oneOf([
+      schema.string({ maxLength: 1000 }),
+      schema.arrayOf(schema.string({ maxLength: 1000 }), { maxSize: 1000 }),
+    ])
+  ),
+  renamePattern: schema.maybe(schema.string({ maxLength: 1000 })),
+  renameReplacement: schema.maybe(schema.string({ maxLength: 1000 })),
   includeGlobalState: schema.maybe(schema.boolean()),
-  featureStates: schema.maybe(schema.arrayOf(schema.string())),
+  featureStates: schema.maybe(
+    schema.arrayOf(schema.string({ maxLength: 1000 }), { maxSize: 1000 })
+  ),
   partial: schema.maybe(schema.boolean()),
-  indexSettings: schema.maybe(schema.string()),
-  ignoreIndexSettings: schema.maybe(schema.arrayOf(schema.string())),
+  indexSettings: schema.maybe(schema.string({ maxLength: 1000 })),
+  ignoreIndexSettings: schema.maybe(
+    schema.arrayOf(schema.string({ maxLength: 1000 }), { maxSize: 1000 })
+  ),
   ignoreUnavailable: schema.maybe(schema.boolean()),
   includeAliases: schema.maybe(schema.boolean()),
 });

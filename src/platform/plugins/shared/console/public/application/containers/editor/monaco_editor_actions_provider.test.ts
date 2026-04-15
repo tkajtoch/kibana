@@ -48,8 +48,14 @@ jest.mock('../../../lib/autocomplete/engine', () => {
   };
 });
 
+jest.mock('../../hooks', () => ({
+  sendRequest: jest.fn(),
+}));
+
 import { MonacoEditorActionsProvider } from './monaco_editor_actions_provider';
-import { monaco } from '@kbn/monaco';
+import type { monaco } from '@kbn/monaco';
+import { sendRequest } from '../../hooks';
+import { serviceContextMock } from '../../contexts/services_context.mock';
 
 describe('Editor actions provider', () => {
   let editorActionsProvider: MonacoEditorActionsProvider;
@@ -95,7 +101,11 @@ describe('Editor actions provider', () => {
 
     const setEditorActionsCssMock = jest.fn();
 
-    editorActionsProvider = new MonacoEditorActionsProvider(editor, setEditorActionsCssMock, true);
+    editorActionsProvider = new MonacoEditorActionsProvider(
+      editor,
+      setEditorActionsCssMock,
+      '.sampleHighlightedLinesClassName'
+    );
   });
 
   describe('getCurl', () => {
@@ -171,14 +181,12 @@ describe('Editor actions provider', () => {
     } as unknown as jest.Mocked<monaco.editor.ITextModel>;
     const mockPosition = { lineNumber: 1, column: 1 } as jest.Mocked<monaco.Position>;
     const mockContext = {} as jest.Mocked<monaco.languages.CompletionContext>;
-    const token = {} as jest.Mocked<monaco.CancellationToken>;
     it('returns completion items for method if no requests', async () => {
       mockGetParsedRequests.mockResolvedValue([]);
       const completionItems = await editorActionsProvider.provideCompletionItems(
         mockModel,
         mockPosition,
-        mockContext,
-        token
+        mockContext
       );
       expect(completionItems?.suggestions.length).toBe(6);
       const methods = completionItems?.suggestions.map((suggestion) => suggestion.label);
@@ -207,8 +215,7 @@ describe('Editor actions provider', () => {
       const completionItems = await editorActionsProvider.provideCompletionItems(
         mockModel,
         mockPosition,
-        mockContext,
-        token
+        mockContext
       );
       expect(completionItems?.suggestions.length).toBe(2);
       const endpoints = completionItems?.suggestions.map((suggestion) => suggestion.label);
@@ -558,6 +565,122 @@ describe('Editor actions provider', () => {
       };
       expect(editor.executeEdits).toHaveBeenCalledTimes(1);
       expect(editor.executeEdits).toHaveBeenCalledWith('restoreFromHistory', [expectedEdit]);
+    });
+  });
+
+  describe('isKbnRequestSelected', () => {
+    beforeEach(() => {
+      /*
+       * The editor has the text
+       * "POST _search" on line 1
+       *  and "GET kbn:test" on line 2
+       */
+      mockGetParsedRequests.mockReturnValue([
+        {
+          startOffset: 0,
+          method: 'POST',
+          url: '_search',
+          endOffset: 12,
+        },
+        {
+          startOffset: 13,
+          method: 'GET',
+          url: 'kbn:test',
+          endOffset: 25,
+        },
+      ]);
+
+      editor.getModel.mockReturnValue({
+        getPositionAt: (offset: number) => {
+          // mock this function for start and end offsets of the mocked requests
+          if (offset === 0) {
+            return { lineNumber: 1, column: 1 };
+          }
+          if (offset === 12) {
+            return { lineNumber: 1, column: 12 };
+          }
+          if (offset === 13) {
+            return { lineNumber: 2, column: 1 };
+          }
+          if (offset === 25) {
+            return { lineNumber: 2, column: 13 };
+          }
+        },
+        getLineContent: (lineNumber: number) => {
+          // mock this function for line 1 and line 2
+          if (lineNumber === 1) {
+            return 'POST _search';
+          }
+          if (lineNumber === 2) {
+            return 'GET kbn:test';
+          }
+        },
+      } as unknown as monaco.editor.ITextModel);
+    });
+
+    it('returns false if no requests', async () => {
+      mockGetParsedRequests.mockResolvedValue([]);
+      expect(await editorActionsProvider.isKbnRequestSelected()).toEqual(false);
+    });
+
+    it('returns true if a Kibana request is selected', async () => {
+      editor.getSelection.mockReturnValue({
+        startLineNumber: 2,
+        endLineNumber: 2,
+      } as monaco.Selection);
+
+      expect(await editorActionsProvider.isKbnRequestSelected()).toEqual(true);
+    });
+
+    it('returns false if a non-Kibana request is selected', async () => {
+      editor.getSelection.mockReturnValue({
+        startLineNumber: 1,
+        endLineNumber: 1,
+      } as monaco.Selection);
+
+      expect(await editorActionsProvider.isKbnRequestSelected()).toEqual(false);
+    });
+
+    it('returns true if multiple requests are selected and one of them is a Kibana request', async () => {
+      editor.getSelection.mockReturnValue({
+        startLineNumber: 1,
+        endLineNumber: 2,
+      } as monaco.Selection);
+
+      expect(await editorActionsProvider.isKbnRequestSelected()).toEqual(true);
+    });
+  });
+
+  describe('sendRequests', () => {
+    afterEach(() => {
+      jest.clearAllMocks();
+    });
+
+    it('falls back to server default and clears stale host when stored host is not in the allowlist', async () => {
+      (sendRequest as jest.Mock).mockResolvedValue([]);
+
+      const context = serviceContextMock.create();
+      jest
+        .spyOn(context.services.settings, 'getSelectedHost')
+        .mockReturnValue('http://localhost:9300/');
+      const setSelectedHostSpy = jest.spyOn(context.services.settings, 'setSelectedHost');
+      jest.spyOn(context.services.esHostService, 'waitForInitialization').mockResolvedValue();
+      jest
+        .spyOn(context.services.esHostService, 'getAllHosts')
+        .mockReturnValue(['https://localhost:9200/']);
+
+      // Use a custom provider that includes getErrors so sendRequests can proceed past validation
+      const provider = new MonacoEditorActionsProvider(editor, jest.fn(), '.className', {
+        getRequests: jest
+          .fn()
+          .mockResolvedValue([{ startOffset: 0, endOffset: 11, method: 'GET', url: '_search' }]),
+        getErrors: jest.fn().mockResolvedValue([]),
+      } as any);
+
+      await provider.sendRequests(jest.fn(), context);
+
+      expect(sendRequest).toHaveBeenCalledWith(expect.objectContaining({ host: undefined }));
+      expect(setSelectedHostSpy).toHaveBeenCalledWith(null);
     });
   });
 });

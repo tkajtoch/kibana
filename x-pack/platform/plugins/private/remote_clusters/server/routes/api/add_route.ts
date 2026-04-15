@@ -6,25 +6,27 @@
  */
 
 import { get } from 'lodash';
-import { schema, TypeOf } from '@kbn/config-schema';
+import type { TypeOf } from '@kbn/config-schema';
+import { schema } from '@kbn/config-schema';
 import { i18n } from '@kbn/i18n';
-import { RequestHandler } from '@kbn/core/server';
+import type { RequestHandler } from '@kbn/core/server';
 
-import { serializeCluster, Cluster } from '../../../common/lib';
+import type { Cluster } from '../../../common/lib';
+import { serializeCluster } from '../../../common/lib';
 import { doesClusterExist } from '../../lib/does_cluster_exist';
 import { API_BASE_PATH, PROXY_MODE, SNIFF_MODE } from '../../../common/constants';
 import { licensePreRoutingFactory } from '../../lib/license_pre_routing_factory';
-import { RouteDependencies } from '../../types';
+import type { RouteDependencies } from '../../types';
 
 const bodyValidation = schema.object({
   name: schema.string({ maxLength: 1000 }),
   skipUnavailable: schema.boolean(),
   mode: schema.oneOf([schema.literal(PROXY_MODE), schema.literal(SNIFF_MODE)]),
-  seeds: schema.nullable(schema.arrayOf(schema.string())),
+  seeds: schema.nullable(schema.arrayOf(schema.string({ maxLength: 1000 }), { maxSize: 1000 })),
   nodeConnections: schema.nullable(schema.number()),
-  proxyAddress: schema.nullable(schema.string()),
+  proxyAddress: schema.nullable(schema.string({ maxLength: 1000 })),
   proxySocketConnections: schema.nullable(schema.number()),
-  serverName: schema.nullable(schema.string()),
+  serverName: schema.nullable(schema.string({ maxLength: 1000 })),
 });
 
 type RouteBody = TypeOf<typeof bodyValidation>;
@@ -61,9 +63,9 @@ export const register = (deps: RouteDependencies): void => {
       }
 
       const addClusterPayload = serializeCluster(request.body as Cluster);
-      const updateClusterResponse = await clusterClient.asCurrentUser.cluster.putSettings({
-        body: addClusterPayload,
-      });
+      const updateClusterResponse = await clusterClient.asCurrentUser.cluster.putSettings(
+        addClusterPayload
+      );
       const acknowledged = get(updateClusterResponse, 'acknowledged');
       const cluster = get(updateClusterResponse, `persistent.cluster.remote.${name}`);
 
@@ -95,6 +97,12 @@ export const register = (deps: RouteDependencies): void => {
   router.post(
     {
       path: API_BASE_PATH,
+      security: {
+        authz: {
+          enabled: false,
+          reason: 'Relies on es client for authorization',
+        },
+      },
       validate: {
         body: bodyValidation,
       },

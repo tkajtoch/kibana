@@ -6,11 +6,11 @@
  */
 
 import { schema } from '@kbn/config-schema';
-import { IScopedClusterClient } from '@kbn/core/server';
+import type { IScopedClusterClient } from '@kbn/core/server';
 import { get } from 'lodash';
 // @ts-ignore
 import { Watch } from '../../../models/watch';
-import { RouteDependencies } from '../../../types';
+import type { RouteDependencies } from '../../../types';
 
 const paramsSchema = schema.object({
   id: schema.string(),
@@ -26,6 +26,12 @@ export function registerLoadRoute({ router, license, lib: { handleEsError } }: R
   router.get(
     {
       path: '/api/watcher/watch/{id}',
+      security: {
+        authz: {
+          enabled: false,
+          reason: 'Relies on es client for authorization',
+        },
+      },
       validate: {
         params: paramsSchema,
       },

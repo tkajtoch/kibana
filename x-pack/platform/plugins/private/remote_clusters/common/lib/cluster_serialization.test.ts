@@ -5,6 +5,7 @@
  * 2.0.
  */
 
+import { SECURITY_MODEL } from '../constants';
 import { deserializeCluster, serializeCluster } from './cluster_serialization';
 
 describe('cluster_serialization', () => {
@@ -12,6 +13,52 @@ describe('cluster_serialization', () => {
     it('should throw an error for invalid arguments', () => {
       // @ts-ignore
       expect(() => deserializeCluster('foo', 'bar')).toThrowError();
+    });
+
+    it('should deserialize boolean-like string values from ES settings', () => {
+      expect(
+        deserializeCluster('test_cluster', {
+          seeds: ['localhost:9300'],
+          connected: true,
+          mode: 'sniff',
+          initial_connect_timeout: '30s',
+          // ES cluster settings can return booleans as strings (e.g. "false")
+          skip_unavailable: 'false' as any,
+        })
+      ).toEqual({
+        name: 'test_cluster',
+        mode: 'sniff',
+        seeds: ['localhost:9300'],
+        isConnected: true,
+        initialConnectTimeout: '30s',
+        skipUnavailable: false,
+        securityModel: SECURITY_MODEL.CERTIFICATE,
+        nodeConnections: null,
+      });
+    });
+
+    it('should deserialize numeric string values from ES settings', () => {
+      expect(
+        deserializeCluster('test_cluster', {
+          proxy_address: 'localhost:9300',
+          mode: 'proxy',
+          connected: true,
+          initial_connect_timeout: '30s',
+          proxy_socket_connections: '18' as any,
+          skip_unavailable: 'true' as any,
+          server_name: 'my_server_name',
+        })
+      ).toEqual({
+        name: 'test_cluster',
+        mode: 'proxy',
+        proxyAddress: 'localhost:9300',
+        isConnected: true,
+        initialConnectTimeout: '30s',
+        skipUnavailable: true,
+        proxySocketConnections: 18,
+        serverName: 'my_server_name',
+        securityModel: SECURITY_MODEL.CERTIFICATE,
+      });
     });
 
     it('should deserialize a complete default cluster object', () => {
@@ -40,7 +87,8 @@ describe('cluster_serialization', () => {
         skipUnavailable: false,
         transportPingSchedule: '-1',
         transportCompress: false,
-        securityModel: 'certificate',
+        securityModel: SECURITY_MODEL.CERTIFICATE,
+        nodeConnections: null,
       });
     });
 
@@ -66,13 +114,14 @@ describe('cluster_serialization', () => {
         proxyAddress: 'localhost:9300',
         isConnected: true,
         connectedSocketsCount: 1,
-        proxySocketConnections: 3,
+        maxProxySocketConnections: 3,
+        proxySocketConnections: null,
         initialConnectTimeout: '30s',
         skipUnavailable: false,
         transportPingSchedule: '-1',
         transportCompress: false,
         serverName: 'my_server_name',
-        securityModel: 'certificate',
+        securityModel: SECURITY_MODEL.CERTIFICATE,
       });
     });
 
@@ -94,7 +143,7 @@ describe('cluster_serialization', () => {
         maxConnectionsPerCluster: 3,
         initialConnectTimeout: '30s',
         skipUnavailable: false,
-        securityModel: 'certificate',
+        securityModel: SECURITY_MODEL.CERTIFICATE,
       });
     });
 
@@ -128,45 +177,56 @@ describe('cluster_serialization', () => {
         skipUnavailable: false,
         transportPingSchedule: '-1',
         transportCompress: false,
-        securityModel: 'certificate',
+        securityModel: SECURITY_MODEL.CERTIFICATE,
       });
     });
 
-    it('should deserialize a cluster that contains a deprecated proxy address and is in cloud', () => {
-      expect(
-        deserializeCluster(
-          'test_cluster',
-          {
-            seeds: ['localhost:9300'],
-            connected: true,
-            num_nodes_connected: 1,
-            max_connections_per_cluster: 3,
-            initial_connect_timeout: '30s',
-            skip_unavailable: false,
-            transport: {
-              ping_schedule: '-1',
-              compress: false,
+    it.each([
+      { title: '(hostname)', address: 'localhost:3000', host: 'localhost' },
+      { title: '(IPv4)', address: '123.1.2.142:3000', host: '123.1.2.142' },
+      {
+        title: '(IPv6)',
+        address: '[2001:0db8:85a3:0000:0000:8a2e:0370:7334]:3000',
+        host: '[2001:0db8:85a3:0000:0000:8a2e:0370:7334]',
+      },
+    ])(
+      'should deserialize a cluster that contains a deprecated proxy address and is in cloud $title',
+      ({ address, host }) => {
+        expect(
+          deserializeCluster(
+            'test_cluster',
+            {
+              seeds: [address],
+              connected: true,
+              num_nodes_connected: 1,
+              max_connections_per_cluster: 3,
+              initial_connect_timeout: '30s',
+              skip_unavailable: false,
+              transport: {
+                ping_schedule: '-1',
+                compress: false,
+              },
             },
-          },
-          'localhost:9300',
-          true
-        )
-      ).toEqual({
-        name: 'test_cluster',
-        proxyAddress: 'localhost:9300',
-        mode: 'proxy',
-        hasDeprecatedProxySetting: true,
-        isConnected: true,
-        connectedNodesCount: 1,
-        maxConnectionsPerCluster: 3,
-        initialConnectTimeout: '30s',
-        skipUnavailable: false,
-        transportPingSchedule: '-1',
-        transportCompress: false,
-        serverName: 'localhost',
-        securityModel: 'certificate',
-      });
-    });
+            address,
+            true
+          )
+        ).toEqual({
+          name: 'test_cluster',
+          proxyAddress: address,
+          mode: 'proxy',
+          hasDeprecatedProxySetting: true,
+          isConnected: true,
+          connectedNodesCount: 1,
+          maxConnectionsPerCluster: 3,
+          initialConnectTimeout: '30s',
+          skipUnavailable: false,
+          transportPingSchedule: '-1',
+          transportCompress: false,
+          serverName: host,
+          securityModel: SECURITY_MODEL.CERTIFICATE,
+        });
+      }
+    );
 
     it('should deserialize a cluster object with arbitrary missing properties', () => {
       expect(
@@ -186,7 +246,7 @@ describe('cluster_serialization', () => {
         connectedNodesCount: 1,
         initialConnectTimeout: '30s',
         transportCompress: false,
-        securityModel: 'certificate',
+        securityModel: SECURITY_MODEL.CERTIFICATE,
       });
     });
 
@@ -217,7 +277,86 @@ describe('cluster_serialization', () => {
         skipUnavailable: false,
         transportPingSchedule: '-1',
         transportCompress: false,
-        securityModel: 'api_key',
+        securityModel: SECURITY_MODEL.API,
+        nodeConnections: null,
+      });
+    });
+
+    it('should deserialize a cluster with node connections information', () => {
+      expect(
+        deserializeCluster(
+          'test_cluster',
+          {
+            seeds: ['localhost:9300'],
+            connected: true,
+            mode: 'sniff',
+            num_nodes_connected: 1,
+            max_connections_per_cluster: 3,
+            initial_connect_timeout: '30s',
+            skip_unavailable: false,
+            transport: {
+              ping_schedule: '-1',
+              compress: false,
+            },
+            cluster_credentials: '::es_redacted::',
+          },
+          undefined,
+          undefined,
+          2
+        )
+      ).toEqual({
+        name: 'test_cluster',
+        mode: 'sniff',
+        seeds: ['localhost:9300'],
+        isConnected: true,
+        connectedNodesCount: 1,
+        maxConnectionsPerCluster: 3,
+        initialConnectTimeout: '30s',
+        skipUnavailable: false,
+        transportPingSchedule: '-1',
+        transportCompress: false,
+        securityModel: SECURITY_MODEL.API,
+        nodeConnections: 2,
+      });
+    });
+
+    it('should deserialize a cluster with proxy socket connections information', () => {
+      expect(
+        deserializeCluster(
+          'test_cluster',
+          {
+            proxy_address: 'localhost:9300',
+            mode: 'proxy',
+            connected: true,
+            num_proxy_sockets_connected: 1,
+            max_proxy_socket_connections: 3,
+            initial_connect_timeout: '30s',
+            skip_unavailable: false,
+            server_name: 'my_server_name',
+            transport: {
+              ping_schedule: '-1',
+              compress: false,
+            },
+          },
+          undefined,
+          undefined,
+          undefined,
+          3
+        )
+      ).toEqual({
+        name: 'test_cluster',
+        mode: 'proxy',
+        proxyAddress: 'localhost:9300',
+        isConnected: true,
+        connectedSocketsCount: 1,
+        maxProxySocketConnections: 3,
+        proxySocketConnections: 3,
+        initialConnectTimeout: '30s',
+        skipUnavailable: false,
+        transportPingSchedule: '-1',
+        transportCompress: false,
+        serverName: 'my_server_name',
+        securityModel: SECURITY_MODEL.CERTIFICATE,
       });
     });
   });
@@ -251,8 +390,6 @@ describe('cluster_serialization', () => {
                 skip_unavailable: false,
                 server_name: 'localhost',
                 proxy: null,
-                seeds: null,
-                node_connections: null,
               },
             },
           },
@@ -281,11 +418,8 @@ describe('cluster_serialization', () => {
               test_cluster: {
                 mode: 'sniff',
                 node_connections: null,
-                proxy_address: null,
-                proxy_socket_connections: null,
                 seeds: ['localhost:9300'],
                 skip_unavailable: false,
-                server_name: null,
               },
             },
           },
@@ -306,10 +440,69 @@ describe('cluster_serialization', () => {
               test_cluster: {
                 mode: null,
                 node_connections: null,
-                proxy_address: null,
-                proxy_socket_connections: null,
                 seeds: ['localhost:9300'],
                 skip_unavailable: null,
+              },
+            },
+          },
+        },
+      });
+    });
+
+    it('should serialize a cluster object that will be deleted', () => {
+      expect(
+        serializeCluster(
+          {
+            name: 'test_cluster',
+            seeds: ['localhost:9300'],
+          },
+          undefined,
+          true
+        )
+      ).toEqual({
+        persistent: {
+          cluster: {
+            remote: {
+              test_cluster: {
+                mode: null,
+                node_connections: null,
+                seeds: ['localhost:9300'],
+                skip_unavailable: null,
+                proxy_address: null,
+                proxy_socket_connections: null,
+                server_name: null,
+              },
+            },
+          },
+        },
+      });
+    });
+
+    it('should serialize a cluster object that has modified mode', () => {
+      expect(
+        serializeCluster(
+          {
+            name: 'test_cluster',
+            seeds: ['localhost:9300'],
+            isConnected: true,
+            connectedNodesCount: 1,
+            maxConnectionsPerCluster: 3,
+            mode: 'sniff',
+            nodeConnections: 18,
+          },
+          'proxy'
+        )
+      ).toEqual({
+        persistent: {
+          cluster: {
+            remote: {
+              test_cluster: {
+                mode: 'sniff',
+                node_connections: 18,
+                seeds: ['localhost:9300'],
+                skip_unavailable: null,
+                proxy_address: null,
+                proxy_socket_connections: null,
                 server_name: null,
               },
             },

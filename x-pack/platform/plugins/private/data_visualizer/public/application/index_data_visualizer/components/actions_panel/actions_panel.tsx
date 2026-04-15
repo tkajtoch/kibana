@@ -17,9 +17,9 @@ import type { DataView } from '@kbn/data-views-plugin/public';
 import { useUrlState } from '@kbn/ml-url-state';
 import { isDefined } from '@kbn/ml-is-defined';
 
-import type { LinkCardProps } from '../../../common/components/link_card/link_card';
+import type { LinkCardProps } from '../../../common/components/results_links/link_card';
 import { useDataVisualizerKibana } from '../../../kibana_context';
-import { LinkCard } from '../../../common/components/link_card';
+import { LinkCard } from '../../../common/components/results_links/link_card';
 import type { GetAdditionalLinks } from '../../../common/components/results_links';
 
 interface Props {
@@ -56,7 +56,7 @@ export const ActionsPanel: FC<Props> = ({
     const dataViewId = dataView.id;
     const dataViewIndexPattern = dataView.getIndexPattern();
     const getDiscoverUrl = async (): Promise<void> => {
-      const isDiscoverAvailable = capabilities.discover?.show ?? false;
+      const isDiscoverAvailable = capabilities.discover_v2?.show ?? false;
       if (!isDiscoverAvailable) return;
       const discoverLocator = url?.locators.get('DISCOVER_APP_LOCATOR');
 

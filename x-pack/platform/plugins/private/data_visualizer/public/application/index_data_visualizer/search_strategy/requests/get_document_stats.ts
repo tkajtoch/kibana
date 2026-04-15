@@ -6,7 +6,7 @@
  */
 
 import { each, get, sortedIndex } from 'lodash';
-import type * as estypes from '@elastic/elasticsearch/lib/api/typesWithBodyKey';
+import type { estypes } from '@elastic/elasticsearch';
 import { isPopulatedObject } from '@kbn/ml-is-populated-object';
 import type { ISearchOptions } from '@kbn/search-types';
 import type { DataPublicPluginStart } from '@kbn/data-plugin/public';
@@ -40,6 +40,7 @@ export const getDocumentCountStats = async (
     runtimeFieldMap,
     searchQuery,
     intervalMs,
+    projectRouting,
   } = params;
 
   // Probability = 1 represents no sampling
@@ -91,13 +92,12 @@ export const getDocumentCountStats = async (
 
   const getSearchParams = (aggregations: unknown, trackTotalHits = false) => ({
     index,
-    body: {
-      query,
-      ...(hasTimeField ? { aggs: aggregations } : {}),
-      ...(isPopulatedObject(runtimeFieldMap) ? { runtime_mappings: runtimeFieldMap } : {}),
-    },
+    query,
+    ...(hasTimeField ? { aggs: aggregations } : {}),
+    ...(isPopulatedObject(runtimeFieldMap) ? { runtime_mappings: runtimeFieldMap } : {}),
     track_total_hits: trackTotalHits,
     size: 0,
+    ...(projectRouting ? { project_routing: projectRouting } : {}),
   });
   const firstResp = await search
     .search(

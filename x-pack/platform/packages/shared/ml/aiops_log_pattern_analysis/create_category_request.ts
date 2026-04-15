@@ -6,7 +6,7 @@
  */
 
 import type { QueryDslQueryContainer } from '@elastic/elasticsearch/lib/api/types';
-import type { MappingRuntimeFields } from '@elastic/elasticsearch/lib/api/typesWithBodyKey';
+import type { MappingRuntimeFields } from '@elastic/elasticsearch/lib/api/types';
 import { isPopulatedObject } from '@kbn/ml-is-populated-object/src/is_populated_object';
 
 import type { createRandomSamplerWrapper } from '@kbn/ml-random-sampler-utils';
@@ -30,18 +30,20 @@ export function createCategoryRequest(
   timeRange: { from: number; to: number } | undefined,
   queryIn: QueryDslQueryContainer,
   runtimeMappings: MappingRuntimeFields | undefined,
+  projectRouting: string | undefined,
   wrap: ReturnType<typeof createRandomSamplerWrapper>['wrap'],
   intervalMs?: number,
   additionalFilter?: CategorizationAdditionalFilter,
   useStandardTokenizer: boolean = true,
-  includeSparkline: boolean = true
+  includeSparkline: boolean = true,
+  categoryLimit: number = CATEGORY_LIMIT
 ) {
   const query = createDefaultQuery(queryIn, timeField, timeRange);
   const aggs = {
     categories: {
       categorize_text: {
         field,
-        size: CATEGORY_LIMIT,
+        size: categoryLimit,
         ...(useStandardTokenizer ? { categorization_analyzer: categorizationAnalyzer } : {}),
       },
       aggs: {
@@ -110,12 +112,11 @@ export function createCategoryRequest(
   return {
     params: {
       index,
-      body: {
-        query,
-        aggs: wrap(aggs),
-        ...(isPopulatedObject(runtimeMappings) ? { runtime_mappings: runtimeMappings } : {}),
-        size: 0,
-      },
+      query,
+      aggs: wrap(aggs),
+      ...(isPopulatedObject(runtimeMappings) ? { runtime_mappings: runtimeMappings } : {}),
+      ...(projectRouting ? { project_routing: projectRouting } : {}),
+      size: 0,
     },
   };
 }

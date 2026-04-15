@@ -8,9 +8,7 @@
 import {
   EuiBadge,
   EuiEmptyPrompt,
-  EuiIcon,
   EuiInMemoryTable,
-  EuiToolTip,
   type DefaultItemAction,
   type EuiBasicTableColumn,
 } from '@elastic/eui';
@@ -28,7 +26,7 @@ import {
   type ChangePointAnnotation,
 } from './change_point_detection_context';
 import { type ChartComponentProps } from './chart_component';
-import { NoChangePointsWarning } from './no_change_points_warning';
+import { NoDataFoundWarning } from './no_data_warning';
 import { useCommonChartProps } from './use_common_chart_props';
 
 export interface ChangePointsTableProps {
@@ -176,41 +174,29 @@ export const ChangePointsTable: FC<ChangePointsTableProps> = ({
       sortable: true,
       truncateText: false,
       render: (type: ChangePointAnnotation['type']) => <EuiBadge color="hollow">{type}</EuiBadge>,
+      width: '150px',
     },
     {
       id: 'pValue',
       'data-test-subj': 'aiopsChangePointPValue',
       field: 'p_value',
-      name: (
-        <EuiToolTip
-          content={i18n.translate('xpack.aiops.changePointDetection.pValueTooltip', {
-            defaultMessage:
-              'Indicates how extreme the change is. Lower values indicate greater change.',
-          })}
-        >
-          <span>
-            {i18n.translate('xpack.aiops.changePointDetection.pValueLabel', {
-              defaultMessage: 'p-value',
-            })}
-            <EuiIcon size="s" color="subdued" type="questionInCircle" className="eui-alignTop" />
-          </span>
-        </EuiToolTip>
-      ),
+      name: i18n.translate('xpack.aiops.changePointDetection.pValueColumn', {
+        defaultMessage: 'p-value',
+      }),
+      nameTooltip: {
+        content: i18n.translate('xpack.aiops.changePointDetection.pValueTooltip', {
+          defaultMessage:
+            'Indicates how extreme the change is. Lower values indicate greater change.',
+        }),
+      },
       sortable: true,
       truncateText: false,
-      render: (pValue: ChangePointAnnotation['p_value']) => pValue.toPrecision(3),
+      render: (pValue: ChangePointAnnotation['p_value']) =>
+        pValue !== undefined ? pValue.toPrecision(3) : '-',
+      width: '130px',
     },
     ...(fieldConfig.splitField
       ? [
-          {
-            id: 'groupName',
-            'data-test-subj': 'aiopsChangePointGroupName',
-            field: 'group.name',
-            name: i18n.translate('xpack.aiops.changePointDetection.fieldNameColumn', {
-              defaultMessage: 'Field name',
-            }),
-            truncateText: false,
-          },
           {
             id: 'groupValue',
             'data-test-subj': 'aiopsChangePointGroupValue',
@@ -241,7 +227,7 @@ export const ChangePointsTable: FC<ChangePointsTableProps> = ({
                           defaultMessage: 'Filter for value',
                         }
                       ),
-                      icon: 'plusInCircle',
+                      icon: 'plusCircle',
                       color: 'primary',
                       type: 'icon',
                       onClick: (item) => {
@@ -269,7 +255,7 @@ export const ChangePointsTable: FC<ChangePointsTableProps> = ({
                           defaultMessage: 'Filter out value',
                         }
                       ),
-                      icon: 'minusInCircle',
+                      icon: 'minusCircle',
                       color: 'primary',
                       type: 'icon',
                       onClick: (item) => {
@@ -311,6 +297,10 @@ export const ChangePointsTable: FC<ChangePointsTableProps> = ({
 
   return (
     <EuiInMemoryTable<ChangePointAnnotation>
+      tableLayout="auto"
+      tableCaption={i18n.translate('xpack.aiops.changePointDetection.resultsTableCaption', {
+        defaultMessage: 'Change point detection results',
+      })}
       itemId="id"
       selection={selectionValue}
       loading={isLoading}
@@ -325,21 +315,22 @@ export const ChangePointsTable: FC<ChangePointsTableProps> = ({
       rowProps={(item) => ({
         'data-test-subj': `aiopsChangePointResultsTableRow row-${item.id}`,
       })}
-      message={
+      noItemsMessage={
         isLoading ? (
           <EuiEmptyPrompt
-            iconType="search"
+            iconType="magnify"
             title={
-              <h2>
+              <h3>
                 <FormattedMessage
                   id="xpack.aiops.changePointDetection.fetchingChangePointsTitle"
                   defaultMessage="Fetching change points..."
                 />
-              </h2>
+              </h3>
             }
+            titleSize="xs"
           />
         ) : (
-          <NoChangePointsWarning />
+          <NoDataFoundWarning />
         )
       }
     />

@@ -47,11 +47,11 @@ describe('createFilterOutAction', () => {
   });
 
   it('should return display name', () => {
-    expect(filterOutAction.getDisplayName(context)).toEqual('Filter Out');
+    expect(filterOutAction.getDisplayName(context)).toEqual('Filter out');
   });
 
   it('should return icon type', () => {
-    expect(filterOutAction.getIconType(context)).toEqual('minusInCircle');
+    expect(filterOutAction.getIconType(context)).toEqual('minusCircle');
   });
 
   describe('isCompatible', () => {

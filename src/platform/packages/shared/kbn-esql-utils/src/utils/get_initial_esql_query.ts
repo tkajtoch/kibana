@@ -8,19 +8,67 @@
  */
 
 import type { DataView } from '@kbn/data-views-plugin/public';
+import { type Filter, type Query, escapeQuotes } from '@kbn/es-query';
+import { convertFiltersToESQLExpression } from './convert_filters_to_esql';
+
+const getFilterBySearchText = (query?: Query) => {
+  if (!query) {
+    return '';
+  }
+  const searchTextFunc =
+    query.language === 'kuery' ? 'KQL' : query.language === 'lucene' ? 'QSTR' : '';
+
+  if (searchTextFunc && query.query) {
+    const escapedQuery =
+      typeof query.query === 'string' && query.language === 'lucene'
+        ? escapeQuotes(query.query)
+        : query.query;
+    return `${searchTextFunc}("""${escapedQuery}""")`;
+  }
+  return '';
+};
+
+const getFinalWhereClause = (
+  timeFilter?: string,
+  queryFilter?: string,
+  filtersExpression?: string
+) => {
+  const parts = [timeFilter, queryFilter, filtersExpression].filter(Boolean);
+  if (parts.length === 0) {
+    return '';
+  }
+  return ` | WHERE ${parts.join(' AND ')}`;
+};
 
 /**
  * Builds an ES|QL query for the provided dataView
  * If there is @timestamp field in the index, we don't add the WHERE clause
  * If there is no @timestamp and there is a dataView timeFieldName, we add the WHERE clause with the timeFieldName
+ * If the index pattern contains TSDB fields, we add the TS command, otherwise we add the FROM command
  * @param dataView
+ * @param query
+ * @param filters - DSL filters to convert to ES|QL WHERE clauses
  */
-export function getInitialESQLQuery(dataView: DataView): string {
+export function getInitialESQLQuery(dataView: DataView, query?: Query, filters?: Filter[]): string {
   const hasAtTimestampField = dataView?.fields?.getByName?.('@timestamp')?.type === 'date';
   const timeFieldName = dataView?.timeFieldName;
   const filterByTimeParams =
     !hasAtTimestampField && timeFieldName
-      ? ` | WHERE ${timeFieldName} >= ?_tstart AND ${timeFieldName} <= ?_tend`
+      ? `${timeFieldName} >= ?_tstart AND ${timeFieldName} <= ?_tend`
       : '';
-  return `FROM ${dataView.getIndexPattern()}${filterByTimeParams} | LIMIT 10`;
+
+  const filterBySearchText = getFilterBySearchText(query);
+
+  const { esqlExpression: filtersExpression } = filters?.length
+    ? convertFiltersToESQLExpression(filters)
+    : { esqlExpression: '' };
+
+  const whereClause = getFinalWhereClause(
+    filterByTimeParams,
+    filterBySearchText,
+    filtersExpression || undefined
+  );
+  const sourceCommand = dataView.isTSDBMode() ? 'TS' : 'FROM';
+
+  return `${sourceCommand} ${dataView.getIndexPattern()}${whereClause}`;
 }

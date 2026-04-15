@@ -7,20 +7,16 @@
 
 import { loggerMock } from '@kbn/logging-mocks';
 import { actionsClientMock } from '@kbn/actions-plugin/server/actions_client/actions_client.mock';
+import type { InferenceClient } from '@kbn/inference-common';
 
 import { ActionsClientLlm } from './llm';
 import { mockActionResponse } from './mocks';
+import { getDefaultArguments } from '..';
+import { DEFAULT_TIMEOUT } from './constants';
 
 const connectorId = 'mock-connector-id';
 
 const actionsClient = actionsClientMock.create();
-
-actionsClient.execute.mockImplementation(
-  jest.fn().mockImplementation(() => ({
-    data: mockActionResponse,
-    status: 'ok',
-  }))
-);
 
 const mockLogger = loggerMock.create();
 
@@ -29,20 +25,12 @@ const prompt = 'Do you know my name?';
 describe('ActionsClientLlm', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-  });
-
-  describe('getActionResultData', () => {
-    it('returns the expected data', async () => {
-      const actionsClientLlm = new ActionsClientLlm({
-        actionsClient,
-        connectorId,
-        logger: mockLogger,
-      });
-
-      const result = await actionsClientLlm._call(prompt); // ignore the result
-
-      expect(result).toEqual(mockActionResponse.message);
-    });
+    actionsClient.execute.mockImplementation(
+      jest.fn().mockImplementation(() => ({
+        data: mockActionResponse,
+        status: 'ok',
+      }))
+    );
   });
 
   describe('_llmType', () => {
@@ -69,6 +57,68 @@ describe('ActionsClientLlm', () => {
   });
 
   describe('_call', () => {
+    it('executes with the expected arguments when llmType is not inference', async () => {
+      const actionsClientLlm = new ActionsClientLlm({
+        actionsClient,
+        connectorId,
+        logger: mockLogger,
+      });
+      await actionsClientLlm._call(prompt);
+      expect(actionsClient.execute).toHaveBeenCalledWith({
+        actionId: 'mock-connector-id',
+        params: {
+          subAction: 'invokeAI',
+          subActionParams: {
+            messages: [
+              {
+                content: 'Do you know my name?',
+                role: 'user',
+              },
+            ],
+            ...getDefaultArguments(),
+            timeout: DEFAULT_TIMEOUT,
+          },
+        },
+      });
+    });
+    it('executes with the expected arguments when llmType is inference', async () => {
+      actionsClient.execute.mockImplementation(
+        jest.fn().mockImplementation(() => ({
+          data: {
+            choices: [
+              {
+                message: { content: mockActionResponse.message },
+              },
+            ],
+          },
+          status: 'ok',
+        }))
+      );
+      const actionsClientLlm = new ActionsClientLlm({
+        actionsClient,
+        connectorId,
+        logger: mockLogger,
+        llmType: 'inference',
+      });
+      const result = await actionsClientLlm._call(prompt);
+      expect(actionsClient.execute).toHaveBeenCalledWith({
+        actionId: 'mock-connector-id',
+        params: {
+          subAction: 'unified_completion',
+          subActionParams: {
+            body: {
+              messages: [
+                {
+                  content: 'Do you know my name?',
+                  role: 'user',
+                },
+              ],
+            },
+          },
+        },
+      });
+      expect(result).toEqual(mockActionResponse.message);
+    });
     it('returns the expected content when _call is invoked', async () => {
       const actionsClientLlm = new ActionsClientLlm({
         actionsClient,
@@ -77,8 +127,7 @@ describe('ActionsClientLlm', () => {
       });
 
       const result = await actionsClientLlm._call(prompt);
-
-      expect(result).toEqual('Yes, your name is Andrew. How can I assist you further, Andrew?');
+      expect(result).toEqual(mockActionResponse.message);
     });
 
     it('rejects with the expected error when the action result status is error', async () => {
@@ -117,6 +166,87 @@ describe('ActionsClientLlm', () => {
       await expect(actionsClientLlm._call(prompt)).rejects.toThrowError(
         'ActionsClientLlm: content should be a string, but it had an unexpected type: number'
       );
+    });
+
+    describe('isInferenceEndpoint', () => {
+      const mockInferenceClient = {
+        chatComplete: jest.fn(),
+      } as unknown as InferenceClient;
+
+      beforeEach(() => {
+        (mockInferenceClient.chatComplete as jest.Mock).mockResolvedValue({
+          content: 'Hello, world',
+        });
+      });
+
+      it('calls inferenceClient.chatComplete with the correct arguments', async () => {
+        const actionsClientLlm = new ActionsClientLlm({
+          actionsClient,
+          connectorId,
+          inferenceClient: mockInferenceClient,
+          isInferenceEndpoint: true,
+          logger: mockLogger,
+        });
+
+        const result = await actionsClientLlm._call(prompt);
+
+        expect(mockInferenceClient.chatComplete).toHaveBeenCalledWith({
+          connectorId,
+          messages: [{ role: 'user', content: prompt }],
+          temperature: undefined,
+          modelName: undefined,
+          timeout: undefined,
+        });
+        expect(result).toEqual('Hello, world');
+        expect(actionsClient.execute).not.toHaveBeenCalled();
+      });
+
+      it('passes model and temperature when provided', async () => {
+        const actionsClientLlm = new ActionsClientLlm({
+          actionsClient,
+          connectorId,
+          inferenceClient: mockInferenceClient,
+          isInferenceEndpoint: true,
+          model: 'my-model',
+          temperature: 0.5,
+          logger: mockLogger,
+        });
+
+        await actionsClientLlm._call(prompt);
+
+        expect(mockInferenceClient.chatComplete).toHaveBeenCalledWith(
+          expect.objectContaining({ modelName: 'my-model', temperature: 0.5 })
+        );
+      });
+
+      it('rejects when inferenceClient is not provided', async () => {
+        const actionsClientLlm = new ActionsClientLlm({
+          actionsClient,
+          connectorId,
+          isInferenceEndpoint: true,
+          logger: mockLogger,
+        });
+
+        await expect(actionsClientLlm._call(prompt)).rejects.toThrowError(
+          'ActionsClientLlm: inferenceClient is required when isInferenceEndpoint is true'
+        );
+      });
+
+      it('propagates errors from inferenceClient.chatComplete', async () => {
+        (mockInferenceClient.chatComplete as jest.Mock).mockRejectedValue(
+          new Error('quota exceeded')
+        );
+
+        const actionsClientLlm = new ActionsClientLlm({
+          actionsClient,
+          connectorId,
+          inferenceClient: mockInferenceClient,
+          isInferenceEndpoint: true,
+          logger: mockLogger,
+        });
+
+        await expect(actionsClientLlm._call(prompt)).rejects.toThrowError('quota exceeded');
+      });
     });
   });
 });

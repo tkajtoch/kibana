@@ -92,9 +92,9 @@ export function savedObjectsRoutes(
       routeGuard.fullLicenseAPIGuard(
         async ({ client, request, response, mlSavedObjectService }) => {
           try {
-            const { simulate } = request.query;
+            const { simulate, addToAllSpaces } = request.query;
             const { syncSavedObjects } = syncSavedObjectsFactory(client, mlSavedObjectService);
-            const savedObjects = await syncSavedObjects(simulate);
+            const savedObjects = await syncSavedObjects(simulate, addToAllSpaces ?? true);
 
             return response.ok({
               body: savedObjects,
@@ -234,6 +234,54 @@ export function savedObjectsRoutes(
 
   router.versioned
     .post({
+      path: `${ML_EXTERNAL_BASE_PATH}/saved_objects/update_jobs_spaces`,
+      access: 'public',
+      security: {
+        authz: {
+          requiredPrivileges: ['ml:canCreateJob', 'ml:canCreateDataFrameAnalytics'],
+        },
+      },
+      summary: 'Update what spaces jobs are assigned to',
+      description: 'Update a list of jobs to add and/or remove them from given spaces.',
+      options: {
+        tags: ['oas-tag:machine learning'],
+        availability: {
+          since: '9.3.0',
+          stability: 'beta',
+        },
+      },
+    })
+    .addVersion(
+      {
+        version: '2023-10-31',
+        validate: {
+          request: {
+            body: updateJobsSpaces,
+          },
+        },
+      },
+      routeGuard.fullLicenseAPIGuard(async ({ request, response, mlSavedObjectService }) => {
+        try {
+          const { jobType, jobIds, spacesToAdd, spacesToRemove } = request.body;
+
+          const body = await mlSavedObjectService.updateJobsSpaces(
+            jobType,
+            jobIds,
+            spacesToAdd,
+            spacesToRemove
+          );
+
+          return response.ok({
+            body,
+          });
+        } catch (e) {
+          return response.customError(wrapError(e));
+        }
+      })
+    );
+
+  router.versioned
+    .post({
       path: `${ML_INTERNAL_BASE_PATH}/saved_objects/update_trained_models_spaces`,
       access: 'internal',
       security: {
@@ -247,6 +295,53 @@ export function savedObjectsRoutes(
     .addVersion(
       {
         version: '1',
+        validate: {
+          request: {
+            body: updateTrainedModelsSpaces,
+          },
+        },
+      },
+      routeGuard.fullLicenseAPIGuard(async ({ request, response, mlSavedObjectService }) => {
+        try {
+          const { modelIds, spacesToAdd, spacesToRemove } = request.body;
+
+          const body = await mlSavedObjectService.updateTrainedModelsSpaces(
+            modelIds,
+            spacesToAdd,
+            spacesToRemove
+          );
+
+          return response.ok({
+            body,
+          });
+        } catch (e) {
+          return response.customError(wrapError(e));
+        }
+      })
+    );
+
+  router.versioned
+    .post({
+      path: `${ML_EXTERNAL_BASE_PATH}/saved_objects/update_trained_models_spaces`,
+      access: 'public',
+      security: {
+        authz: {
+          requiredPrivileges: ['ml:canCreateTrainedModels'],
+        },
+      },
+      summary: 'Update what spaces trained models are assigned to',
+      description: 'Update a list of trained models to add and/or remove them from given spaces.',
+      options: {
+        tags: ['oas-tag:machine learning'],
+        availability: {
+          since: '9.3.0',
+          stability: 'beta',
+        },
+      },
+    })
+    .addVersion(
+      {
+        version: '2023-10-31',
         validate: {
           request: {
             body: updateTrainedModelsSpaces,
@@ -449,5 +544,47 @@ export function savedObjectsRoutes(
           }
         }
       )
+    );
+
+  router.versioned
+    .get({
+      path: `${ML_INTERNAL_BASE_PATH}/saved_objects/can_sync_to_all_spaces/{mlSavedObjectType?}`,
+      access: 'internal',
+      security: {
+        authz: {
+          requiredPrivileges: [
+            'ml:canGetJobs',
+            'ml:canGetDataFrameAnalytics',
+            'ml:canGetTrainedModels',
+          ],
+        },
+      },
+      summary: 'Check whether user can sync a job or trained model to the * space',
+      description: `Check the user's ability to sync jobs or trained models to the * space. Returns whether they are able to sync the job or trained model to the * space.`,
+    })
+    .addVersion(
+      {
+        version: '1',
+        validate: {
+          request: {
+            params: syncCheckSchema,
+          },
+        },
+      },
+      routeGuard.fullLicenseAPIGuard(async ({ request, response, mlSavedObjectService }) => {
+        try {
+          const { mlSavedObjectType } = request.params;
+          const canSync = await mlSavedObjectService.canCreateGlobalMlSavedObjects(
+            request,
+            mlSavedObjectType as MlSavedObjectType
+          );
+
+          return response.ok({
+            body: { canSync },
+          });
+        } catch (e) {
+          return response.customError(wrapError(e));
+        }
+      })
     );
 }

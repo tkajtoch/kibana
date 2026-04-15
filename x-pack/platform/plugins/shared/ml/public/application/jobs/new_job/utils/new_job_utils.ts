@@ -5,7 +5,7 @@
  * 2.0.
  */
 
-import type * as estypes from '@elastic/elasticsearch/lib/api/typesWithBodyKey';
+import type { estypes } from '@elastic/elasticsearch';
 import { cloneDeep } from 'lodash';
 import rison from '@kbn/rison';
 import {
@@ -62,7 +62,7 @@ export function createQueries(
   kibanaConfig: IUiSettingsClient
 ) {
   let query = getDefaultQuery();
-  let combinedQuery: estypes.QueryDslQueryContainer = getDefaultDatafeedQuery();
+  let combinedQuery = getDefaultDatafeedQuery();
 
   query = data.query;
   const filter = data.filter;
@@ -82,6 +82,7 @@ export function createQueries(
       // a bool.should
       // in this case, move it to a bool.should
       if (combinedQuery.multi_match !== undefined) {
+        // @ts-expect-error - ExactlyOne in the ES types makes it really hard to comply without force-casting.
         combinedQuery.bool.should = {
           multi_match: combinedQuery.multi_match,
         };

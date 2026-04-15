@@ -6,14 +6,15 @@
  */
 
 import { Aggregators } from './types';
-import { LocatorPublic } from '@kbn/share-plugin/common';
-import { LogsExplorerLocatorParams } from '@kbn/deeplinks-observability';
-import { getViewInAppUrl, GetViewInAppUrlArgs } from './get_view_in_app_url';
+import type { LocatorPublic } from '@kbn/share-plugin/common';
+import type { LogsLocatorParams } from '@kbn/logs-shared-plugin/common';
+import type { GetViewInAppUrlArgs } from './get_view_in_app_url';
+import { getViewInAppUrl } from './get_view_in_app_url';
 
 describe('getViewInAppUrl', () => {
-  const logsExplorerLocator = {
+  const logsLocator = {
     getRedirectUrl: jest.fn(() => 'mockedGetRedirectUrl'),
-  } as unknown as LocatorPublic<LogsExplorerLocatorParams>;
+  } as unknown as LocatorPublic<LogsLocatorParams>;
   const startedAt = '2023-12-07T16:30:15.403Z';
   const endedAt = '2023-12-07T20:30:15.403Z';
   const returnedTimeRange = {
@@ -26,7 +27,7 @@ describe('getViewInAppUrl', () => {
     jest.clearAllMocks();
   });
 
-  it('Should return empty string if logsExplorerLocator is not provided', () => {
+  it('Should return empty string if logsLocator is not provided', () => {
     const args: GetViewInAppUrlArgs = {
       metrics: [],
       startedAt,
@@ -45,7 +46,7 @@ describe('getViewInAppUrl', () => {
           filter: 'mockedCountFilter',
         },
       ],
-      logsExplorerLocator,
+      logsLocator,
       startedAt,
       endedAt,
       searchConfiguration: {
@@ -59,9 +60,10 @@ describe('getViewInAppUrl', () => {
     };
 
     expect(getViewInAppUrl(args)).toBe('mockedGetRedirectUrl');
-    expect(logsExplorerLocator.getRedirectUrl).toHaveBeenCalledWith(
+    expect(logsLocator.getRedirectUrl).toHaveBeenCalledWith(
       {
-        dataset: args.dataViewId,
+        dataViewId: args.dataViewId,
+        dataViewSpec: undefined,
         timeRange: returnedTimeRange,
         filters: [],
         query: {
@@ -82,15 +84,16 @@ describe('getViewInAppUrl', () => {
           filter: 'mockedCountFilter',
         },
       ],
-      logsExplorerLocator,
+      logsLocator,
       startedAt,
       endedAt,
     };
 
     expect(getViewInAppUrl(args)).toBe('mockedGetRedirectUrl');
-    expect(logsExplorerLocator.getRedirectUrl).toHaveBeenCalledWith(
+    expect(logsLocator.getRedirectUrl).toHaveBeenCalledWith(
       {
         dataset: undefined,
+        dataViewSpec: undefined,
         timeRange: returnedTimeRange,
         filters: [],
         query: {
@@ -104,7 +107,7 @@ describe('getViewInAppUrl', () => {
 
   it('should call getRedirectUrl with only filter', () => {
     const args: GetViewInAppUrlArgs = {
-      logsExplorerLocator,
+      logsLocator,
       startedAt,
       endedAt,
       searchConfiguration: {
@@ -117,9 +120,10 @@ describe('getViewInAppUrl', () => {
     };
 
     expect(getViewInAppUrl(args)).toBe('mockedGetRedirectUrl');
-    expect(logsExplorerLocator.getRedirectUrl).toHaveBeenCalledWith(
+    expect(logsLocator.getRedirectUrl).toHaveBeenCalledWith(
       {
-        dataset: undefined,
+        dataViewId: undefined,
+        dataViewSpec: undefined,
         timeRange: returnedTimeRange,
         filters: [],
         query: {
@@ -133,15 +137,16 @@ describe('getViewInAppUrl', () => {
 
   it('should call getRedirectUrl with empty query if metrics and filter are not not provided', () => {
     const args: GetViewInAppUrlArgs = {
-      logsExplorerLocator,
+      logsLocator,
       startedAt,
       endedAt,
     };
 
     expect(getViewInAppUrl(args)).toBe('mockedGetRedirectUrl');
-    expect(logsExplorerLocator.getRedirectUrl).toHaveBeenCalledWith(
+    expect(logsLocator.getRedirectUrl).toHaveBeenCalledWith(
       {
         dataset: undefined,
+        dataViewSpec: undefined,
         timeRange: returnedTimeRange,
         filters: [],
         query: {
@@ -167,15 +172,16 @@ describe('getViewInAppUrl', () => {
           field: 'mockedAvgField',
         },
       ],
-      logsExplorerLocator,
+      logsLocator,
       startedAt,
       endedAt,
     };
 
     expect(getViewInAppUrl(args)).toBe('mockedGetRedirectUrl');
-    expect(logsExplorerLocator.getRedirectUrl).toHaveBeenCalledWith(
+    expect(logsLocator.getRedirectUrl).toHaveBeenCalledWith(
       {
         dataset: undefined,
+        dataViewSpec: undefined,
         timeRange: returnedTimeRange,
         filters: [],
         query: {
@@ -201,7 +207,7 @@ describe('getViewInAppUrl', () => {
           field: 'mockedAvgField',
         },
       ],
-      logsExplorerLocator,
+      logsLocator,
       startedAt,
       endedAt,
       searchConfiguration: {
@@ -232,9 +238,10 @@ describe('getViewInAppUrl', () => {
     };
 
     expect(getViewInAppUrl(args)).toBe('mockedGetRedirectUrl');
-    expect(logsExplorerLocator.getRedirectUrl).toHaveBeenCalledWith(
+    expect(logsLocator.getRedirectUrl).toHaveBeenCalledWith(
       {
-        dataset: undefined,
+        dataViewId: undefined,
+        dataViewSpec: undefined,
         timeRange: returnedTimeRange,
         filters: [
           {
@@ -275,20 +282,99 @@ describe('getViewInAppUrl', () => {
           filter: 'mockedCountFilter',
         },
       ],
-      logsExplorerLocator,
+      logsLocator,
       startedAt,
       endedAt,
       spaceId,
     };
 
     expect(getViewInAppUrl(args)).toBe('mockedGetRedirectUrl');
-    expect(logsExplorerLocator.getRedirectUrl).toHaveBeenCalledWith(
+    expect(logsLocator.getRedirectUrl).toHaveBeenCalledWith(
       {
         dataset: undefined,
+        dataViewSpec: undefined,
         timeRange: returnedTimeRange,
         filters: [],
         query: {
           query: 'mockedCountFilter',
+          language: 'kuery',
+        },
+      },
+      { spaceId }
+    );
+  });
+  it('should call getRedirectUrl with dataViewSpec of the AD-HOC data view', () => {
+    const spaceId = 'mockedSpaceId';
+    const dataViewSpec = {
+      id: 'mockedDataViewId',
+      title: 'mockedDataViewTitle',
+      timeFieldName: '@timestamp',
+      sourceFilters: [],
+      fieldFormats: {},
+      runtimeFieldMap: {},
+      allowNoIndex: false,
+      name: 'mockedDataViewName',
+      allowHidden: false,
+    };
+    const args: GetViewInAppUrlArgs = {
+      searchConfiguration: {
+        index: dataViewSpec,
+        query: {
+          language: '',
+          query: 'mockedFilter',
+        },
+        filter: [],
+      },
+      logsLocator,
+      startedAt,
+      endedAt,
+      spaceId,
+    };
+
+    expect(getViewInAppUrl(args)).toBe('mockedGetRedirectUrl');
+    expect(logsLocator.getRedirectUrl).toHaveBeenCalledWith(
+      {
+        dataset: undefined,
+        dataViewSpec,
+        timeRange: returnedTimeRange,
+        filters: [],
+        query: {
+          query: 'mockedFilter',
+          language: 'kuery',
+        },
+      },
+      { spaceId }
+    );
+  });
+  it('should call getRedirectUrl with the id of the SAVED data view ', () => {
+    const spaceId = 'mockedSpaceId';
+    const mockedDataViewId = 'uuid-mocked-dataView-id';
+    const args: GetViewInAppUrlArgs = {
+      dataViewId: mockedDataViewId,
+      searchConfiguration: {
+        index: 'uuid-mockedDataViewId',
+        query: {
+          language: '',
+          query: 'mockedFilter',
+        },
+        filter: [],
+      },
+      logsLocator,
+      startedAt,
+      endedAt,
+      spaceId,
+    };
+
+    expect(getViewInAppUrl(args)).toBe('mockedGetRedirectUrl');
+    expect(logsLocator.getRedirectUrl).toHaveBeenCalledWith(
+      {
+        dataset: undefined,
+        dataViewSpec: undefined,
+        dataViewId: mockedDataViewId,
+        timeRange: returnedTimeRange,
+        filters: [],
+        query: {
+          query: 'mockedFilter',
           language: 'kuery',
         },
       },

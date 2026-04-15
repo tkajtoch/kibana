@@ -8,15 +8,24 @@
 import { i18n } from '@kbn/i18n';
 
 import { MIN_SEARCHABLE_SNAPSHOT_LICENSE } from '../../../../common/constants';
-import { ListSnapshotReposResponse } from '../../../../common/types';
+import type { ListSnapshotReposResponse } from '../../../../common/types';
 
-import { RouteDependencies } from '../../../types';
+import type { RouteDependencies } from '../../../types';
 import { addBasePath } from '../../../services';
 import { handleEsError } from '../../../shared_imports';
 
 export const registerFetchRoute = ({ router, license }: RouteDependencies) => {
   router.get(
-    { path: addBasePath('/snapshot_repositories'), validate: false },
+    {
+      path: addBasePath('/snapshot_repositories'),
+      security: {
+        authz: {
+          enabled: false,
+          reason: 'Relies on es client for authorization',
+        },
+      },
+      validate: false,
+    },
     async (ctx, request, response) => {
       if (!license.isCurrentLicenseAtLeast(MIN_SEARCHABLE_SNAPSHOT_LICENSE)) {
         return response.forbidden({

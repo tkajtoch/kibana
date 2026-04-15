@@ -10,11 +10,12 @@ import React from 'react';
 import { i18n } from '@kbn/i18n';
 import type { EuiRangeProps } from '@elastic/eui';
 import { EuiFieldNumber, EuiFlexGroup, EuiFlexItem, EuiFormRow, EuiRange } from '@elastic/eui';
-import { ML_ANOMALY_THRESHOLD } from '@kbn/ml-anomaly-utils';
+import { ML_ANOMALY_THRESHOLD, ML_SEVERITY_COLORS } from '@kbn/ml-anomaly-utils';
 
 export interface SeveritySelectorProps {
   value: number | undefined;
   onChange: (value: number) => void;
+  disabled?: boolean;
 }
 
 const MAX_ANOMALY_SCORE = 100;
@@ -24,31 +25,28 @@ export const SeverityControl: FC<SeveritySelectorProps> = React.memo(({ value, o
     {
       min: ML_ANOMALY_THRESHOLD.LOW,
       max: ML_ANOMALY_THRESHOLD.MINOR,
-      color: '#8BC8FB',
+      color: ML_SEVERITY_COLORS.WARNING,
     },
     {
       min: ML_ANOMALY_THRESHOLD.MINOR,
       max: ML_ANOMALY_THRESHOLD.MAJOR,
-      color: '#FDEC25',
+      color: ML_SEVERITY_COLORS.MINOR,
     },
     {
       min: ML_ANOMALY_THRESHOLD.MAJOR,
       max: ML_ANOMALY_THRESHOLD.CRITICAL,
-      color: '#FBA740',
+      color: ML_SEVERITY_COLORS.MAJOR,
     },
     {
       min: ML_ANOMALY_THRESHOLD.CRITICAL,
       max: MAX_ANOMALY_SCORE,
-      color: '#FE5050',
+      color: ML_SEVERITY_COLORS.CRITICAL,
     },
   ];
-
   const label = i18n.translate('xpack.ml.severitySelector.formControlLabel', {
     defaultMessage: 'Severity',
   });
-
   const resultValue = value ?? ML_ANOMALY_THRESHOLD.LOW;
-
   const ticks = new Array(5).fill(null).map((x, i) => {
     const v = i * 25;
     return { value: v, label: v };

@@ -8,7 +8,7 @@ import React, { useEffect } from 'react';
 import { Provider as ReduxProvider } from 'react-redux';
 import { Router } from '@kbn/shared-ux-router';
 import { i18n } from '@kbn/i18n';
-import { I18nStart, ChromeBreadcrumb, CoreStart, AppMountParameters } from '@kbn/core/public';
+import type { I18nStart, ChromeBreadcrumb, CoreStart, AppMountParameters } from '@kbn/core/public';
 import { APP_WRAPPER_CLASS } from '@kbn/core/public';
 import { KibanaContextProvider } from '@kbn/kibana-react-plugin/public';
 import { KibanaRenderContextProvider } from '@kbn/react-kibana-context-render';
@@ -17,15 +17,14 @@ import { RedirectAppLinks } from '@kbn/shared-ux-link-redirect-app';
 import { EuiThemeProvider } from '@kbn/kibana-react-plugin/common';
 import { InspectorContextProvider } from '@kbn/observability-shared-plugin/public';
 import { PerformanceContextProvider } from '@kbn/ebt-tools';
-import { ClientPluginsSetup, ClientPluginsStart } from '../../plugin';
-import { UMUpdateBadge } from '../lib/lib';
+import type { ClientPluginsSetup, ClientPluginsStart } from '../../plugin';
+import type { UMUpdateBadge } from '../lib/lib';
 import {
   UptimeRefreshContextProvider,
   UptimeSettingsContextProvider,
-  UptimeThemeContextProvider,
   UptimeStartupPluginsContextProvider,
 } from '../contexts';
-import { CommonlyUsedRange } from '../components/common/uptime_date_picker';
+import type { CommonlyUsedRange } from '../components/common/uptime_date_picker';
 import { setBasePath } from '../state/actions';
 import { PageRouter } from '../routes';
 import { UptimeAlertsFlyoutWrapper } from '../components/overview';
@@ -33,17 +32,6 @@ import { store, storage } from '../state';
 import { kibanaService } from '../state/kibana_service';
 import { ActionMenu } from '../components/common/header/action_menu';
 import { UptimeDataViewContextProvider } from '../contexts/uptime_data_view_context';
-
-export interface UptimeAppColors {
-  danger: string;
-  dangerBehindText: string;
-  success: string;
-  gray: string;
-  range: string;
-  mean: string;
-  warning: string;
-  lightestShade: string;
-}
 
 export interface UptimeAppProps {
   basePath: string;
@@ -88,7 +76,7 @@ const Application = (props: UptimeAppProps) => {
             tooltip: i18n.translate('xpack.uptime.badge.readOnly.tooltip', {
               defaultMessage: 'Unable to save',
             }),
-            iconType: 'glasses',
+            iconType: 'readOnly',
           }
         : undefined
     );
@@ -118,40 +106,38 @@ const Application = (props: UptimeAppProps) => {
               storage,
               data: startPlugins.data,
               unifiedSearch: startPlugins.unifiedSearch,
+              kql: startPlugins.kql,
               fleet: startPlugins.fleet,
               inspector: startPlugins.inspector,
               triggersActionsUi: startPlugins.triggersActionsUi,
               observability: startPlugins.observability,
               observabilityShared: startPlugins.observabilityShared,
               exploratoryView: startPlugins.exploratoryView,
-              cases: startPlugins.cases,
             }}
           >
             <Router history={appMountParameters.history}>
               <EuiThemeProvider darkMode={darkMode}>
                 <UptimeRefreshContextProvider>
                   <UptimeSettingsContextProvider {...props}>
-                    <UptimeThemeContextProvider darkMode={darkMode}>
-                      <UptimeStartupPluginsContextProvider {...startPlugins}>
-                        <UptimeDataViewContextProvider dataViews={startPlugins.dataViews}>
-                          <PerformanceContextProvider>
-                            <div className={APP_WRAPPER_CLASS} data-test-subj="uptimeApp">
-                              <RedirectAppLinks
-                                coreStart={{
-                                  application: core.application,
-                                }}
-                              >
-                                <InspectorContextProvider>
-                                  <UptimeAlertsFlyoutWrapper />
-                                  <PageRouter />
-                                  <ActionMenu appMountParameters={appMountParameters} />
-                                </InspectorContextProvider>
-                              </RedirectAppLinks>
-                            </div>
-                          </PerformanceContextProvider>
-                        </UptimeDataViewContextProvider>
-                      </UptimeStartupPluginsContextProvider>
-                    </UptimeThemeContextProvider>
+                    <UptimeStartupPluginsContextProvider {...startPlugins}>
+                      <UptimeDataViewContextProvider dataViews={startPlugins.dataViews}>
+                        <PerformanceContextProvider>
+                          <div className={APP_WRAPPER_CLASS} data-test-subj="uptimeApp">
+                            <RedirectAppLinks
+                              coreStart={{
+                                application: core.application,
+                              }}
+                            >
+                              <InspectorContextProvider>
+                                <UptimeAlertsFlyoutWrapper />
+                                <PageRouter />
+                                <ActionMenu appMountParameters={appMountParameters} />
+                              </InspectorContextProvider>
+                            </RedirectAppLinks>
+                          </div>
+                        </PerformanceContextProvider>
+                      </UptimeDataViewContextProvider>
+                    </UptimeStartupPluginsContextProvider>
                   </UptimeSettingsContextProvider>
                 </UptimeRefreshContextProvider>
               </EuiThemeProvider>

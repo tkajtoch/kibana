@@ -7,12 +7,13 @@
  * License v3.0 only", or the "Server Side Public License, v 1".
  */
 
-import { z } from '@kbn/zod';
+import { z } from '@kbn/zod/v4';
+import { PassThroughAny } from '@kbn/zod-helpers/v4';
 
 export const passThroughValidationObject = {
-  body: z.any(),
-  params: z.any(),
-  query: z.any(),
+  body: PassThroughAny,
+  params: PassThroughAny,
+  query: PassThroughAny,
 };
 
 export const noParamsValidationObject = {

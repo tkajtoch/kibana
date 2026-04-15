@@ -4,9 +4,12 @@
  * 2.0; you may not use this file except in compliance with the Elastic License
  * 2.0.
  */
-import type { AggregationsAutoDateHistogramAggregation } from '@elastic/elasticsearch/lib/api/types';
+import type {
+  AggregationsAggregationContainer,
+  AggregationsAutoDateHistogramAggregation,
+} from '@elastic/elasticsearch/lib/api/types';
 import type { QueryDslQueryContainer } from '@kbn/data-views-plugin/common/types';
-import type { AggregateOfMap, ChangePointType } from '@kbn/es-types/src/search';
+import type { AggregateOf, AggregateOfMap, ChangePointType } from '@kbn/es-types/src/search';
 import type { ObservabilityAIAssistantElasticsearchClient } from '../../clients/elasticsearch';
 
 type MetricType = 'min' | 'max' | 'sum' | 'count' | 'avg' | 'p95' | 'p99';
@@ -104,7 +107,7 @@ export async function getMetricChanges({
     over_time: {
       auto_date_histogram: dateHistogram,
       aggs: {
-        metric: metricAgg,
+        metric: metricAgg as AggregationsAggregationContainer,
         value: {
           bucket_script: {
             buckets_path: {
@@ -146,21 +149,26 @@ export async function getMetricChanges({
   const series = groups.map((group) => {
     const key = group.key ?? 'all';
 
+    const changes = group.changes as AggregateOf<
+      { change_point: { buckets_path: string } },
+      unknown
+    >;
+
     return {
       key,
-      over_time: group.over_time.buckets.map((bucket) => {
+      over_time: group.over_time?.buckets?.map((bucket) => {
         return {
-          x: new Date(bucket.key_as_string).getTime(),
+          x: new Date(bucket.key_as_string!).getTime(),
           y: bucket.value?.value as number | null,
         };
       }),
       changes:
-        group.changes.type.indeterminable || !group.changes.bucket?.key
+        changes.type.indeterminable || !changes.bucket?.key
           ? { type: 'indeterminable' as ChangePointType }
           : {
-              time: new Date(group.changes.bucket.key).toISOString(),
-              type: Object.keys(group.changes.type)[0] as keyof typeof group.changes.type,
-              ...Object.values(group.changes.type)[0],
+              time: new Date(changes.bucket.key).toISOString(),
+              type: Object.keys(changes.type)[0] as keyof typeof changes.type,
+              ...Object.values(changes.type)[0],
             },
     };
   });

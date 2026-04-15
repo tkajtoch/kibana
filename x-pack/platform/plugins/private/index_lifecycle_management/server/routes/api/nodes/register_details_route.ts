@@ -7,7 +7,7 @@
 
 import { schema } from '@kbn/config-schema';
 
-import { RouteDependencies } from '../../../types';
+import type { RouteDependencies } from '../../../types';
 import { addBasePath } from '../../../services';
 
 function findMatchingNodes(stats: any, nodeAttrs: string): any {
@@ -36,7 +36,16 @@ export function registerDetailsRoute({
   lib: { handleEsError },
 }: RouteDependencies) {
   router.get(
-    { path: addBasePath('/nodes/{nodeAttrs}/details'), validate: { params: paramsSchema } },
+    {
+      path: addBasePath('/nodes/{nodeAttrs}/details'),
+      security: {
+        authz: {
+          enabled: false,
+          reason: 'Relies on es client for authorization',
+        },
+      },
+      validate: { params: paramsSchema },
+    },
     license.guardApiRoute(async (context, request, response) => {
       const params = request.params as typeof paramsSchema.type;
       const { nodeAttrs } = params;

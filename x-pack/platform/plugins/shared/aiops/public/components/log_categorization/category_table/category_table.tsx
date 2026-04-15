@@ -10,6 +10,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 import type { EuiBasicTableColumn, EuiTableSelectionType } from '@elastic/eui';
 import {
+  useEuiTheme,
   useEuiBackgroundColor,
   EuiInMemoryTable,
   EuiButtonIcon,
@@ -23,8 +24,6 @@ import type { UseTableState } from '@kbn/ml-in-memory-table';
 
 import { css } from '@emotion/react';
 import type { Category } from '@kbn/aiops-log-pattern-analysis/types';
-
-import { useEuiTheme } from '../../../hooks/use_eui_theme';
 
 import { MiniHistogram } from '../../mini_histogram';
 
@@ -63,7 +62,7 @@ export const CategoryTable: FC<Props> = ({
   selectable = true,
   onRenderComplete,
 }) => {
-  const euiTheme = useEuiTheme();
+  const { euiTheme } = useEuiTheme();
   const primaryBackgroundColor = useEuiBackgroundColor('primary');
   const { onTableChange, pagination, sorting } = tableState;
 
@@ -108,7 +107,7 @@ export const CategoryTable: FC<Props> = ({
                   defaultMessage: 'Expand',
                 })
           }
-          iconType={itemIdToExpandedRowMap[item.key] ? 'arrowDown' : 'arrowRight'}
+          iconType={itemIdToExpandedRowMap[item.key] ? 'chevronSingleDown' : 'chevronSingleRight'}
         />
       ),
       'data-test-subj': 'aiopsLogPatternsExpandRowToggle',
@@ -153,7 +152,7 @@ export const CategoryTable: FC<Props> = ({
             {i18n.translate('xpack.aiops.logCategorization.column.tokens', {
               defaultMessage: 'Tokens',
             })}
-            <EuiIcon size="s" color="subdued" type="questionInCircle" className="eui-alignTop" />
+            <EuiIcon size="s" color="subdued" type="question" className="eui-alignTop" />
           </>
         </EuiToolTip>
       ),
@@ -221,12 +220,12 @@ export const CategoryTable: FC<Props> = ({
 
     if (mouseOver.highlightedCategory && mouseOver.highlightedCategory.key === category.key) {
       return {
-        backgroundColor: euiTheme.euiColorLightestShade,
+        backgroundColor: euiTheme.colors.lightestShade,
       };
     }
 
     return {
-      backgroundColor: euiTheme.euiColorEmptyShade,
+      backgroundColor: euiTheme.colors.emptyShade,
     };
   };
 
@@ -235,8 +234,8 @@ export const CategoryTable: FC<Props> = ({
       position: 'sticky',
       insetBlockStart: 0,
       zIndex: 1,
-      backgroundColor: euiTheme.euiColorEmptyShade,
-      boxShadow: `inset 0 0px 0, inset 0 -1px 0 ${euiTheme.euiBorderColor}`,
+      backgroundColor: euiTheme.colors.emptyShade,
+      boxShadow: `inset 0 0px 0, inset 0 -1px 0 ${euiTheme.border.color}`,
     },
   });
 
@@ -299,6 +298,9 @@ export const CategoryTable: FC<Props> = ({
               }
             : undefined;
         }}
+        tableCaption={i18n.translate('xpack.aiops.logCategorization.categoryTable.tableCaption', {
+          defaultMessage: 'Log pattern categories',
+        })}
       />
     </div>
   );

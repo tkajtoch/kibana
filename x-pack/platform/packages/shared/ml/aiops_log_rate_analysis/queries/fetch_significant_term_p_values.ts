@@ -6,7 +6,7 @@
  */
 import { uniqBy } from 'lodash';
 
-import type * as estypes from '@elastic/elasticsearch/lib/api/typesWithBodyKey';
+import type { estypes } from '@elastic/elasticsearch';
 
 import type { ElasticsearchClient } from '@kbn/core/server';
 import type { Logger } from '@kbn/logging';
@@ -25,7 +25,7 @@ import { getQueryWithParams } from './get_query_with_params';
 import { getRequestBase } from './get_request_base';
 
 // TODO Consolidate with duplicate `fetchDurationFieldCandidates` in
-// `x-pack/plugins/observability_solution/apm/server/routes/correlations/queries/fetch_failed_events_correlation_p_values.ts`
+// `x-pack/solutions/observability/plugins/apm/server/routes/correlations/queries/fetch_failed_events_correlation_p_values.ts`
 
 export const getSignificantTermRequest = (
   params: AiopsLogRateAnalysisSchema,
@@ -41,7 +41,7 @@ export const getSignificantTermRequest = (
   let filter: estypes.QueryDslQueryContainer[] = [];
 
   if (query.bool && Array.isArray(query.bool.filter)) {
-    filter = query.bool.filter.filter((d) => Object.keys(d)[0] !== 'range');
+    filter = query.bool.filter.filter((d) => Object.keys(d || {})[0] !== 'range');
 
     query.bool.filter = [
       ...filter,
@@ -87,7 +87,6 @@ export const getSignificantTermRequest = (
             ],
           },
         },
-        // @ts-expect-error `p_value` is not yet part of `AggregationsAggregationContainer`
         p_value: { background_is_superset: false },
         size: 1000,
       },
@@ -100,11 +99,12 @@ export const getSignificantTermRequest = (
     query,
     size: 0,
     aggs: wrap(fieldCandidateAggs),
+    ...(params.projectRouting ? { project_routing: params.projectRouting } : {}),
   };
 
   return {
     ...getRequestBase(params),
-    body,
+    ...body,
   };
 };
 

@@ -6,10 +6,10 @@
  */
 
 import { schema } from '@kbn/config-schema';
-import { MonitorStatusHeatmapBucket } from '../../../common/runtime_types';
+import type { MonitorStatusHeatmapBucket } from '../../../common/runtime_types';
 import { SYNTHETICS_API_URLS } from '../../../common/constants';
 import { queryMonitorHeatmap } from '../../common/pings/monitor_status_heatmap';
-import { SyntheticsRestApiRouteFactory } from '../types';
+import type { SyntheticsRestApiRouteFactory } from '../types';
 
 export const syntheticsGetPingHeatmapRoute: SyntheticsRestApiRouteFactory = () => ({
   method: 'GET',
@@ -26,7 +26,7 @@ export const syntheticsGetPingHeatmapRoute: SyntheticsRestApiRouteFactory = () =
   handler: async ({
     syntheticsEsClient,
     request,
-  }): Promise<MonitorStatusHeatmapBucket[] | undefined> => {
+  }): Promise<{ result: MonitorStatusHeatmapBucket[] } | undefined> => {
     const { from, to, interval: intervalInMinutes, monitorId, location } = request.query;
 
     const result = await queryMonitorHeatmap({
@@ -38,6 +38,6 @@ export const syntheticsGetPingHeatmapRoute: SyntheticsRestApiRouteFactory = () =
       intervalInMinutes,
     });
 
-    return result.body.aggregations?.heatmap?.buckets as MonitorStatusHeatmapBucket[];
+    return { result: result.body.aggregations?.heatmap?.buckets as MonitorStatusHeatmapBucket[] };
   },
 });

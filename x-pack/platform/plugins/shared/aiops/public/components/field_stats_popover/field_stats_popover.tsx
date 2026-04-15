@@ -5,7 +5,7 @@
  * 2.0.
  */
 
-import { EuiButtonIcon, EuiToolTip } from '@elastic/eui';
+import { useEuiTheme, EuiButtonIcon, EuiToolTip } from '@elastic/eui';
 import React, { useCallback, useMemo, useState } from 'react';
 import { i18n } from '@kbn/i18n';
 import { isDefined } from '@kbn/ml-is-defined';
@@ -19,7 +19,6 @@ import {
 } from '@kbn/unified-field-list/src/components/field_popover';
 import type { DataView } from '@kbn/data-views-plugin/common';
 import type { TimeRange as TimeRangeMs } from '@kbn/ml-date-picker';
-import { useEuiTheme } from '../../hooks/use_eui_theme';
 import { FieldStatsContent } from './field_stats_content';
 
 export function FieldStatsPopover({
@@ -38,7 +37,7 @@ export function FieldStatsPopover({
   timeRangeMs?: TimeRangeMs;
 }) {
   const [infoIsOpen, setInfoOpen] = useState(false);
-  const euiTheme = useEuiTheme();
+  const { euiTheme } = useEuiTheme();
 
   const closePopover = useCallback(() => setInfoOpen(false), []);
 
@@ -59,10 +58,11 @@ export function FieldStatsPopover({
           setInfoOpen(!infoIsOpen);
         }}
         aria-label={i18n.translate('xpack.aiops.fieldContextPopover.topFieldValuesAriaLabel', {
-          defaultMessage: 'Show top field values',
+          defaultMessage: 'Show top field values for {fieldName}',
+          values: { fieldName },
         })}
         data-test-subj={'aiopsContextPopoverButton'}
-        css={{ marginLeft: euiTheme.euiSizeXS }}
+        css={{ marginLeft: euiTheme.size.xs }}
       />
     </EuiToolTip>
   );

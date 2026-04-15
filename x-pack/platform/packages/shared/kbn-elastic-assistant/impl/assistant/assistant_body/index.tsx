@@ -5,54 +5,64 @@
  * 2.0.
  */
 
-import React, {
-  Dispatch,
-  FunctionComponent,
-  SetStateAction,
-  useEffect,
-  useMemo,
-  useRef,
-} from 'react';
-import { EuiEmptyPrompt, EuiFlexGroup, EuiFlexItem, EuiPanel, EuiText } from '@elastic/eui';
-import { HttpSetup } from '@kbn/core-http-browser';
-import { euiThemeVars } from '@kbn/ui-theme';
+import type { Dispatch, FunctionComponent, SetStateAction } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
+import {
+  EuiEmptyPrompt,
+  EuiFlexGroup,
+  EuiFlexItem,
+  EuiPanel,
+  EuiText,
+  useEuiTheme,
+} from '@elastic/eui';
+import type { HttpSetup } from '@kbn/core-http-browser';
 import { css } from '@emotion/react';
-import { PromptResponse } from '@kbn/elastic-assistant-common';
-import { AssistantAnimatedIcon } from '../assistant_animated_icon';
+import type { PromptResponse } from '@kbn/elastic-assistant-common';
+import { AssistantBeacon } from '@kbn/ai-assistant-icon';
+import { ConversationSharedState } from '@kbn/elastic-assistant-common';
+import { SharedConversationOwnerCallout } from '../shared_conversation_callout/owner';
 import { EmptyConvo } from './empty_convo';
 import { WelcomeSetup } from './welcome_setup';
-import { Conversation } from '../../..';
+import type { Conversation } from '../../..';
 import { UpgradeLicenseCallToAction } from '../upgrade_license_cta';
 import * as i18n from '../translations';
 interface Props {
   allSystemPrompts: PromptResponse[];
   comments: JSX.Element;
+  conversationSharedState: ConversationSharedState;
   currentConversation: Conversation | undefined;
   currentSystemPromptId: string | undefined;
-  handleOnConversationSelected: ({ cId, cTitle }: { cId: string; cTitle: string }) => Promise<void>;
+  handleOnConversationSelected: ({ cId }: { cId: string }) => Promise<void>;
   isAssistantEnabled: boolean;
+  isConversationOwner: boolean;
   isSettingsModalVisible: boolean;
   isWelcomeSetup: boolean;
   isLoading: boolean;
   http: HttpSetup;
   setCurrentSystemPromptId: (promptId: string | undefined) => void;
   setIsSettingsModalVisible: Dispatch<SetStateAction<boolean>>;
+  setUserPrompt: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
 export const AssistantBody: FunctionComponent<Props> = ({
   allSystemPrompts,
   comments,
+  conversationSharedState,
   currentConversation,
   currentSystemPromptId,
   handleOnConversationSelected,
   setCurrentSystemPromptId,
   http,
   isAssistantEnabled,
+  isConversationOwner,
   isLoading,
   isSettingsModalVisible,
   isWelcomeSetup,
   setIsSettingsModalVisible,
+  setUserPrompt,
 }) => {
+  const { euiTheme } = useEuiTheme();
+
   const isEmptyConversation = useMemo(
     () => currentConversation?.messages.length === 0,
     [currentConversation?.messages.length]
@@ -64,16 +74,16 @@ export const AssistantBody: FunctionComponent<Props> = ({
         <EuiText
           data-test-subj="assistant-disclaimer"
           textAlign="center"
-          color={euiThemeVars.euiColorMediumShade}
+          color={euiTheme.colors.textDisabled}
           size="xs"
           css={css`
-            margin: 0 ${euiThemeVars.euiSizeL} ${euiThemeVars.euiSizeM} ${euiThemeVars.euiSizeL};
+            margin: 0 ${euiTheme.size.l} ${euiTheme.size.m} ${euiTheme.size.l};
           `}
         >
           {i18n.DISCLAIMER}
         </EuiText>
       ),
-    [isEmptyConversation]
+    [euiTheme, isEmptyConversation]
   );
 
   // Start Scrolling
@@ -91,7 +101,8 @@ export const AssistantBody: FunctionComponent<Props> = ({
     (
       commentsContainerRef.current?.childNodes[0].childNodes[0] as HTMLElement
     ).lastElementChild?.scrollIntoView();
-  });
+    // currentConversation is required in the dependency array to keep the scroll at the bottom.
+  }, [currentConversation]);
   //  End Scrolling
 
   if (!isAssistantEnabled) {
@@ -100,9 +111,12 @@ export const AssistantBody: FunctionComponent<Props> = ({
 
   return (
     <EuiFlexGroup direction="column" justifyContent="spaceBetween">
-      <EuiFlexItem grow={false}>
+      <EuiFlexItem>
         {isLoading ? (
-          <EuiEmptyPrompt data-test-subj="animatedLogo" icon={<AssistantAnimatedIcon />} />
+          <EuiEmptyPrompt
+            data-test-subj="animatedLogo"
+            icon={<AssistantBeacon backgroundColor="emptyShade" />}
+          />
         ) : isWelcomeSetup ? (
           <WelcomeSetup
             currentConversation={currentConversation}
@@ -115,6 +129,8 @@ export const AssistantBody: FunctionComponent<Props> = ({
             isSettingsModalVisible={isSettingsModalVisible}
             setCurrentSystemPromptId={setCurrentSystemPromptId}
             setIsSettingsModalVisible={setIsSettingsModalVisible}
+            setUserPrompt={setUserPrompt}
+            connectorId={currentConversation?.apiConfig?.connectorId}
           />
         ) : (
           <EuiPanel
@@ -125,6 +141,14 @@ export const AssistantBody: FunctionComponent<Props> = ({
           >
             {comments}
           </EuiPanel>
+        )}
+      </EuiFlexItem>
+      <EuiFlexItem grow={false}>
+        {isConversationOwner && conversationSharedState !== ConversationSharedState.PRIVATE && (
+          <SharedConversationOwnerCallout
+            id={currentConversation?.id ?? ''}
+            isGloballyShared={conversationSharedState === ConversationSharedState.SHARED}
+          />
         )}
       </EuiFlexItem>
       <EuiFlexItem grow={false}>{disclaimer}</EuiFlexItem>

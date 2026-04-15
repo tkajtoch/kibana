@@ -5,12 +5,12 @@
  * 2.0.
  */
 
-import { EcsSecurityExtension as Ecs } from '@kbn/securitysolution-ecs';
-import { DeprecatedRowRendererId } from '..';
+import type { EcsSecurityExtension as Ecs } from '@kbn/securitysolution-ecs';
+import type { DeprecatedRowRendererId } from '..';
 
 /**
  * This interface should not be used anymore.
- * Use the one from `plugins/security_solution/common/types/timeline`.
+ * Use the one from `solutions/security/plugins/security_solution/common/types/timeline`.
  * @deprecated
  */
 export interface DeprecatedRowRenderer {
@@ -19,12 +19,10 @@ export interface DeprecatedRowRenderer {
   renderRow: ({
     contextId,
     data,
-    isDraggable,
     scopeId,
   }: {
     contextId?: string;
     data: Ecs;
-    isDraggable: boolean;
     scopeId: string;
   }) => React.ReactNode;
 }

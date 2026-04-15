@@ -5,13 +5,13 @@
  * 2.0.
  */
 
-import type * as estypes from '@elastic/elasticsearch/lib/api/typesWithBodyKey';
+import type { estypes } from '@elastic/elasticsearch';
 import { schema } from '@kbn/config-schema';
-import { IScopedClusterClient } from '@kbn/core/server';
-import { RouteDependencies } from '../../../types';
+import type { IScopedClusterClient } from '@kbn/core/server';
+import type { RouteDependencies } from '../../../types';
 
 const bodySchema = schema.object({
-  watchIds: schema.arrayOf(schema.string()),
+  watchIds: schema.arrayOf(schema.string(), { maxSize: 1000 }),
 });
 
 type DeleteWatchPromiseArray = Promise<{
@@ -51,6 +51,12 @@ export function registerDeleteRoute({ router, license }: RouteDependencies) {
   router.post(
     {
       path: '/api/watcher/watches/delete',
+      security: {
+        authz: {
+          enabled: false,
+          reason: 'Relies on es client for authorization',
+        },
+      },
       validate: {
         body: bodySchema,
       },

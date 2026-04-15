@@ -6,26 +6,29 @@
  */
 
 import React, { useMemo, useCallback } from 'react';
+import type {
+  BarStyleAccessor,
+  DomainRange,
+  TickFormatter,
+  CustomTooltip as CustomChartTooltip,
+} from '@elastic/charts';
 import {
   Axis,
   BarSeries,
-  BarStyleAccessor,
   Chart,
-  DomainRange,
   Position,
   ScaleType,
   Settings,
-  TickFormatter,
   TooltipContainer,
-  CustomTooltip as CustomChartTooltip,
   Tooltip,
 } from '@elastic/charts';
 import { i18n } from '@kbn/i18n';
+import { useElasticChartsTheme } from '@kbn/charts-theme';
 import { useAppFixedViewport } from '@kbn/core-rendering-browser';
 import { BAR_HEIGHT } from './constants';
-import { useBaseChartTheme } from '../../../../../hooks/use_base_chart_theme';
 import { WaterfallChartChartContainer, WaterfallChartTooltip } from './styles';
-import { useWaterfallContext, WaterfallData } from '..';
+import type { WaterfallData } from '..';
+import { useWaterfallContext } from '..';
 import { WaterfallTooltipContent } from './waterfall_tooltip_content';
 import { formatTooltipHeading } from '../../step_detail/waterfall/data_formatting';
 import { WaterfallChartMarkers } from './waterfall_markers';
@@ -76,7 +79,7 @@ export const WaterfallBarChart = ({
   barStyleAccessor,
   index,
 }: Props) => {
-  const baseChartTheme = useBaseChartTheme();
+  const baseChartTheme = useElasticChartsTheme();
   const { onElementClick, onProjectionClick } = useWaterfallContext();
   const handleElementClick = useMemo(() => onElementClick, [onElementClick]);
   const handleProjectionClick = useMemo(() => onProjectionClick, [onProjectionClick]);
@@ -100,7 +103,6 @@ export const WaterfallBarChart = ({
         <Settings
           showLegend={false}
           rotation={90}
-          // TODO connect to charts.theme service see src/plugins/charts/public/services/theme/README.md
           baseTheme={baseChartTheme}
           onProjectionClick={handleProjectionClick}
           onElementClick={handleElementClick}

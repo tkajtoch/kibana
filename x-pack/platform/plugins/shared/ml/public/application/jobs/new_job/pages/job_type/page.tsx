@@ -19,18 +19,17 @@ import {
 } from '@elastic/eui';
 import { FormattedMessage } from '@kbn/i18n-react';
 import { ES_FIELD_TYPES } from '@kbn/field-types';
-import { useMlKibana, useNavigateToPath } from '../../../../contexts/kibana';
+import { PageTitle } from '../../../../components/page_title';
+import { useMlKibana, useMlManagementLocator } from '../../../../contexts/kibana';
 
 import { useDataSource } from '../../../../contexts/ml';
 import { DataRecognizer } from '../../../../components/data_recognizer';
 import { addItemToRecentlyAccessed } from '../../../../util/recently_accessed';
 import { LinkCard } from '../../../../components/link_card';
-import { CategorizationIcon } from './categorization_job_icon';
 import { ML_APP_LOCATOR, ML_PAGES } from '../../../../../../common/constants/locator';
-import { RareIcon } from './rare_job_icon';
-import { GeoIcon } from './geo_job_icon';
 import { useCreateAndNavigateToMlLink } from '../../../../contexts/kibana/use_create_url';
 import { MlPageHeader } from '../../../../components/page_header';
+import { CPSUnsupportedWarning } from '../../../../components/cps_unsupported_warning';
 
 export const Page: FC = () => {
   const {
@@ -42,7 +41,6 @@ export const Page: FC = () => {
   } = useMlKibana();
 
   const dataSourceContext = useDataSource();
-  const navigateToPath = useNavigateToPath();
   const onSelectDifferentIndex = useCreateAndNavigateToMlLink(
     ML_PAGES.ANOMALY_DETECTION_CREATE_JOB_SELECT_INDEX
   );
@@ -52,6 +50,17 @@ export const Page: FC = () => {
   const { selectedDataView, selectedSavedSearch } = dataSourceContext;
 
   const isTimeBasedIndex: boolean = selectedDataView.isTimeBased();
+
+  const mlManagementLocator = useMlManagementLocator();
+
+  const navigateToManagementPath = async (path: string) => {
+    if (!mlManagementLocator) return;
+
+    await mlManagementLocator.navigate({
+      sectionId: 'ml',
+      appId: `anomaly_detection${path}`,
+    });
+  };
 
   useEffect(() => {
     if (!isTimeBasedIndex) {
@@ -95,7 +104,7 @@ export const Page: FC = () => {
 
   const pageTitleLabel = selectedSavedSearch
     ? i18n.translate('xpack.ml.newJob.wizard.jobType.savedSearchPageTitleLabel', {
-        defaultMessage: 'saved search {savedSearchTitle}',
+        defaultMessage: 'Discover session {savedSearchTitle}',
         values: { savedSearchTitle: selectedSavedSearch.title ?? '' },
       })
     : i18n.translate('xpack.ml.newJob.wizard.jobType.dataViewPageTitleLabel', {
@@ -140,12 +149,12 @@ export const Page: FC = () => {
       dataVisualizerLink,
       recentlyAccessed
     );
-    navigateToPath(`/jobs/new_job/datavisualizer${getUrlParams()}`);
+    navigateToManagementPath(`/jobs/new_job/datavisualizer${getUrlParams()}`);
   };
 
   const jobTypes = [
     {
-      onClick: () => navigateToPath(`/jobs/new_job/single_metric${getUrlParams()}`),
+      onClick: () => navigateToManagementPath(`/jobs/new_job/single_metric${getUrlParams()}`),
       icon: {
         type: 'createSingleMetricJob',
         ariaLabel: i18n.translate('xpack.ml.newJob.wizard.jobType.singleMetricAriaLabel', {
@@ -161,7 +170,7 @@ export const Page: FC = () => {
       id: 'mlJobTypeLinkSingleMetricJob',
     },
     {
-      onClick: () => navigateToPath(`/jobs/new_job/multi_metric${getUrlParams()}`),
+      onClick: () => navigateToManagementPath(`/jobs/new_job/multi_metric${getUrlParams()}`),
       icon: {
         type: 'createMultiMetricJob',
         ariaLabel: i18n.translate('xpack.ml.newJob.wizard.jobType.multiMetricAriaLabel', {
@@ -178,7 +187,7 @@ export const Page: FC = () => {
       id: 'mlJobTypeLinkMultiMetricJob',
     },
     {
-      onClick: () => navigateToPath(`/jobs/new_job/population${getUrlParams()}`),
+      onClick: () => navigateToManagementPath(`/jobs/new_job/population${getUrlParams()}`),
       icon: {
         type: 'createPopulationJob',
         ariaLabel: i18n.translate('xpack.ml.newJob.wizard.jobType.populationAriaLabel', {
@@ -195,7 +204,7 @@ export const Page: FC = () => {
       id: 'mlJobTypeLinkPopulationJob',
     },
     {
-      onClick: () => navigateToPath(`/jobs/new_job/advanced${getUrlParams()}`),
+      onClick: () => navigateToManagementPath(`/jobs/new_job/advanced${getUrlParams()}`),
       icon: {
         type: 'createAdvancedJob',
         ariaLabel: i18n.translate('xpack.ml.newJob.wizard.jobType.advancedAriaLabel', {
@@ -212,9 +221,9 @@ export const Page: FC = () => {
       id: 'mlJobTypeLinkAdvancedJob',
     },
     {
-      onClick: () => navigateToPath(`/jobs/new_job/categorization${getUrlParams()}`),
+      onClick: () => navigateToManagementPath(`/jobs/new_job/categorization${getUrlParams()}`),
       icon: {
-        type: CategorizationIcon,
+        type: 'createGenericJob',
         ariaLabel: i18n.translate('xpack.ml.newJob.wizard.jobType.categorizationAriaLabel', {
           defaultMessage: 'Categorization job',
         }),
@@ -228,9 +237,9 @@ export const Page: FC = () => {
       id: 'mlJobTypeLinkCategorizationJob',
     },
     {
-      onClick: () => navigateToPath(`/jobs/new_job/rare${getUrlParams()}`),
+      onClick: () => navigateToManagementPath(`/jobs/new_job/rare${getUrlParams()}`),
       icon: {
-        type: RareIcon,
+        type: 'createGenericJob',
         ariaLabel: i18n.translate('xpack.ml.newJob.wizard.jobType.rareAriaLabel', {
           defaultMessage: 'Rare job',
         }),
@@ -247,9 +256,9 @@ export const Page: FC = () => {
 
   if (hasGeoFields) {
     jobTypes.push({
-      onClick: () => navigateToPath(`/jobs/new_job/geo${getUrlParams()}`),
+      onClick: () => navigateToManagementPath(`/jobs/new_job/geo${getUrlParams()}`),
       icon: {
-        type: GeoIcon,
+        type: 'createGeoJob',
         ariaLabel: i18n.translate('xpack.ml.newJob.wizard.jobType.geoAriaLabel', {
           defaultMessage: 'Geo job',
         }),
@@ -267,16 +276,28 @@ export const Page: FC = () => {
   return (
     <div data-test-subj="mlPageJobTypeSelection">
       <MlPageHeader>
-        <FormattedMessage
-          id="xpack.ml.newJob.wizard.jobType.createJobFromTitle"
-          defaultMessage="Create a job from the {pageTitleLabel}"
-          values={{ pageTitleLabel }}
+        <PageTitle
+          title={
+            <FormattedMessage
+              id="xpack.ml.newJob.wizard.jobType.createJobFromTitle"
+              defaultMessage="Create a job from the {pageTitleLabel}"
+              values={{ pageTitleLabel }}
+            />
+          }
         />
       </MlPageHeader>
+      <EuiSpacer size="l" />
+
+      <CPSUnsupportedWarning />
 
       {isTimeBasedIndex === false && (
         <>
-          <EuiCallOut title={indexWarningTitle} color="warning" iconType="warning">
+          <EuiCallOut
+            announceOnMount={false}
+            title={indexWarningTitle}
+            color="warning"
+            iconType="warning"
+          >
             <FormattedMessage
               id="xpack.ml.newJob.wizard.jobType.howToRunAnomalyDetectionDescription"
               defaultMessage="Anomaly detection can only be run over indices which are time based."
@@ -285,11 +306,11 @@ export const Page: FC = () => {
             <EuiLink onClick={onSelectDifferentIndex}>
               <FormattedMessage
                 id="xpack.ml.newJob.wizard.jobType.selectDifferentIndexLinkText"
-                defaultMessage="Select a different data view or saved search"
+                defaultMessage="Select a different data view or saved Discover session"
               />
             </EuiLink>
           </EuiCallOut>
-          <EuiSpacer size="xxl" />
+          <EuiSpacer size="l" />
         </>
       )}
 
@@ -354,22 +375,20 @@ export const Page: FC = () => {
 
       <EuiSpacer size="xxl" />
 
-      <EuiText>
-        <EuiTitle size="s">
-          <h3>
-            <FormattedMessage
-              id="xpack.ml.newJob.wizard.jobType.learnMoreAboutDataTitle"
-              defaultMessage="Learn more about your data"
-            />
-          </h3>
-        </EuiTitle>
-
-        <p>
+      <EuiTitle size="s">
+        <h2>
           <FormattedMessage
-            id="xpack.ml.newJob.wizard.jobType.learnMoreAboutDataDescription"
-            defaultMessage="If you're not sure what type of job to create, first explore the fields and metrics in your data."
+            id="xpack.ml.newJob.wizard.jobType.learnMoreAboutDataTitle"
+            defaultMessage="Learn more about your data"
           />
-        </p>
+        </h2>
+      </EuiTitle>
+      <EuiSpacer size="s" />
+      <EuiText>
+        <FormattedMessage
+          id="xpack.ml.newJob.wizard.jobType.learnMoreAboutDataDescription"
+          defaultMessage="If you're not sure what type of job to create, first explore the fields and metrics in your data."
+        />
       </EuiText>
 
       <EuiSpacer size="m" />

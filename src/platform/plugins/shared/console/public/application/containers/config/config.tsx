@@ -15,20 +15,27 @@ import {
   EuiSpacer,
   useIsWithinBreakpoints,
 } from '@elastic/eui';
+import { css } from '@emotion/react';
 
 import { Settings } from './settings';
 import { Variables } from './variables';
+
+const styles = {
+  fullHeightPanel: css`
+    height: 100%;
+  `,
+};
 
 export function Config() {
   const isVerticalLayout = useIsWithinBreakpoints(['xs', 's', 'm']);
 
   return (
     <EuiPanel
-      color="subdued"
+      color="plain"
       paddingSize="l"
       hasShadow={false}
       borderRadius="none"
-      css={{ height: '100%' }}
+      css={styles.fullHeightPanel}
       data-test-subj="consoleConfigPanel"
     >
       <EuiFlexGroup

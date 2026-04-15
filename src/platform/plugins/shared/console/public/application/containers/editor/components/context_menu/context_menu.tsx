@@ -7,19 +7,20 @@
  * License v3.0 only", or the "Server Side Public License, v 1".
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   EuiButtonIcon,
+  EuiCode,
   EuiContextMenuPanel,
   EuiContextMenuItem,
   EuiPopover,
   EuiFlexGroup,
   EuiFlexItem,
-  EuiLink,
   EuiLoadingSpinner,
+  EuiText,
 } from '@elastic/eui';
 import { css } from '@emotion/react';
-import { NotificationsSetup } from '@kbn/core/public';
+import type { NotificationsStart } from '@kbn/core/public';
 import { FormattedMessage } from '@kbn/i18n-react';
 import { i18n } from '@kbn/i18n';
 import { LanguageSelectorModal } from './language_selector_modal';
@@ -33,12 +34,17 @@ import {
   AVAILABLE_LANGUAGES,
   KIBANA_API_PREFIX,
 } from '../../../../../../common/constants';
+import { KEYS } from '../../../../components/shortcuts_popover/keys';
 
 interface Props {
   getRequests: () => Promise<EditorRequest[]>;
   getDocumentation: () => Promise<string | null>;
   autoIndent: (ev: React.MouseEvent) => void;
-  notifications: NotificationsSetup;
+  notifications: Pick<NotificationsStart, 'toasts'>;
+  /* A function that returns true if any of the selected requests is an internal Kibana request
+   * (starting with the kbn: prefix). This is needed here as we display only the curl language
+   * for internal Kibana requests since the other languages are not supported yet. */
+  getIsKbnRequestSelected: () => Promise<boolean | null>;
 }
 
 const styles = {
@@ -48,7 +54,9 @@ const styles = {
   button: css`
     &:hover {
       text-decoration: none !important;
-      .languageSelector {
+
+      /* Target the language selector when the button is hovered */
+      .consoleEditorContextMenu__languageSelector {
         text-decoration: underline;
       }
     }
@@ -66,17 +74,30 @@ export const ContextMenu = ({
   getDocumentation,
   autoIndent,
   notifications,
+  getIsKbnRequestSelected,
 }: Props) => {
   // Get default language from local storage
   const {
     services: { storage, esHostService },
+    config: { isPackagedEnvironment },
   } = useServicesContext();
-  const defaultLanguage = storage.get(StorageKeys.DEFAULT_LANGUAGE, DEFAULT_LANGUAGE);
 
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
   const [isRequestConverterLoading, setRequestConverterLoading] = useState(false);
   const [isLanguageSelectorVisible, setLanguageSelectorVisibility] = useState(false);
+  const [isKbnRequestSelected, setIsKbnRequestSelected] = useState<boolean | null>(null);
+  const [defaultLanguage, setDefaultLanguage] = useState(
+    storage.get(StorageKeys.DEFAULT_LANGUAGE, DEFAULT_LANGUAGE)
+  );
   const [currentLanguage, setCurrentLanguage] = useState(defaultLanguage);
+
+  useEffect(() => {
+    if (isKbnRequestSelected) {
+      setCurrentLanguage(DEFAULT_LANGUAGE);
+    } else {
+      setCurrentLanguage(defaultLanguage);
+    }
+  }, [defaultLanguage, isKbnRequestSelected]);
 
   const copyText = async (text: string) => {
     if (window.navigator?.clipboard) {
@@ -138,6 +159,10 @@ export const ContextMenu = ({
     await copyText(requestsAsCode);
   };
 
+  const checkIsKbnRequestSelected = async () => {
+    setIsKbnRequestSelected(await getIsKbnRequestSelected());
+  };
+
   const onCopyAsSubmit = async (language?: string) => {
     const withLanguage = language || currentLanguage;
 
@@ -165,7 +190,10 @@ export const ContextMenu = ({
       storage.set(StorageKeys.DEFAULT_LANGUAGE, language);
     }
 
-    setCurrentLanguage(language);
+    setDefaultLanguage(language);
+    if (!isKbnRequestSelected) {
+      setCurrentLanguage(language);
+    }
   };
 
   const closePopover = () => {
@@ -193,7 +221,10 @@ export const ContextMenu = ({
 
   const button = (
     <EuiButtonIcon
-      onClick={() => setIsPopoverOpen((prev) => !prev)}
+      onClick={() => {
+        setIsPopoverOpen((prev) => !prev);
+        checkIsKbnRequestSelected();
+      }}
       data-test-subj="toggleConsoleMenu"
       aria-label={i18n.translate('console.requestOptionsButtonAriaLabel', {
         defaultMessage: 'Request options',
@@ -204,63 +235,82 @@ export const ContextMenu = ({
   );
 
   const items = [
-    <EuiContextMenuItem
-      key="Copy as"
-      data-test-subj="consoleMenuCopyAsButton"
-      id="copyAs"
-      disabled={!window.navigator?.clipboard}
-      onClick={(e: React.MouseEvent) => {
-        e.preventDefault();
-        const target = e.target as HTMLButtonElement;
-
-        if (target.dataset.name === 'changeLanguage') {
-          setLanguageSelectorVisibility(true);
-          return;
-        }
-
-        onCopyAsSubmit();
-      }}
-      icon="copyClipboard"
-      css={styles.button}
-    >
-      <EuiFlexGroup alignItems="center">
-        <EuiFlexItem>
-          <EuiFlexGroup gutterSize="xs" alignItems="center" className="languageSelector">
-            <EuiFlexItem grow={false}>
-              <FormattedMessage
-                tagName="span"
-                id="console.monaco.requestOptions.copyAsUrlButtonLabel"
-                defaultMessage="Copy as"
-              />
-            </EuiFlexItem>
-            <EuiFlexItem grow={false}>
-              <strong>{getLanguageLabelByValue(currentLanguage)}</strong>
-            </EuiFlexItem>
-          </EuiFlexGroup>
-        </EuiFlexItem>
-        <EuiFlexItem grow={false}>
-          {isRequestConverterLoading ? (
-            <EuiLoadingSpinner size="s" />
-          ) : (
-            // The EuiContextMenuItem renders itself as a button already, so we need to
-            // force the link to not be a button in order to prevent A11Y issues.
-            <EuiLink href="" data-name="changeLanguage" data-test-subj="changeLanguageButton">
-              Change
-            </EuiLink>
-          )}
-        </EuiFlexItem>
-      </EuiFlexGroup>
-    </EuiContextMenuItem>,
+    ...(!isPackagedEnvironment
+      ? [
+          <EuiContextMenuItem
+            key="Copy to"
+            data-test-subj="consoleMenuCopyAsButton"
+            id="copyAs"
+            disabled={!window.navigator?.clipboard}
+            onClick={() => onCopyAsSubmit()}
+            icon="copy"
+            css={styles.button}
+          >
+            <EuiFlexGroup
+              gutterSize="xs"
+              alignItems="center"
+              className="consoleEditorContextMenu__languageSelector"
+              data-test-subj="language-selector"
+            >
+              <EuiFlexItem grow={false}>
+                <FormattedMessage
+                  tagName="span"
+                  id="console.monaco.requestOptions.copyAsUrlButtonLabel"
+                  defaultMessage="Copy to"
+                />
+              </EuiFlexItem>
+              <EuiFlexItem grow={false}>
+                <strong>{getLanguageLabelByValue(currentLanguage)}</strong>
+              </EuiFlexItem>
+            </EuiFlexGroup>
+          </EuiContextMenuItem>,
+        ]
+      : []),
+    ...(!isPackagedEnvironment && !isKbnRequestSelected
+      ? [
+          <EuiContextMenuItem
+            key="Select language"
+            data-test-subj="consoleMenuSelectLanguage"
+            id="selectLanguage"
+            onClick={() => setLanguageSelectorVisibility(true)}
+            icon="code"
+            disabled={isRequestConverterLoading}
+          >
+            <EuiFlexGroup alignItems="center" gutterSize="s" responsive={false}>
+              <EuiFlexItem grow={true}>
+                <FormattedMessage
+                  id="console.monaco.requestOptions.selectLanguageButtonLabel"
+                  defaultMessage="Select language"
+                />
+              </EuiFlexItem>
+              {isRequestConverterLoading && (
+                <EuiFlexItem grow={false}>
+                  <EuiLoadingSpinner size="s" />
+                </EuiFlexItem>
+              )}
+            </EuiFlexGroup>
+          </EuiContextMenuItem>,
+        ]
+      : []),
     <EuiContextMenuItem
       data-test-subj="consoleMenuAutoIndent"
       key="Auto indent"
       onClick={handleAutoIndent}
       icon="kqlFunction"
     >
-      <FormattedMessage
-        id="console.monaco.requestOptions.autoIndentButtonLabel"
-        defaultMessage="Auto indent"
-      />
+      <EuiFlexGroup alignItems="center" gutterSize="s" responsive={false}>
+        <EuiFlexItem grow={true}>
+          <FormattedMessage
+            id="console.monaco.requestOptions.autoIndentButtonLabel"
+            defaultMessage="Auto indent"
+          />
+        </EuiFlexItem>
+        <EuiFlexItem grow={false} data-test-subj="consoleMenuAutoIndentShortcut">
+          <EuiText size="xs">
+            <EuiCode>{KEYS.keyCtrlCmd}</EuiCode> + <EuiCode>{KEYS.keyI}</EuiCode>
+          </EuiText>
+        </EuiFlexItem>
+      </EuiFlexGroup>
     </EuiContextMenuItem>,
     <EuiContextMenuItem
       key="Open documentation"
@@ -268,10 +318,19 @@ export const ContextMenu = ({
       onClick={openDocs}
       icon="documentation"
     >
-      <FormattedMessage
-        id="console.monaco.requestOptions.openDocumentationButtonLabel"
-        defaultMessage="Open API reference"
-      />
+      <EuiFlexGroup alignItems="center" gutterSize="s" responsive={false}>
+        <EuiFlexItem grow={true}>
+          <FormattedMessage
+            id="console.monaco.requestOptions.openDocumentationButtonLabel"
+            defaultMessage="Open API reference"
+          />
+        </EuiFlexItem>
+        <EuiFlexItem grow={false} data-test-subj="consoleMenuOpenDocsShortcut">
+          <EuiText size="xs">
+            <EuiCode>{KEYS.keyCtrlCmd}</EuiCode> + <EuiCode>{KEYS.keySlash}</EuiCode>
+          </EuiText>
+        </EuiFlexItem>
+      </EuiFlexGroup>
     </EuiContextMenuItem>,
   ];
 

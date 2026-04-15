@@ -5,14 +5,19 @@
  * 2.0.
  */
 
-import { z } from '@kbn/zod';
-import { get } from 'lodash';
+import { z } from '@kbn/zod/v4';
 import { DynamicStructuredTool } from '@langchain/core/tools';
 import { errors } from '@elastic/elasticsearch';
-import { QueryDslQueryContainer, SearchRequest } from '@elastic/elasticsearch/lib/api/types';
-import { AuthenticatedUser } from '@kbn/core-security-common';
-import { IndexEntry } from '@kbn/elastic-assistant-common';
-import { ElasticsearchClient, Logger } from '@kbn/core/server';
+import type {
+  QueryDslQueryContainer,
+  SearchHit,
+  SearchRequest,
+} from '@elastic/elasticsearch/lib/api/types';
+import type { AuthenticatedUser } from '@kbn/core-security-common';
+import type { ContentReferencesStore, IndexEntry } from '@kbn/elastic-assistant-common';
+import { contentReferenceBlock, esqlQueryReference } from '@kbn/elastic-assistant-common';
+import type { ElasticsearchClient, Logger } from '@kbn/core/server';
+import { isString } from 'lodash';
 
 export const isModelAlreadyExistsError = (error: Error) => {
   return (
@@ -139,13 +144,13 @@ export const getKBVectorSearchQuery = ({
 export const getStructuredToolForIndexEntry = ({
   indexEntry,
   esClient,
+  contentReferencesStore,
   logger,
-  elserId,
 }: {
   indexEntry: IndexEntry;
   esClient: ElasticsearchClient;
+  contentReferencesStore: ContentReferencesStore;
   logger: Logger;
-  elserId: string;
 }): DynamicStructuredTool => {
   const inputSchema = indexEntry.inputSchema?.reduce((prev, input) => {
     const fieldType =
@@ -160,7 +165,11 @@ export const getStructuredToolForIndexEntry = ({
   }, {});
 
   return new DynamicStructuredTool({
-    name: indexEntry.name.replace(/[^a-zA-Z0-9-]/g, ''), // // Tool names expects a string that matches the pattern '^[a-zA-Z0-9-]+$'
+    name: indexEntry.name
+      // Replace invalid characters with an empty string
+      .replace(/[^a-zA-Z0-9_]/g, '')
+      // Ensure it starts with a letter. If not, prepend 'a'
+      .replace(/^[^a-zA-Z]/, 'a'),
     description: indexEntry.description,
     schema: z.object({
       query: z.string().describe(indexEntry.queryDescription),
@@ -174,34 +183,32 @@ export const getStructuredToolForIndexEntry = ({
       // Generate filters for inputSchema fields
       const filter =
         indexEntry.inputSchema?.reduce(
-          // @ts-expect-error Possible to override types with dynamic input schema?
+          // @ts-expect-error upgrade typescript v5.9.3
           (prev, i) => [...prev, { term: { [`${i.fieldName}`]: input?.[i.fieldName] } }],
           [] as Array<{ term: { [key: string]: string } }>
         ) ?? [];
 
       const params: SearchRequest = {
         index: indexEntry.index,
-        size: 10,
-        retriever: {
-          standard: {
-            query: {
-              nested: {
-                path: `${indexEntry.field}.inference.chunks`,
-                query: {
-                  sparse_vector: {
-                    inference_id: elserId,
-                    field: `${indexEntry.field}.inference.chunks.embeddings`,
-                    query: input.query,
-                  },
-                },
-                inner_hits: {
-                  size: 2,
-                  name: `${indexEntry.name}.${indexEntry.field}`,
-                  _source: [`${indexEntry.field}.inference.chunks.text`],
+        size: 100,
+        query: {
+          bool: {
+            must: [
+              {
+                match: {
+                  [indexEntry.field]: input.query,
                 },
               },
-            },
+            ],
             filter,
+          },
+        },
+        highlight: {
+          fields: {
+            [indexEntry.field]: {
+              number_of_fragments: 2,
+              order: 'score',
+            },
           },
         },
       };
@@ -210,25 +217,21 @@ export const getStructuredToolForIndexEntry = ({
         const result = await esClient.search(params);
 
         const kbDocs = result.hits.hits.map((hit) => {
-          if (indexEntry.outputFields && indexEntry.outputFields.length > 0) {
-            return indexEntry.outputFields.reduce((prev, field) => {
-              // @ts-expect-error
-              return { ...prev, [field]: hit._source[field] };
-            }, {});
-          }
+          const reference = contentReferencesStore.add((p) => createReference(p.id, hit));
 
-          // We want to send relevant inner hits (chunks) to the LLM as a context
-          const innerHitPath = `${indexEntry.name}.${indexEntry.field}`;
-          if (hit.inner_hits?.[innerHitPath]) {
-            return {
-              text: hit.inner_hits[innerHitPath].hits.hits
-                .map((innerHit) => innerHit._source.text)
-                .join('\n --- \n'),
-            };
+          if (indexEntry.outputFields && indexEntry.outputFields.length > 0) {
+            return indexEntry.outputFields.reduce(
+              (prev, field) => {
+                // @ts-expect-error
+                return { ...prev, [field]: hit._source[field] };
+              },
+              { citation: contentReferenceBlock(reference) }
+            );
           }
 
           return {
-            text: get(hit._source, `${indexEntry.field}.inference.chunks[0].text`),
+            text: hit.highlight?.[indexEntry.field].join('\n --- \n'),
+            citation: contentReferenceBlock(reference),
           };
         });
 
@@ -236,9 +239,9 @@ export const getStructuredToolForIndexEntry = ({
         logger.debug(() => `Similarity Search Results:\n ${JSON.stringify(result)}`);
         logger.debug(() => `Similarity Text Extract Results:\n ${JSON.stringify(kbDocs)}`);
 
-        return `###\nBelow are all relevant documents in JSON format:\n${JSON.stringify(
-          kbDocs
-        )}\n###`;
+        const prunedResult = JSON.stringify(kbDocs).substring(0, 20000);
+
+        return `###\nBelow are all relevant documents in JSON format:\n${prunedResult}###`;
       } catch (e) {
         logger.error(`Error performing IndexEntry KB Similarity Search: ${e.message}`);
         return `I'm sorry, but I was unable to find any information in the knowledge base. Perhaps this error would be useful to deliver to the user. Be sure to print it below your response and in a codeblock so it is rendered nicely: ${e.message}`;
@@ -247,4 +250,24 @@ export const getStructuredToolForIndexEntry = ({
     tags: ['knowledge-base'],
     // TODO: Remove after ZodAny is fixed https://github.com/langchain-ai/langchainjs/blob/main/langchain-core/src/tools.ts
   }) as unknown as DynamicStructuredTool;
+};
+
+const createReference = (id: string, hit: SearchHit<unknown>) => {
+  const hitIndex = hit._index;
+  const hitId = hit._id;
+  const esqlQuery = `FROM ${hitIndex} ${hitId ? `METADATA _id\n | WHERE _id == "${hitId}"` : ''}`;
+
+  let timerange;
+  const source = hit._source as Record<string, unknown>;
+
+  if ('@timestamp' in source && isString(source['@timestamp']) && hitId) {
+    timerange = { from: source['@timestamp'], to: source['@timestamp'] };
+  }
+
+  return esqlQueryReference({
+    id,
+    query: esqlQuery,
+    label: `Index: ${hit._index}`,
+    timerange,
+  });
 };

@@ -5,10 +5,10 @@
  * 2.0.
  */
 
-import {
+import { firstValueFrom } from 'rxjs';
+import type {
   CoreSetup,
   CoreStart,
-  DEFAULT_APP_CATEGORIES,
   KibanaRequest,
   Logger,
   Plugin,
@@ -16,30 +16,20 @@ import {
   PluginInitializerContext,
 } from '@kbn/core/server';
 import { registerRoutes } from '@kbn/server-route-repository';
-import { firstValueFrom } from 'rxjs';
-import { KibanaFeatureScope } from '@kbn/features-plugin/common';
-import { EntityManagerConfig, configSchema, exposeToBrowserConfig } from '../common/config';
-import { builtInDefinitions } from './lib/entities/built_in';
-import { upgradeBuiltInEntityDefinitions } from './lib/entities/upgrade_entity_definition';
+import type { EntityManagerConfig } from '../common/config';
+import { configSchema, exposeToBrowserConfig } from '../common/config';
 import { EntityClient } from './lib/entity_client';
-import { installEntityManagerTemplates } from './lib/manage_index_templates';
 import { entityManagerRouteRepository } from './routes';
-import { EntityManagerRouteDependencies } from './routes/types';
+import type { EntityManagerRouteDependencies } from './routes/types';
 import { EntityDiscoveryApiKeyType, entityDefinition } from './saved_objects';
-import {
+import type {
   EntityManagerPluginSetupDependencies,
   EntityManagerPluginStartDependencies,
   EntityManagerServerSetup,
 } from './types';
-import { setupEntityDefinitionsIndex } from './lib/v2/definitions/setup_entity_definitions_index';
-import {
-  CREATE_ENTITY_TYPE_DEFINITION_PRIVILEGE,
-  CREATE_ENTITY_SOURCE_DEFINITION_PRIVILEGE,
-  READ_ENTITY_TYPE_DEFINITION_PRIVILEGE,
-  READ_ENTITY_SOURCE_DEFINITION_PRIVILEGE,
-  READ_ENTITIES_PRIVILEGE,
-} from './lib/v2/constants';
-import { installBuiltInDefinitions } from './lib/v2/definitions/install_built_in_definitions';
+import { disableManagedEntityDiscovery } from './lib/entities/uninstall_entity_definition';
+import { installEntityManagerTemplates } from './lib/manage_index_templates';
+import { createAndInstallILMPolicies } from './lib/entities/manage_ilm_policies';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface EntityManagerServerPluginSetup {}
@@ -64,8 +54,12 @@ export class EntityManagerServerPlugin
   public config: EntityManagerConfig;
   public logger: Logger;
   public server?: EntityManagerServerSetup;
+  private isDev: boolean;
+  private isServerless: boolean;
 
   constructor(context: PluginInitializerContext<EntityManagerConfig>) {
+    this.isDev = context.env.mode.dev;
+    this.isServerless = context.env.packageInfo.buildFlavor === 'serverless';
     this.config = context.config.get();
     this.logger = context.logger.get();
   }
@@ -74,46 +68,6 @@ export class EntityManagerServerPlugin
     core: CoreSetup,
     plugins: EntityManagerPluginSetupDependencies
   ): EntityManagerServerPluginSetup {
-    const ENTITY_MANAGER_FEATURE_ID = 'entityManager';
-    plugins.features.registerKibanaFeature({
-      id: ENTITY_MANAGER_FEATURE_ID,
-      name: 'Entity Manager',
-      description: 'All features related to the Elastic Entity model',
-      category: DEFAULT_APP_CATEGORIES.management,
-      scope: [KibanaFeatureScope.Spaces, KibanaFeatureScope.Security],
-      app: [ENTITY_MANAGER_FEATURE_ID],
-      privileges: {
-        all: {
-          app: [ENTITY_MANAGER_FEATURE_ID],
-          api: [
-            CREATE_ENTITY_TYPE_DEFINITION_PRIVILEGE,
-            CREATE_ENTITY_SOURCE_DEFINITION_PRIVILEGE,
-            READ_ENTITY_TYPE_DEFINITION_PRIVILEGE,
-            READ_ENTITY_SOURCE_DEFINITION_PRIVILEGE,
-            READ_ENTITIES_PRIVILEGE,
-          ],
-          ui: [],
-          savedObject: {
-            all: [],
-            read: [],
-          },
-        },
-        read: {
-          app: [ENTITY_MANAGER_FEATURE_ID],
-          api: [
-            READ_ENTITY_TYPE_DEFINITION_PRIVILEGE,
-            READ_ENTITY_SOURCE_DEFINITION_PRIVILEGE,
-            READ_ENTITIES_PRIVILEGE,
-          ],
-          ui: [],
-          savedObject: {
-            all: [],
-            read: [],
-          },
-        },
-      },
-    });
-
     core.savedObjects.registerType(entityDefinition);
     core.savedObjects.registerType(EntityDiscoveryApiKeyType);
     plugins.encryptedSavedObjects.registerType({
@@ -138,6 +92,7 @@ export class EntityManagerServerPlugin
       },
       core,
       logger: this.logger,
+      runDevModeChecks: this.isDev,
     });
 
     return {};
@@ -152,7 +107,12 @@ export class EntityManagerServerPlugin
   }) {
     const clusterClient = coreStart.elasticsearch.client.asScoped(request);
     const soClient = coreStart.savedObjects.getScopedClient(request);
-    return new EntityClient({ clusterClient, soClient, logger: this.logger });
+    return new EntityClient({
+      clusterClient,
+      soClient,
+      isServerless: this.isServerless,
+      logger: this.logger,
+    });
   }
 
   public start(
@@ -161,7 +121,6 @@ export class EntityManagerServerPlugin
   ): EntityManagerServerPluginStart {
     if (this.server) {
       this.server.core = core;
-      this.server.isServerless = core.elasticsearch.getCapabilities().serverless;
       this.server.security = plugins.security;
       this.server.encryptedSavedObjects = plugins.encryptedSavedObjects;
     }
@@ -170,28 +129,25 @@ export class EntityManagerServerPlugin
     installEntityManagerTemplates({
       esClient: core.elasticsearch.client.asInternalUser,
       logger: this.logger,
-    })
-      .then(async () => {
-        // the api key validation requires a check against the cluster license
-        // which is lazily loaded. we ensure it gets loaded before the update
-        await firstValueFrom(plugins.licensing.license$);
-        const { success } = await upgradeBuiltInEntityDefinitions({
-          definitions: builtInDefinitions,
-          server: this.server!,
-        });
+      isServerless: this.isServerless,
+    }).catch((err) => this.logger.error(err));
 
-        if (success) {
-          this.logger.info('Builtin definitions were successfully upgraded');
-        }
-      })
-      .catch((err) => this.logger.error(err));
+    // Serverless does not support ILM, see: https://www.elastic.co/docs/deploy-manage/deploy/elastic-cloud/differences-from-other-elasticsearch-offerings#elasticsearch
+    if (!this.isServerless) {
+      createAndInstallILMPolicies(core.elasticsearch.client.asInternalUser).catch((err) =>
+        this.logger.error(err)
+      );
+    }
 
-    // Setup v2 definitions index
-    setupEntityDefinitionsIndex(core.elasticsearch.client, this.logger)
-      .then(() => installBuiltInDefinitions(core.elasticsearch.client, this.logger))
-      .catch((error) => {
-        this.logger.error(error);
-      });
+    // Disable v1 built-in definitions.
+    // the api key invalidation requires a check against the cluster license
+    // which is lazily loaded. we ensure it gets loaded before the update
+    firstValueFrom(plugins.licensing.license$)
+      .then(() =>
+        disableManagedEntityDiscovery({ server: this.server!, isServerless: this.isServerless })
+      )
+      .then(() => this.logger.debug(`Disabled managed entity discovery`))
+      .catch((err) => this.logger.error(`Failed to disable managed entity discovery: ${err}`));
 
     return {
       getScopedClient: async ({ request }: { request: KibanaRequest }) => {

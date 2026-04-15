@@ -6,7 +6,7 @@
  */
 
 import React, { useEffect } from 'react';
-import styled from 'styled-components';
+import styled from '@emotion/styled';
 import { EuiSuperSelect, EuiToolTip } from '@elastic/eui';
 import { i18n } from '@kbn/i18n';
 import { useSeriesStorage } from '../../hooks/use_series_storage';
@@ -16,7 +16,7 @@ import {
   RECORDS_FIELD,
   PERCENTILE,
 } from '../../configurations/constants';
-import { SeriesConfig, SeriesUrl } from '../../types';
+import type { SeriesConfig, SeriesUrl } from '../../types';
 import { SYNTHETICS_STEP_NAME } from '../../configurations/constants/field_names/synthetics';
 import { isStepLevelMetric } from '../../configurations/synthetics/kpi_over_time_config';
 
@@ -92,7 +92,7 @@ export function Breakdowns({ seriesConfig, seriesId, series }: Props) {
           value: id,
           dropdownDisplay: (
             <EuiToolTip content={BREAKDOWN_UNAVAILABLE}>
-              <>{label}</>
+              <span tabIndex={0}>{label}</span>
             </EuiToolTip>
           ),
           disabled: true,
@@ -122,6 +122,9 @@ export function Breakdowns({ seriesConfig, seriesId, series }: Props) {
         onChange={(value) => onOptionChange(value)}
         data-test-subj={'seriesBreakdown'}
         disabled={differentSeriesHasBreakdown}
+        aria-label={i18n.translate('xpack.exploratoryView.breakDownFilter.selectAriaLabel', {
+          defaultMessage: 'Breakdown',
+        })}
       />
     );
   }

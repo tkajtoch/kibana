@@ -17,7 +17,9 @@
           "ContentEditorKibanaDependencies",
           ">) => React.JSX.Element"
         ],
-        "path": "packages/content-management/content_editor/src/services.tsx",
+        "path": "src/platform/packages/shared/content-management/content_editor/src/services.tsx",
+        "lineNumber": 128,
+        "columnNumber": 14,
         "deprecated": false,
         "trackAdoption": false,
         "children": [
@@ -33,7 +35,9 @@
               "ContentEditorKibanaDependencies",
               ">"
             ],
-            "path": "packages/content-management/content_editor/src/services.tsx",
+            "path": "src/platform/packages/shared/content-management/content_editor/src/services.tsx",
+            "lineNumber": 130,
+            "columnNumber": 6,
             "deprecated": false,
             "trackAdoption": false,
             "isRequired": true
@@ -56,7 +60,9 @@
           "Services",
           ">) => React.JSX.Element"
         ],
-        "path": "packages/content-management/content_editor/src/services.tsx",
+        "path": "src/platform/packages/shared/content-management/content_editor/src/services.tsx",
+        "lineNumber": 59,
+        "columnNumber": 14,
         "deprecated": false,
         "trackAdoption": false,
         "children": [
@@ -72,7 +78,9 @@
               "Services",
               ">"
             ],
-            "path": "packages/content-management/content_editor/src/services.tsx",
+            "path": "src/platform/packages/shared/content-management/content_editor/src/services.tsx",
+            "lineNumber": 59,
+            "columnNumber": 72,
             "deprecated": false,
             "trackAdoption": false,
             "isRequired": true
@@ -99,7 +107,9 @@
           },
           ") => () => void"
         ],
-        "path": "packages/content-management/content_editor/src/open_content_editor.tsx",
+        "path": "src/platform/packages/shared/content-management/content_editor/src/open_content_editor.tsx",
+        "lineNumber": 43,
+        "columnNumber": 1,
         "deprecated": false,
         "trackAdoption": false,
         "children": [],
@@ -115,7 +125,9 @@
         "tags": [],
         "label": "SavedObjectsReference",
         "description": [],
-        "path": "packages/content-management/content_editor/src/services.tsx",
+        "path": "src/platform/packages/shared/content-management/content_editor/src/services.tsx",
+        "lineNumber": 34,
+        "columnNumber": 1,
         "deprecated": false,
         "trackAdoption": false,
         "children": [
@@ -126,7 +138,9 @@
             "tags": [],
             "label": "id",
             "description": [],
-            "path": "packages/content-management/content_editor/src/services.tsx",
+            "path": "src/platform/packages/shared/content-management/content_editor/src/services.tsx",
+            "lineNumber": 35,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           },
@@ -137,7 +151,9 @@
             "tags": [],
             "label": "name",
             "description": [],
-            "path": "packages/content-management/content_editor/src/services.tsx",
+            "path": "src/platform/packages/shared/content-management/content_editor/src/services.tsx",
+            "lineNumber": 36,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           },
@@ -148,7 +164,9 @@
             "tags": [],
             "label": "type",
             "description": [],
-            "path": "packages/content-management/content_editor/src/services.tsx",
+            "path": "src/platform/packages/shared/content-management/content_editor/src/services.tsx",
+            "lineNumber": 37,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           }
@@ -168,11 +186,13 @@
         "signature": [
           "{ onSave?: ((args: { id: string; title: string; description?: string | undefined; tags: string[]; }) => Promise<void>) | undefined; item: ",
           "Item",
-          "; isReadonly?: boolean | undefined; readonlyReason?: string | undefined; entityName: string; customValidators?: ",
+          "; entityName: string; isReadonly?: boolean | undefined; readonlyReason?: string | undefined; customValidators?: ",
           "CustomValidators",
           " | undefined; appendRows?: React.ReactNode; }"
         ],
-        "path": "packages/content-management/content_editor/src/open_content_editor.tsx",
+        "path": "src/platform/packages/shared/content-management/content_editor/src/open_content_editor.tsx",
+        "lineNumber": 32,
+        "columnNumber": 1,
         "deprecated": false,
         "trackAdoption": false,
         "initialIsOpen": false

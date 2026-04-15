@@ -5,22 +5,24 @@
  * 2.0.
  */
 
-import { useMutation } from '@tanstack/react-query';
+import { useMutation } from '@kbn/react-query';
 import type { HttpSetup, IHttpFetchError, ResponseErrorBody } from '@kbn/core-http-browser';
 import type { IToasts } from '@kbn/core-notifications-browser';
 import { i18n } from '@kbn/i18n';
 
+import type {
+  KnowledgeBaseEntryCreateProps,
+  KnowledgeBaseEntryResponse,
+} from '@kbn/elastic-assistant-common';
 import {
   API_VERSIONS,
   ELASTIC_AI_ASSISTANT_KNOWLEDGE_BASE_ENTRIES_URL,
-  KnowledgeBaseEntryCreateProps,
-  KnowledgeBaseEntryResponse,
 } from '@kbn/elastic-assistant-common';
 import { useInvalidateKnowledgeBaseEntries } from './use_knowledge_base_entries';
 
 const CREATE_KNOWLEDGE_BASE_ENTRY_MUTATION_KEY = [
   ELASTIC_AI_ASSISTANT_KNOWLEDGE_BASE_ENTRIES_URL,
-  API_VERSIONS.internal.v1,
+  API_VERSIONS.public.v1,
 ];
 
 export interface UseCreateKnowledgeBaseEntryParams {
@@ -54,7 +56,7 @@ export const useCreateKnowledgeBaseEntry = ({
         ELASTIC_AI_ASSISTANT_KNOWLEDGE_BASE_ENTRIES_URL,
         {
           body: JSON.stringify(entry),
-          version: API_VERSIONS.internal.v1,
+          version: API_VERSIONS.public.v1,
           signal,
         }
       );

@@ -5,7 +5,7 @@
  * 2.0.
  */
 
-import type * as estypes from '@elastic/elasticsearch/lib/api/typesWithBodyKey';
+import type { estypes } from '@elastic/elasticsearch';
 import type { QueryDslQueryContainer } from '@elastic/elasticsearch/lib/api/types';
 
 import type { HttpStart } from '@kbn/core/public';
@@ -42,6 +42,10 @@ interface GetTimeFieldRangeOptions {
   path: string;
 
   signal?: AbortSignal;
+  /**
+   * Project routing
+   */
+  projectRouting?: string;
 }
 
 /**

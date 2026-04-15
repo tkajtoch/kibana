@@ -6,14 +6,14 @@
  */
 
 import { useState } from 'react';
-import { DataView } from '@kbn/data-views-plugin/common';
+import type { DataView } from '@kbn/data-views-plugin/common';
 import { useFetcher } from '@kbn/observability-shared-plugin/public';
 import { useLocalDataView } from './use_local_data_view';
-import { ExploratoryEmbeddableProps, ExploratoryViewPublicPluginsStart } from '../../../..';
+import type { ExploratoryEmbeddableProps, ExploratoryViewPublicPluginsStart } from '../../../..';
 import type { DataViewState } from '../hooks/use_app_data_view';
 import type { AppDataType } from '../types';
 import { ObservabilityDataViews } from '../../../../utils/observability_data_views/observability_data_views';
-import { SeriesUrl } from '../../../..';
+import type { SeriesUrl } from '../../../..';
 
 export const useAppDataView = ({
   series,
@@ -45,6 +45,7 @@ export const useAppDataView = ({
         setDataViews((prevState) => ({ ...(prevState ?? {}), [seriesDataType]: indPattern }));
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dataViewTitle, seriesDataType, JSON.stringify(series)]);
 
   return { dataViews, loading: loading && !dataViews[seriesDataType] };

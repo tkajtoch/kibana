@@ -5,17 +5,17 @@
  * 2.0.
  */
 
-import { ReactElement } from 'react';
+import type { ReactElement } from 'react';
 import type { SensorAPI } from '@hello-pangea/dnd';
-import { Store } from 'redux';
-import { CoreStart } from '@kbn/core/public';
+import type { Store } from 'redux';
+import type { CoreStart } from '@kbn/core/public';
 import type { DataPublicPluginStart } from '@kbn/data-plugin/public';
-import { CasesPublicStart } from '@kbn/cases-plugin/public';
-import { ApmBase } from '@elastic/apm-rum';
-import type { UseAddToTimelineProps, UseAddToTimeline } from './hooks/use_add_to_timeline';
-import { HoverActionsConfig } from './components/hover_actions';
-import { LastUpdatedAtProps } from './components/last_updated';
-import { LoadingPanelProps } from './components/loading';
+import type { CasesPublicStart } from '@kbn/cases-plugin/public';
+import type { ApmBase } from '@elastic/apm-rum';
+import type { UseAddToTimeline, UseAddToTimelineProps } from './hooks/use_add_to_timeline';
+import type { HoverActionsConfig } from './components/hover_actions';
+import type { LastUpdatedAtProps } from './components/last_updated';
+
 export interface TimelinesUIStart {
   /**
    * @deprecated Use cell-actions package instead
@@ -23,7 +23,6 @@ export interface TimelinesUIStart {
   getHoverActions: () => HoverActionsConfig;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   getTimelineReducer: () => any;
-  getLoadingPanel: (props: LoadingPanelProps) => ReactElement<LoadingPanelProps>;
   getLastUpdated: (props: LastUpdatedAtProps) => ReactElement<LastUpdatedAtProps>;
   getUseAddToTimeline: () => (props: UseAddToTimelineProps) => UseAddToTimeline;
   getUseAddToTimelineSensor: () => (api: SensorAPI) => void;

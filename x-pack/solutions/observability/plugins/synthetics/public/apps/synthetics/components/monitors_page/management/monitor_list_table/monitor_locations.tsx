@@ -5,10 +5,13 @@
  * 2.0.
  */
 
+import { useEuiTheme } from '@elastic/eui';
 import React from 'react';
-import { useTheme } from '@kbn/observability-shared-plugin/public';
+import type {
+  OverviewStatusState,
+  ServiceLocations,
+} from '../../../../../../../common/runtime_types';
 import { LocationStatusBadges } from '../../../common/components/location_status_badges';
-import { ServiceLocations, OverviewStatusState } from '../../../../../../../common/runtime_types';
 
 interface Props {
   locations: ServiceLocations;
@@ -17,22 +20,20 @@ interface Props {
 }
 
 export const MonitorLocations = ({ locations, monitorId, overviewStatus }: Props) => {
-  const {
-    eui: { euiColorVis9, euiColorVis0, euiColorDisabled },
-  } = useTheme();
+  const { euiTheme } = useEuiTheme();
 
   const locationsToDisplay = locations.map((loc) => {
     const locById = `${monitorId}-${loc.id}`;
 
     let status: string = 'unknown';
-    let color = euiColorDisabled;
+    let color = euiTheme.colors.disabled;
 
     if (overviewStatus?.downConfigs[locById]) {
       status = 'down';
-      color = euiColorVis9;
+      color = euiTheme.colors.danger;
     } else if (overviewStatus?.upConfigs[locById]) {
       status = 'up';
-      color = euiColorVis0;
+      color = euiTheme.colors.success;
     }
 
     return {

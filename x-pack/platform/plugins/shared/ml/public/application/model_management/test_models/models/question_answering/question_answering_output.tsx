@@ -8,8 +8,7 @@
 import type { FC, PropsWithChildren } from 'react';
 import React from 'react';
 import useObservable from 'react-use/lib/useObservable';
-import { EuiBadge, EuiHorizontalRule } from '@elastic/eui';
-import { useCurrentThemeVars } from '../../../../contexts/kibana';
+import { useEuiFontSize, useEuiTheme, EuiBadge, EuiHorizontalRule } from '@elastic/eui';
 import type {
   FormattedQuestionAnsweringResult,
   QuestionAnsweringInference,
@@ -59,15 +58,17 @@ function insertHighlighting(result: FormattedQuestionAnsweringResult, inputText:
 }
 
 const ResultBadge: FC<PropsWithChildren<unknown>> = ({ children }) => {
-  const { euiTheme } = useCurrentThemeVars();
+  const { euiTheme } = useEuiTheme();
+  const euiFontSizeXS = useEuiFontSize('xs').fontSize;
+  const badgeColor = euiTheme.colors.vis.euiColorVis9;
+
   return (
     <EuiBadge
-      color={euiTheme.euiColorVis5_behindText}
+      color={badgeColor}
       style={{
         marginRight: ICON_PADDING,
         marginTop: `-${ICON_PADDING}`,
-        border: `1px solid ${euiTheme.euiColorVis5}`,
-        fontSize: euiTheme.euiFontSizeXS,
+        fontSize: euiFontSizeXS,
         padding: '0px 6px',
         pointerEvents: 'none',
       }}

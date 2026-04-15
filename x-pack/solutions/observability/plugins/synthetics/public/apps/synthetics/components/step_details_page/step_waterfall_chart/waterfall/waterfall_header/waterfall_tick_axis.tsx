@@ -8,7 +8,7 @@
 import React from 'react';
 import { i18n } from '@kbn/i18n';
 import { FormattedMessage } from '@kbn/i18n-react';
-import { BarStyleAccessor, DomainRange, TickFormatter } from '@elastic/charts';
+import type { BarStyleAccessor, DomainRange, TickFormatter } from '@elastic/charts';
 import { EuiFlexGroup, EuiFlexItem, EuiText, EuiIcon, useEuiTheme } from '@elastic/eui';
 
 import { MAIN_GROW_SIZE, SIDEBAR_GROW_SIZE } from '../constants';
@@ -61,14 +61,14 @@ export const WaterfallTickAxis = ({
                         marginBottom: euiTheme.size.s,
                         whiteSpace: 'nowrap',
                         cursor: 'pointer',
-                        color: euiTheme.colors.primaryText,
+                        color: euiTheme.colors.textPrimary,
                       }}
                       onClick={() => {
                         setOnlyHighlighted(!showOnlyHighlightedNetworkRequests);
                       }}
                     >
                       <EuiIcon
-                        type={showOnlyHighlightedNetworkRequests ? 'eyeClosed' : 'eye'}
+                        type={showOnlyHighlightedNetworkRequests ? 'eyeSlash' : 'eye'}
                         size="s"
                       />
                       <EuiText size="xs">

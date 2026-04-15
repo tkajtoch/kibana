@@ -5,14 +5,16 @@
  * 2.0.
  */
 
-import { HttpSetup, type IHttpFetchError, type ResponseErrorBody } from '@kbn/core/public';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import type { HttpSetup, IHttpFetchError, ResponseErrorBody } from '@kbn/core/public';
+import { useQuery, useQueryClient } from '@kbn/react-query';
 import type { IToasts } from '@kbn/core-notifications-browser';
+import type {
+  FindKnowledgeBaseEntriesRequestQuery,
+  FindKnowledgeBaseEntriesResponse,
+} from '@kbn/elastic-assistant-common';
 import {
   API_VERSIONS,
   ELASTIC_AI_ASSISTANT_KNOWLEDGE_BASE_ENTRIES_URL_FIND,
-  FindKnowledgeBaseEntriesRequestQuery,
-  FindKnowledgeBaseEntriesResponse,
 } from '@kbn/elastic-assistant-common';
 
 import { useCallback } from 'react';
@@ -36,7 +38,7 @@ export const KNOWLEDGE_BASE_ENTRY_QUERY_KEY = [
   ELASTIC_AI_ASSISTANT_KNOWLEDGE_BASE_ENTRIES_URL_FIND,
   defaultQuery.page,
   defaultQuery.per_page,
-  API_VERSIONS.internal.v1,
+  API_VERSIONS.public.v1,
 ];
 
 /**
@@ -66,7 +68,7 @@ export const useKnowledgeBaseEntries = ({
         ELASTIC_AI_ASSISTANT_KNOWLEDGE_BASE_ENTRIES_URL_FIND,
         {
           method: 'GET',
-          version: API_VERSIONS.internal.v1,
+          version: API_VERSIONS.public.v1,
           query,
           signal,
         }

@@ -7,7 +7,7 @@
 
 import { get } from 'lodash';
 
-import type * as estypes from '@elastic/elasticsearch/lib/api/typesWithBodyKey';
+import type { estypes } from '@elastic/elasticsearch';
 
 import type { ElasticsearchClient } from '@kbn/core-elasticsearch-server';
 import { KBN_FIELD_TYPES } from '@kbn/field-types';
@@ -41,6 +41,8 @@ export interface FetchAggIntervalsParams {
     samplerShardSize: number;
     /** Optional runtime mappings for the query. */
     runtimeMappings?: estypes.MappingRuntimeFields;
+    /** Optional project routing for the query. */
+    projectRouting?: string;
     /** Optional probability for random sampling. */
     randomSamplerProbability?: number;
     /** Optional seed for random sampling. */
@@ -63,6 +65,7 @@ export const fetchAggIntervals = async (
     fields,
     samplerShardSize,
     runtimeMappings,
+    projectRouting,
     randomSamplerProbability,
     randomSamplerSeed,
   } = args;
@@ -102,15 +105,13 @@ export const fetchAggIntervals = async (
     {
       index: indexPattern,
       size: 0,
-      body: {
-        query,
-        aggs:
-          randomSamplerProbability === undefined
-            ? buildSamplerAggregation(minMaxAggs, samplerShardSize)
-            : wrap(minMaxAggs),
-        size: 0,
-        ...(isPopulatedObject(runtimeMappings) ? { runtime_mappings: runtimeMappings } : {}),
-      },
+      query,
+      aggs:
+        randomSamplerProbability === undefined
+          ? buildSamplerAggregation(minMaxAggs, samplerShardSize)
+          : wrap(minMaxAggs),
+      ...(isPopulatedObject(runtimeMappings) ? { runtime_mappings: runtimeMappings } : {}),
+      ...(projectRouting ? { project_routing: projectRouting } : {}),
     },
     { signal: abortSignal, maxRetries: 0 }
   );

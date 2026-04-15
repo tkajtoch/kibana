@@ -5,7 +5,7 @@
  * 2.0.
  */
 
-import { ACTIVE_ALERTS } from '../components/alert_search_bar/constants';
+import { ALERT_RULE_NAME, ALERT_STATUS } from '@kbn/rule-data-utils';
 import {
   RULE_DETAILS_EXECUTION_TAB,
   RULE_DETAILS_ALERTS_TAB,
@@ -37,7 +37,8 @@ describe('RuleDetailsLocator', () => {
       tabId: RULE_DETAILS_ALERTS_TAB,
     });
     expect(location.path).toEqual(
-      `${RULES_PATH}/${mockedRuleId}?tabId=alerts&searchBarParams=(kuery:'',rangeFrom:now-15m,rangeTo:now,status:all)`
+      `${RULES_PATH}/${mockedRuleId}?tabId=alerts&searchBarParams=(` +
+        `controlConfigs:!((display_settings:(hide_action_bar:!t,hide_exists:!t),field_name:kibana.alert.status,persist:!t,selected_options:!(active),title:Status),(display_settings:(hide_exists:!t),field_name:kibana.alert.rule.name,title:Rule),(field_name:kibana.alert.group.value,title:Group),(field_name:tags,title:Tags)),kuery:'',rangeFrom:now-15m,rangeTo:now)`
     );
   });
 
@@ -48,10 +49,54 @@ describe('RuleDetailsLocator', () => {
       rangeFrom: 'mockedRangeTo',
       rangeTo: 'mockedRangeFrom',
       kuery: 'mockedKuery',
-      status: ACTIVE_ALERTS.status,
     });
     expect(location.path).toEqual(
-      `${RULES_PATH}/${mockedRuleId}?tabId=alerts&searchBarParams=(kuery:mockedKuery,rangeFrom:mockedRangeTo,rangeTo:mockedRangeFrom,status:active)`
+      `${RULES_PATH}/${mockedRuleId}?tabId=alerts&searchBarParams=(` +
+        `controlConfigs:!((display_settings:(hide_action_bar:!t,hide_exists:!t),field_name:kibana.alert.status,persist:!t,selected_options:!(active),title:Status),(display_settings:(hide_exists:!t),field_name:kibana.alert.rule.name,title:Rule),(field_name:kibana.alert.group.value,title:Group),(field_name:tags,title:Tags)),kuery:mockedKuery,rangeFrom:mockedRangeTo,rangeTo:mockedRangeFrom)`
+    );
+  });
+
+  it('should return correct url when controlConfigs is provided', async () => {
+    const mockedControlConfigs = [
+      {
+        title: 'Status',
+        field_name: ALERT_STATUS,
+        selected_options: ['untracked'],
+        display_settings: {
+          hide_action_bar: true,
+          hide_exists: true,
+        },
+        persist: true,
+      },
+      {
+        title: 'Rule',
+        field_name: ALERT_RULE_NAME,
+        display_settings: {
+          hide_exists: true,
+        },
+      },
+      {
+        title: 'Group',
+        field_name: 'kibana.alert.group.value',
+      },
+      {
+        title: 'Tags',
+        field_name: 'tags',
+      },
+    ];
+    const location = await locator.getLocation({
+      ruleId: mockedRuleId,
+      tabId: RULE_DETAILS_ALERTS_TAB,
+      rangeFrom: 'mockedRangeTo',
+      rangeTo: 'mockedRangeFrom',
+      kuery: 'mockedKuery',
+      controlConfigs: mockedControlConfigs,
+    });
+    expect(location.path).toEqual(
+      `${RULES_PATH}/${mockedRuleId}?tabId=alerts&searchBarParams=(` +
+        `controlConfigs:!((display_settings:(hide_action_bar:!t,hide_exists:!t),field_name:kibana.alert.status,persist:!t,selected_options:!(untracked)` +
+        `,title:Status),(display_settings:(hide_exists:!t),field_name:kibana.alert.rule.name,title:Rule),(field_name:kibana.alert.group.value,title:Group)` +
+        `,(field_name:tags,title:Tags)),kuery:mockedKuery,rangeFrom:mockedRangeTo,rangeTo:mockedRangeFrom)`
     );
   });
 });

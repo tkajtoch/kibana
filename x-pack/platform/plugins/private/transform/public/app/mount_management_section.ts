@@ -39,7 +39,7 @@ export async function mountManagementSection(
     i18n,
     overlays,
     theme,
-    savedObjects,
+    userProfile,
     uiSettings,
     settings,
     notifications,
@@ -48,15 +48,18 @@ export async function mountManagementSection(
     data,
     dataViews,
     dataViewEditor,
+    cps,
     share,
     spaces,
     triggersActionsUi,
     unifiedSearch,
+    kql,
     charts,
     fieldFormats,
     savedObjectsManagement,
     savedSearch,
     contentManagement,
+    fieldsMetadata,
   } = plugins;
   const { docTitle } = chrome;
 
@@ -70,6 +73,7 @@ export async function mountManagementSection(
     analytics,
     application,
     chrome,
+    cps,
     data,
     dataViewEditor,
     dataViews,
@@ -79,7 +83,7 @@ export async function mountManagementSection(
     notifications,
     overlays,
     theme,
-    savedObjects,
+    userProfile,
     storage: localStorage,
     uiSettings,
     settings,
@@ -88,11 +92,13 @@ export async function mountManagementSection(
     spaces,
     triggersActionsUi,
     unifiedSearch,
+    kql,
     charts,
     fieldFormats,
     savedObjectsManagement,
     savedSearch,
     contentManagement,
+    fieldsMetadata,
   };
 
   const enabledFeatures: TransformEnabledFeatures = {

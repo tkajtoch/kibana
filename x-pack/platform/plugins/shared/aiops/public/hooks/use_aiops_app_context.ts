@@ -8,6 +8,7 @@
 import { createContext, type FC, useContext } from 'react';
 
 import type { ObservabilityAIAssistantPublicStart } from '@kbn/observability-ai-assistant-plugin/public';
+import type { CPSPluginStart } from '@kbn/cps/public';
 import type { IStorageWrapper } from '@kbn/kibana-utils-plugin/public';
 import type { DataPublicPluginStart } from '@kbn/data-plugin/public';
 import type { UnifiedSearchPublicPluginStart } from '@kbn/unified-search-plugin/public';
@@ -16,12 +17,13 @@ import type { FieldFormatsStart } from '@kbn/field-formats-plugin/public';
 import type { SharePluginStart } from '@kbn/share-plugin/public';
 import type {
   AnalyticsServiceStart,
-  CoreSetup,
   CoreStart,
   ExecutionContextStart,
   HttpStart,
   IUiSettingsClient,
   ThemeServiceStart,
+  UserProfileService,
+  NotificationsStart,
 } from '@kbn/core/public';
 import type { LensPublicStart } from '@kbn/lens-plugin/public';
 import type { EmbeddableStart } from '@kbn/embeddable-plugin/public';
@@ -69,7 +71,7 @@ export interface AiopsAppContextValue {
   /**
    * Used for toast notifications.
    */
-  notifications: CoreSetup['notifications'];
+  notifications: NotificationsStart;
   /**
    * Used to store user settings in local storage.
    */
@@ -90,6 +92,10 @@ export interface AiopsAppContextValue {
    * Usage collection.
    */
   usageCollection?: UsageCollectionSetup;
+  /**
+   * User profile service.
+   */
+  userProfile: UserProfileService;
   /**
    * Used to create deep links to other plugins.
    */
@@ -120,6 +126,8 @@ export interface AiopsAppContextValue {
   embeddingOrigin: string;
   /** Observability AI Assistant */
   observabilityAIAssistant?: ObservabilityAIAssistantPublicStart;
+  /** CPS plugin for project routing */
+  cps?: CPSPluginStart;
 }
 
 /**

@@ -8,7 +8,7 @@
 import { schema } from '@kbn/config-schema';
 import { deserializeFollowerIndex } from '../../../../common/services/follower_index_serialization';
 import { addBasePath } from '../../../services';
-import { RouteDependencies } from '../../../types';
+import type { RouteDependencies } from '../../../types';
 
 /**
  * Returns a single follower index pattern
@@ -25,6 +25,12 @@ export const registerGetRoute = ({
   router.get(
     {
       path: addBasePath('/follower_indices/{id}'),
+      security: {
+        authz: {
+          enabled: false,
+          reason: 'Relies on es client for authorization',
+        },
+      },
       validate: {
         params: paramsSchema,
       },

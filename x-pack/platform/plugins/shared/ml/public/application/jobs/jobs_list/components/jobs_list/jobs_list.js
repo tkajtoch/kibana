@@ -23,15 +23,19 @@ import { JobDescription } from './job_description';
 import {
   EuiBasicTable,
   EuiButtonIcon,
-  EuiIcon,
   EuiScreenReaderOnly,
   EuiToolTip,
   EuiBadge,
+  EuiIconTip,
+  EuiFlexGroup,
+  EuiFlexItem,
 } from '@elastic/eui';
 import { i18n } from '@kbn/i18n';
 import { FormattedMessage } from '@kbn/i18n-react';
 import { AnomalyDetectionJobIdLink } from './job_id_link';
 import { isManagedJob } from '../../../jobs_utils';
+import { MLSavedObjectsSpacesList } from '../../../../components/ml_saved_objects_spaces_list';
+import { ANOMALY_DETECTOR_SAVED_OBJECT_TYPE } from '../../../../../../common/types/saved_objects';
 
 const PAGE_SIZE_OPTIONS = [10, 25, 50];
 
@@ -146,7 +150,11 @@ export class JobsListUI extends Component {
         render: (item) => (
           <EuiButtonIcon
             onClick={() => this.toggleRow(item)}
-            iconType={this.state.itemIdToExpandedRowMap[item.id] ? 'arrowDown' : 'arrowRight'}
+            iconType={
+              this.state.itemIdToExpandedRowMap[item.id]
+                ? 'chevronSingleDown'
+                : 'chevronSingleRight'
+            }
             aria-label={
               this.state.itemIdToExpandedRowMap[item.id]
                 ? i18n.translate('xpack.ml.jobsList.collapseJobDetailsAriaLabel', {
@@ -186,7 +194,12 @@ export class JobsListUI extends Component {
                       'This job is preconfigured and managed by Elastic; other parts of the product might have might have dependencies on its behavior.',
                   })}
                 >
-                  <EuiBadge color="hollow" data-test-subj="mlJobListRowManagedLabel" size="xs">
+                  <EuiBadge
+                    tabIndex={0}
+                    color="hollow"
+                    data-test-subj="mlJobListRowManagedLabel"
+                    size="xs"
+                  >
                     {i18n.translate('xpack.ml.jobsList.managedBadgeLabel', {
                       defaultMessage: 'Managed',
                     })}
@@ -198,50 +211,46 @@ export class JobsListUI extends Component {
         },
       },
       {
-        field: 'auditMessage',
         'data-test-subj': 'mlJobListColumnIcons',
         name: (
           <EuiScreenReaderOnly>
             <p>
               <FormattedMessage
-                id="xpack.ml.jobsList.auditMessageColumn.screenReaderDescription"
-                defaultMessage="This column displays icons when there are errors or warnings for the job in the past 24 hours"
+                id="xpack.ml.jobsList.iconsColumn.screenReaderDescription"
+                defaultMessage="This column displays an alert icon when the job has alert rules, or a status icon when there are warnings or errors in the past 24 hours"
               />
             </p>
           </EuiScreenReaderOnly>
         ),
-        render: (item) => <JobIcon message={item} showTooltip={true} />,
-      },
-      {
-        field: 'alertingRules',
-        'data-test-subj': 'mlJobListColumnAlertingRuleIndicator',
-        name: (
-          <EuiScreenReaderOnly>
-            <p>
-              <FormattedMessage
-                id="xpack.ml.jobsList.alertingRules.screenReaderDescription"
-                defaultMessage="This column displays icons when there are alert rules associated with a job"
-              />
-            </p>
-          </EuiScreenReaderOnly>
-        ),
-        width: '30px',
-        render: (item) => {
-          return Array.isArray(item) ? (
-            <EuiToolTip
-              position="bottom"
-              content={
-                <FormattedMessage
-                  id="xpack.ml.jobsList.alertingRules.tooltipContent"
-                  defaultMessage="Job has {rulesCount} associated alert {rulesCount, plural, one { rule} other { rules}}"
-                  values={{ rulesCount: item.length }}
-                />
-              }
-            >
-              <EuiIcon type="bell" />
-            </EuiToolTip>
-          ) : (
-            <span />
+        width: '50px',
+        render: (row) => {
+          const showAlertIcon = Array.isArray(row.alertingRules) && row.alertingRules.length > 0;
+          const showAuditIcon = Boolean(row.auditMessage);
+          if (!showAlertIcon && !showAuditIcon) return null;
+          return (
+            <EuiFlexGroup gutterSize="s" responsive={false} justifyContent="flexEnd">
+              {showAlertIcon && (
+                <EuiFlexItem grow={false}>
+                  <EuiIconTip
+                    position="bottom"
+                    content={
+                      <FormattedMessage
+                        id="xpack.ml.jobsList.alertingRules.tooltipContent"
+                        defaultMessage="Job has {rulesCount} associated alert {rulesCount, plural, one {rule} other {rules}}"
+                        values={{ rulesCount: row.alertingRules?.length }}
+                      />
+                    }
+                    type="bell"
+                    data-test-subj="mlJobListAlertRulesIcon"
+                  />
+                </EuiFlexItem>
+              )}
+              {showAuditIcon && (
+                <EuiFlexItem grow={false}>
+                  <JobIcon message={row.auditMessage} showTooltip={true} />
+                </EuiFlexItem>
+              )}
+            </EuiFlexGroup>
           );
         },
       },
@@ -327,13 +336,42 @@ export class JobsListUI extends Component {
         render: (item) => <ResultLinks jobs={[item]} />,
         width: '64px',
       },
+      ...(this.props.kibana.services.spaces
+        ? [
+            {
+              name: i18n.translate('xpack.ml.jobsList.jobActionsColumn.spaces', {
+                defaultMessage: 'Spaces',
+              }),
+              'data-test-subj': 'mlTableColumnSpaces',
+              truncateText: true,
+              align: 'right',
+              width: '10%',
+              render: (item) => {
+                return (
+                  <MLSavedObjectsSpacesList
+                    disabled={
+                      !this.props.kibana.services.application?.capabilities?.savedObjectsManagement
+                        ?.shareIntoSpace
+                    }
+                    spacesApi={this.props.kibana.services.spaces}
+                    spaceIds={item.spaces}
+                    id={item.id}
+                    mlSavedObjectType={ANOMALY_DETECTOR_SAVED_OBJECT_TYPE}
+                    refresh={this.props.refreshJobs}
+                  />
+                );
+              },
+            },
+          ]
+        : []),
+
       {
         name: i18n.translate('xpack.ml.jobsList.actionsLabel', {
           defaultMessage: 'Actions',
         }),
         actions: actionsMenuContent(
           this.props.kibana.services.notifications.toasts,
-          this.props.kibana.services.application,
+          this.props.kibana.services.share,
           this.mlApi,
           this.props.showEditJobFlyout,
           this.props.showDatafeedChartFlyout,
@@ -375,33 +413,38 @@ export class JobsListUI extends Component {
     const selectedJobsClass = this.props.selectedJobsCount ? 'jobs-selected' : '';
 
     return (
-      <EuiBasicTable
-        data-test-subj={loading ? 'mlJobListTable loading' : 'mlJobListTable loaded'}
-        loading={loading === true}
-        noItemsMessage={
-          loading
-            ? i18n.translate('xpack.ml.jobsList.loadingJobsLabel', {
-                defaultMessage: 'Loading jobs…',
-              })
-            : i18n.translate('xpack.ml.jobsList.noJobsFoundLabel', {
-                defaultMessage: 'No jobs found',
-              })
-        }
-        itemId="id"
-        className={`jobs-list-table ${selectedJobsClass}`}
-        items={pageOfItems}
-        columns={columns}
-        pagination={pagination}
-        onChange={this.onTableChange}
-        selection={selectionControls}
-        itemIdToExpandedRowMap={this.state.itemIdToExpandedRowMap}
-        sorting={sorting}
-        rowProps={(item) => ({
-          'data-test-subj': `mlJobListRow row-${item.id}`,
-        })}
-        css={{ '.euiTableRow-isExpandedRow .euiTableCellContent': { animation: 'none' } }}
-        rowHeader="id"
-      />
+      <>
+        <EuiBasicTable
+          data-test-subj={loading ? 'mlJobListTable loading' : 'mlJobListTable loaded'}
+          tableCaption={i18n.translate('xpack.ml.jobsList.tableCaption', {
+            defaultMessage: 'List of anomaly detection jobs',
+          })}
+          loading={loading === true}
+          noItemsMessage={
+            loading
+              ? i18n.translate('xpack.ml.jobsList.loadingJobsLabel', {
+                  defaultMessage: 'Loading jobs…',
+                })
+              : i18n.translate('xpack.ml.jobsList.noJobsFoundLabel', {
+                  defaultMessage: 'No jobs found',
+                })
+          }
+          itemId="id"
+          className={`jobs-list-table ${selectedJobsClass}`}
+          items={pageOfItems}
+          columns={columns}
+          pagination={pagination}
+          onChange={this.onTableChange}
+          selection={selectionControls}
+          itemIdToExpandedRowMap={this.state.itemIdToExpandedRowMap}
+          sorting={sorting}
+          rowProps={(item) => ({
+            'data-test-subj': `mlJobListRow row-${item.id}`,
+          })}
+          css={{ '.euiTableRow-isExpandedRow .euiTableCellContent': { animation: 'none' } }}
+          rowHeader="id"
+        />
+      </>
     );
   }
 }

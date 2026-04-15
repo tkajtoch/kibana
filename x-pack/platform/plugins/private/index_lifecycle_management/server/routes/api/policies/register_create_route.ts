@@ -6,9 +6,9 @@
  */
 
 import { schema } from '@kbn/config-schema';
-import { ElasticsearchClient } from '@kbn/core/server';
+import type { ElasticsearchClient } from '@kbn/core/server';
 
-import { RouteDependencies } from '../../../types';
+import type { RouteDependencies } from '../../../types';
 import { addBasePath } from '../../../services';
 
 async function createPolicy(
@@ -16,12 +16,11 @@ async function createPolicy(
   name: string,
   policy: Omit<typeof bodySchema.type, 'name'>
 ): Promise<any> {
-  const body = { policy };
   const options = {
     ignore: [404],
   };
 
-  return client.ilm.putLifecycle({ name, body }, options);
+  return client.ilm.putLifecycle({ name, policy }, options);
 }
 
 /**
@@ -35,7 +34,7 @@ const bodySchema = schema.object({
   name: schema.string({ maxLength: 1000 }),
   deprecated: schema.maybe(schema.boolean()),
   phases: schema.object({
-    hot: schema.any(),
+    hot: schema.maybe(schema.any()),
     warm: schema.maybe(schema.any()),
     cold: schema.maybe(schema.any()),
     frozen: schema.maybe(schema.any()),
@@ -50,7 +49,16 @@ export function registerCreateRoute({
   lib: { handleEsError },
 }: RouteDependencies) {
   router.post(
-    { path: addBasePath('/policies'), validate: { body: bodySchema } },
+    {
+      path: addBasePath('/policies'),
+      security: {
+        authz: {
+          enabled: false,
+          reason: 'Relies on es client for authorization',
+        },
+      },
+      validate: { body: bodySchema },
+    },
     license.guardApiRoute(async (context, request, response) => {
       const body = request.body as typeof bodySchema.type;
       const { name, ...rest } = body;

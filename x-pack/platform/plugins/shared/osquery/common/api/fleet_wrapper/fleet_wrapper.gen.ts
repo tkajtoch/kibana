@@ -14,13 +14,11 @@
  *   version: 1
  */
 
-import { z } from '@kbn/zod';
-
-import { Id } from '../model/schema/common_attributes.gen';
+import { z } from '@kbn/zod/v4';
 
 export type GetAgentDetailsRequestParams = z.infer<typeof GetAgentDetailsRequestParams>;
 export const GetAgentDetailsRequestParams = z.object({
-  id: Id,
+  id: z.string(),
 });
 export type GetAgentDetailsRequestParamsInput = z.input<typeof GetAgentDetailsRequestParams>;
 
@@ -35,7 +33,7 @@ export const GetAgentPoliciesResponse = z.object({});
 
 export type GetAgentPolicyRequestParams = z.infer<typeof GetAgentPolicyRequestParams>;
 export const GetAgentPolicyRequestParams = z.object({
-  id: Id,
+  id: z.string(),
 });
 export type GetAgentPolicyRequestParamsInput = z.input<typeof GetAgentPolicyRequestParams>;
 

@@ -5,11 +5,11 @@
  * 2.0.
  */
 
-import { IScopedClusterClient } from '@kbn/core/server';
+import type { IScopedClusterClient } from '@kbn/core/server';
 import { get } from 'lodash';
 import { fetchAllFromScroll } from '../../../lib/fetch_all_from_scroll';
 import { INDEX_NAMES, ES_SCROLL_SETTINGS } from '../../../../common/constants';
-import { RouteDependencies } from '../../../types';
+import type { RouteDependencies } from '../../../types';
 // @ts-ignore
 import { Watch } from '../../../models/watch';
 
@@ -19,9 +19,7 @@ function fetchWatches(dataClient: IScopedClusterClient) {
       {
         index: INDEX_NAMES.WATCHES,
         scroll: ES_SCROLL_SETTINGS.KEEPALIVE,
-        body: {
-          size: ES_SCROLL_SETTINGS.PAGE_SIZE,
-        },
+        size: ES_SCROLL_SETTINGS.PAGE_SIZE,
       },
       { ignore: [404] }
     )
@@ -32,6 +30,12 @@ export function registerListRoute({ router, license, lib: { handleEsError } }: R
   router.get(
     {
       path: '/api/watcher/watches',
+      security: {
+        authz: {
+          enabled: false,
+          reason: 'Relies on es client for authorization',
+        },
+      },
       validate: false,
     },
     license.guardApiRoute(async (ctx, request, response) => {

@@ -16,11 +16,14 @@ export type UpsellingSectionId =
   | 'endpointPolicyProtections'
   | 'osquery_automated_response_actions'
   | 'endpoint_protection_updates'
+  | 'endpoint_device_control'
   | 'endpoint_agent_tamper_protection'
   | 'endpoint_custom_notification'
   | 'cloud_security_posture_integration_installation'
   | 'ruleDetailsEndpointExceptions'
-  | 'integration_assistant';
+  | 'automatic_import'
+  | 'siem_migrations_start'
+  | 'graph_visualization';
 
 export type UpsellingMessageId =
   | 'investigation_guide'
@@ -28,4 +31,6 @@ export type UpsellingMessageId =
   | 'alert_assignments'
   | 'alert_suppression_rule_form'
   | 'alert_suppression_rule_details'
-  | 'note_management_user_filter';
+  | 'note_management_user_filter'
+  | 'prebuilt_rule_customization'
+  | 'prebuilt_rule_customization_description';

@@ -24,7 +24,9 @@
         "description": [
           "\nMocks for the Feature Flags service (browser-side)"
         ],
-        "path": "packages/core/feature-flags/core-feature-flags-server-mocks/index.ts",
+        "path": "src/core/packages/feature-flags/server-mocks/index.ts",
+        "lineNumber": 69,
+        "columnNumber": 14,
         "deprecated": false,
         "trackAdoption": false,
         "children": [
@@ -47,16 +49,12 @@
                 "text": "PublicMethodsOf"
               },
               "<",
-              {
-                "pluginId": "@kbn/core-feature-flags-server-internal",
-                "scope": "server",
-                "docId": "kibKbnCoreFeatureFlagsServerInternalPluginApi",
-                "section": "def-server.FeatureFlagsService",
-                "text": "FeatureFlagsService"
-              },
+              "FeatureFlagsService",
               ">>"
             ],
-            "path": "packages/core/feature-flags/core-feature-flags-server-mocks/index.ts",
+            "path": "src/core/packages/feature-flags/server-mocks/index.ts",
+            "lineNumber": 70,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false,
             "returnComment": [],
@@ -73,16 +71,12 @@
             ],
             "signature": [
               "() => jest.Mocked<",
-              {
-                "pluginId": "@kbn/core-feature-flags-server-internal",
-                "scope": "server",
-                "docId": "kibKbnCoreFeatureFlagsServerInternalPluginApi",
-                "section": "def-server.InternalFeatureFlagsSetup",
-                "text": "InternalFeatureFlagsSetup"
-              },
+              "InternalFeatureFlagsSetup",
               ">"
             ],
-            "path": "packages/core/feature-flags/core-feature-flags-server-mocks/index.ts",
+            "path": "src/core/packages/feature-flags/server-mocks/index.ts",
+            "lineNumber": 74,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false,
             "returnComment": [],
@@ -99,16 +93,12 @@
             ],
             "signature": [
               "() => jest.Mocked<",
-              {
-                "pluginId": "@kbn/core-feature-flags-server",
-                "scope": "server",
-                "docId": "kibKbnCoreFeatureFlagsServerPluginApi",
-                "section": "def-server.FeatureFlagsSetup",
-                "text": "FeatureFlagsSetup"
-              },
+              "FeatureFlagsSetup",
               ">"
             ],
-            "path": "packages/core/feature-flags/core-feature-flags-server-mocks/index.ts",
+            "path": "src/core/packages/feature-flags/server-mocks/index.ts",
+            "lineNumber": 78,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false,
             "returnComment": [],
@@ -125,16 +115,12 @@
             ],
             "signature": [
               "() => jest.Mocked<",
-              {
-                "pluginId": "@kbn/core-feature-flags-server",
-                "scope": "server",
-                "docId": "kibKbnCoreFeatureFlagsServerPluginApi",
-                "section": "def-server.FeatureFlagsStart",
-                "text": "FeatureFlagsStart"
-              },
+              "FeatureFlagsStart",
               ">"
             ],
-            "path": "packages/core/feature-flags/core-feature-flags-server-mocks/index.ts",
+            "path": "src/core/packages/feature-flags/server-mocks/index.ts",
+            "lineNumber": 82,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false,
             "returnComment": [],
@@ -151,16 +137,12 @@
             ],
             "signature": [
               "() => jest.Mocked<",
-              {
-                "pluginId": "@kbn/core-feature-flags-server",
-                "scope": "server",
-                "docId": "kibKbnCoreFeatureFlagsServerPluginApi",
-                "section": "def-server.FeatureFlagsRequestHandlerContext",
-                "text": "FeatureFlagsRequestHandlerContext"
-              },
+              "FeatureFlagsRequestHandlerContext",
               ">"
             ],
-            "path": "packages/core/feature-flags/core-feature-flags-server-mocks/index.ts",
+            "path": "src/core/packages/feature-flags/server-mocks/index.ts",
+            "lineNumber": 86,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false,
             "returnComment": [],

@@ -31,7 +31,9 @@
           "MarkdownProps",
           ") => React.JSX.Element"
         ],
-        "path": "packages/shared-ux/markdown/impl/markdown.tsx",
+        "path": "src/platform/packages/shared/shared-ux/markdown/impl/markdown.tsx",
+        "lineNumber": 51,
+        "columnNumber": 14,
         "deprecated": false,
         "trackAdoption": false,
         "children": [
@@ -45,7 +47,9 @@
             "signature": [
               "MarkdownProps"
             ],
-            "path": "packages/shared-ux/markdown/impl/markdown.tsx",
+            "path": "src/platform/packages/shared/shared-ux/markdown/impl/markdown.tsx",
+            "lineNumber": 51,
+            "columnNumber": 26,
             "deprecated": false,
             "trackAdoption": false,
             "isRequired": true

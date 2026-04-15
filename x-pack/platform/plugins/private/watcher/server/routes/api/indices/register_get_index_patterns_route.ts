@@ -5,8 +5,8 @@
  * 2.0.
  */
 
-import { SavedObjectsFindResult } from '@kbn/core/server';
-import { RouteDependencies } from '../../../types';
+import type { SavedObjectsFindResult } from '@kbn/core/server';
+import type { RouteDependencies } from '../../../types';
 
 export function registerGetIndexPatternsRoute({
   router,
@@ -16,6 +16,12 @@ export function registerGetIndexPatternsRoute({
   router.get(
     {
       path: '/api/watcher/indices/index_patterns',
+      security: {
+        authz: {
+          enabled: false,
+          reason: 'Relies on saved object client for authorization',
+        },
+      },
       validate: false,
     },
     license.guardApiRoute(async ({ core }, request, response) => {

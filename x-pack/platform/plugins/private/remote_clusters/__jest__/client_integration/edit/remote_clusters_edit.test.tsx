@@ -5,96 +5,109 @@
  * 2.0.
  */
 
-import { act } from 'react-dom/test-utils';
-import { TestBed } from '@kbn/test-jest-helpers';
+import { screen } from '@testing-library/react';
+import { EuiComboBoxTestHarness } from '@kbn/test-eui-helpers';
 
-import { RemoteClusterForm } from '../../../public/application/sections/components/remote_cluster_form';
-import { RemoteClustersActions, setupEnvironment } from '../helpers';
-import { setup as setupRemoteClustersAdd } from '../add/remote_clusters_add.helpers';
-import {
-  setup,
-  REMOTE_CLUSTER_EDIT,
-  REMOTE_CLUSTER_EDIT_NAME,
-} from './remote_clusters_edit.helpers';
-import { Cluster } from '../../../common/lib';
+import { RemoteClusterAdd, RemoteClusterEdit } from '../../../public/application/sections';
+import type { Cluster } from '../../../common/lib';
+import { SECURITY_MODEL } from '../../../common/constants';
 
-let component: TestBed['component'];
-let actions: RemoteClustersActions;
+import { renderRemoteClustersRoute } from '../helpers/render';
+import { setupEnvironment } from '../helpers/setup_environment';
+
+const REMOTE_CLUSTER_EDIT_NAME = 'new-york';
+
+const REMOTE_CLUSTER_EDIT: Cluster = {
+  name: REMOTE_CLUSTER_EDIT_NAME,
+  seeds: ['localhost:9400'],
+  skipUnavailable: true,
+  securityModel: SECURITY_MODEL.CERTIFICATE,
+};
 
 describe('Edit Remote cluster', () => {
   const { httpSetup, httpRequestsMockHelpers } = setupEnvironment();
 
-  httpRequestsMockHelpers.setLoadRemoteClustersResponse([REMOTE_CLUSTER_EDIT]);
-
-  beforeEach(async () => {
-    await act(async () => {
-      ({ component, actions } = await setup(httpSetup));
+  const renderEdit = (cluster: Cluster, contextOverrides: Record<string, unknown> = {}) => {
+    httpRequestsMockHelpers.setLoadRemoteClustersResponse([cluster]);
+    return renderRemoteClustersRoute(RemoteClusterEdit, {
+      httpSetup,
+      contextOverrides,
+      routePath: '/:name',
+      initialEntries: [`/${REMOTE_CLUSTER_EDIT_NAME}`],
     });
-    component.update();
+  };
+
+  test('should have the title of the page set correctly', async () => {
+    renderEdit(REMOTE_CLUSTER_EDIT);
+    expect(await screen.findByTestId('remoteClusterPageTitle')).toHaveTextContent(
+      'Edit remote cluster'
+    );
   });
 
-  test('should have the title of the page set correctly', () => {
-    expect(actions.pageTitle.exists()).toBe(true);
-    expect(actions.pageTitle.text()).toEqual('Edit remote cluster');
+  test('should have a link to the documentation', async () => {
+    renderEdit(REMOTE_CLUSTER_EDIT);
+    expect(await screen.findByTestId('remoteClusterDocsButton')).toBeInTheDocument();
   });
 
-  test('should have a link to the documentation', () => {
-    expect(actions.docsButtonExists()).toBe(true);
-  });
-
-  /**
-   * As the "edit" remote cluster component uses the same form underneath that
-   * the "create" remote cluster, we won't test it again but simply make sure that
-   * the form component is indeed shared between the 2 app sections.
-   */
   test('should use the same Form component as the "<RemoteClusterAdd />" component', async () => {
-    let addRemoteClusterTestBed: TestBed;
+    // Edit renders the form directly.
+    const edit = renderEdit(REMOTE_CLUSTER_EDIT);
+    expect(await screen.findByTestId('remoteClusterForm')).toBeInTheDocument();
+    edit.unmount();
 
-    await act(async () => {
-      addRemoteClusterTestBed = await setupRemoteClustersAdd(httpSetup);
+    // Add renders the wizard; the form is shown after completing the trust step.
+    const { user } = renderRemoteClustersRoute(RemoteClusterAdd, {
+      httpSetup,
+      routePath: '/add',
+      initialEntries: ['/add'],
     });
 
-    addRemoteClusterTestBed!.component.update();
+    await user.click(await screen.findByTestId('setupTrustApiMode'));
+    await user.click(screen.getByTestId('remoteClusterTrustNextButton'));
 
-    const formEdit = component.find(RemoteClusterForm);
-    const formAdd = addRemoteClusterTestBed!.component.find(RemoteClusterForm);
-
-    expect(formEdit.length).toBe(1);
-    expect(formAdd.length).toBe(1);
+    expect(await screen.findByTestId('remoteClusterForm')).toBeInTheDocument();
   });
 
-  test('should populate the form fields with the values from the remote cluster loaded', () => {
-    expect(actions.nameInput.getValue()).toBe(REMOTE_CLUSTER_EDIT_NAME);
-    // seeds input for sniff connection is not shown on Cloud
-    expect(actions.seedsInput.getValue()).toBe(REMOTE_CLUSTER_EDIT.seeds?.join(''));
-    expect(actions.skipUnavailableSwitch.isChecked()).toBe(REMOTE_CLUSTER_EDIT.skipUnavailable);
+  test('should populate the form fields with the values from the remote cluster loaded', async () => {
+    renderEdit(REMOTE_CLUSTER_EDIT);
+
+    const nameInput = await screen.findByTestId('remoteClusterFormNameInput');
+    expect(nameInput).toHaveValue(REMOTE_CLUSTER_EDIT_NAME);
+
+    const seeds = new EuiComboBoxTestHarness('remoteClusterFormSeedsInput');
+    expect(seeds.getSelected()).toContain(REMOTE_CLUSTER_EDIT.seeds?.[0] ?? '');
+
+    const skipUnavailable = screen.getByTestId('remoteClusterFormSkipUnavailableFormToggle');
+    expect(skipUnavailable).toHaveAttribute(
+      'aria-checked',
+      String(REMOTE_CLUSTER_EDIT.skipUnavailable)
+    );
   });
 
-  test('should disable the form name input', () => {
-    expect(actions.nameInput.isDisabled()).toBe(true);
+  test('should disable the form name input', async () => {
+    renderEdit(REMOTE_CLUSTER_EDIT);
+    expect(await screen.findByTestId('remoteClusterFormNameInput')).toBeDisabled();
   });
 
   describe('on cloud', () => {
     const cloudUrl = 'cloud-url';
     const defaultCloudPort = '9400';
+
     test('existing cluster that has the same TLS server name as the host in the remote address', async () => {
       const cluster: Cluster = {
         name: REMOTE_CLUSTER_EDIT_NAME,
         mode: 'proxy',
         proxyAddress: `${cloudUrl}:${defaultCloudPort}`,
         serverName: cloudUrl,
-        securityModel: 'certificate',
+        securityModel: SECURITY_MODEL.CERTIFICATE,
       };
-      httpRequestsMockHelpers.setLoadRemoteClustersResponse([cluster]);
 
-      await act(async () => {
-        ({ component, actions } = await setup(httpSetup, { isCloudEnabled: true }));
-      });
-      component.update();
+      renderEdit(cluster, { isCloudEnabled: true });
 
-      expect(actions.cloudRemoteAddressInput.exists()).toBe(true);
-      expect(actions.cloudRemoteAddressInput.getValue()).toBe(`${cloudUrl}:${defaultCloudPort}`);
-      expect(actions.tlsServerNameInput.exists()).toBe(false);
+      expect(await screen.findByTestId('remoteClusterFormRemoteAddressInput')).toHaveValue(
+        `${cloudUrl}:${defaultCloudPort}`
+      );
+      expect(screen.queryByTestId('remoteClusterFormTLSServerNameFormRow')).not.toBeInTheDocument();
     });
 
     test("existing cluster that doesn't have a TLS server name", async () => {
@@ -102,18 +115,15 @@ describe('Edit Remote cluster', () => {
         name: REMOTE_CLUSTER_EDIT_NAME,
         mode: 'proxy',
         proxyAddress: `${cloudUrl}:9500`,
-        securityModel: 'certificate',
+        securityModel: SECURITY_MODEL.CERTIFICATE,
       };
-      httpRequestsMockHelpers.setLoadRemoteClustersResponse([cluster]);
 
-      await act(async () => {
-        ({ component, actions } = await setup(httpSetup, { isCloudEnabled: true }));
-      });
-      component.update();
+      renderEdit(cluster, { isCloudEnabled: true });
 
-      expect(actions.cloudRemoteAddressInput.exists()).toBe(true);
-      expect(actions.cloudRemoteAddressInput.getValue()).toBe(`${cloudUrl}:9500`);
-      expect(actions.tlsServerNameInput.exists()).toBe(true);
+      expect(await screen.findByTestId('remoteClusterFormRemoteAddressInput')).toHaveValue(
+        `${cloudUrl}:9500`
+      );
+      expect(screen.getByTestId('remoteClusterFormTLSServerNameFormRow')).toBeInTheDocument();
     });
 
     test('existing cluster that has remote address different from TLS server name)', async () => {
@@ -122,18 +132,15 @@ describe('Edit Remote cluster', () => {
         mode: 'proxy',
         proxyAddress: `${cloudUrl}:${defaultCloudPort}`,
         serverName: 'another-value',
-        securityModel: 'certificate',
+        securityModel: SECURITY_MODEL.CERTIFICATE,
       };
-      httpRequestsMockHelpers.setLoadRemoteClustersResponse([cluster]);
 
-      await act(async () => {
-        ({ component, actions } = await setup(httpSetup, { isCloudEnabled: true }));
-      });
-      component.update();
+      renderEdit(cluster, { isCloudEnabled: true });
 
-      expect(actions.cloudRemoteAddressInput.exists()).toBe(true);
-      expect(actions.cloudRemoteAddressInput.getValue()).toBe(`${cloudUrl}:${defaultCloudPort}`);
-      expect(actions.tlsServerNameInput.exists()).toBe(true);
+      expect(await screen.findByTestId('remoteClusterFormRemoteAddressInput')).toHaveValue(
+        `${cloudUrl}:${defaultCloudPort}`
+      );
+      expect(screen.getByTestId('remoteClusterFormTLSServerNameFormRow')).toBeInTheDocument();
     });
   });
 });

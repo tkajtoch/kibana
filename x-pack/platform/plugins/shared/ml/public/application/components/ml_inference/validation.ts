@@ -5,7 +5,7 @@
  * 2.0.
  */
 
-import type * as estypes from '@elastic/elasticsearch/lib/api/typesWithBodyKey';
+import type { estypes } from '@elastic/elasticsearch';
 import { i18n } from '@kbn/i18n';
 import type { IngestInferenceProcessor } from '@elastic/elasticsearch/lib/api/types';
 import type { SupportedPytorchTasksType } from '@kbn/ml-trained-models-utils';
@@ -143,7 +143,7 @@ export const validatePipelineProcessors = (
   }
 
   const inferenceProcessor = processors?.find(
-    (processor) => processor.inference && processor.inference.model_id
+    (processor) => processor?.inference && processor.inference.model_id
   );
 
   if (inferenceProcessor === undefined) {

@@ -10,7 +10,7 @@ import React, { useMemo } from 'react';
 import { useEuiTheme } from '@elastic/eui';
 import { useMonitorQueryFilters } from '../hooks/use_monitor_query_filters';
 import { ERRORS_LABEL } from './monitor_errors_count';
-import { ClientPluginsStart } from '../../../../../plugin';
+import type { ClientPluginsStart } from '../../../../../plugin';
 
 interface Props {
   from: string;
@@ -47,8 +47,8 @@ export const MonitorErrorSparklines = ({ from, to, id }: Props) => {
           dataType: 'synthetics',
           selectedMetricField: 'monitor_errors',
           name: ERRORS_LABEL,
-          color: euiTheme.colors.danger,
           operationType: 'unique_count',
+          color: euiTheme.colors.vis.euiColorVis6,
         },
       ]}
     />

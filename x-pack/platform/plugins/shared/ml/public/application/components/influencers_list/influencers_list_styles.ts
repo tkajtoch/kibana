@@ -6,85 +6,70 @@
  */
 
 import { css } from '@emotion/react';
-import { useCurrentEuiThemeVars } from '@kbn/ml-kibana-theme';
-import { mlColors } from '../../styles';
-import { useMlKibana } from '../../contexts/kibana';
+
+import { useEuiFontSize, useEuiTheme } from '@elastic/eui';
+
+import {
+  getThemeResolvedSeverityColor,
+  ML_ANOMALY_THRESHOLD,
+  type MlSeverityType,
+} from '@kbn/ml-anomaly-utils';
 
 export const useInfluencersListStyles = () => {
-  const {
-    services: { theme },
-  } = useMlKibana();
-  const { euiTheme } = useCurrentEuiThemeVars(theme);
+  const { euiTheme } = useEuiTheme();
+  const euiFontSizeXS = useEuiFontSize('xs').fontSize;
+  const euiFontSizeM = useEuiFontSize('m').fontSize;
 
   return {
     influencersList: css({
       lineHeight: 1.45,
     }),
     fieldLabel: css({
-      fontSize: euiTheme.euiFontSizeXS,
+      fontSize: euiFontSizeXS,
       textAlign: 'left',
-      maxHeight: euiTheme.euiFontSizeS,
+      maxHeight: euiFontSizeM,
       maxWidth: 'calc(100% - 102px)',
     }),
-    progress: css({
-      display: 'inline-block',
-      width: 'calc(100% - 34px)',
-      height: '22px',
-      minWidth: '70px',
-      marginBottom: 0,
-      color: euiTheme.euiColorDarkShade,
-      backgroundColor: 'transparent',
+    progressBar: css({
+      backgroundColor: euiTheme.colors.backgroundBaseSubdued,
+      '&::-webkit-progress-bar': {
+        backgroundColor: euiTheme.colors.backgroundBaseSubdued,
+      },
     }),
-    progressBarHolder: css({
-      width: `calc(100% - 28px)`,
-    }),
-    progressBar: (severity: string, barScore: number) =>
+    progressColor: (severity: MlSeverityType) =>
+      severity.id === 'critical'
+        ? getThemeResolvedSeverityColor(ML_ANOMALY_THRESHOLD.CRITICAL, euiTheme)
+        : severity.id === 'major'
+        ? getThemeResolvedSeverityColor(ML_ANOMALY_THRESHOLD.MAJOR, euiTheme)
+        : severity.id === 'minor'
+        ? getThemeResolvedSeverityColor(ML_ANOMALY_THRESHOLD.MINOR, euiTheme)
+        : severity.id === 'warning'
+        ? getThemeResolvedSeverityColor(ML_ANOMALY_THRESHOLD.WARNING, euiTheme)
+        : severity.id === 'low'
+        ? getThemeResolvedSeverityColor(ML_ANOMALY_THRESHOLD.LOW, euiTheme)
+        : euiTheme.colors.severity.unknown,
+    influencerBadgeBackgroundColor: (severity: MlSeverityType) =>
+      severity.id === 'critical'
+        ? euiTheme.colors.backgroundLightDanger
+        : severity.id === 'major'
+        ? euiTheme.colors.backgroundLightRisk
+        : severity.id === 'minor'
+        ? euiTheme.colors.backgroundLightWarning
+        : severity.id === 'warning' || severity.id === 'low'
+        ? euiTheme.colors.backgroundLightNeutral
+        : euiTheme.colors.backgroundLightPrimary,
+    influencerBadgeTextColor: (severity: MlSeverityType) =>
       css({
-        height: `calc(${euiTheme.euiSizeXS} / 2)`,
-        float: 'left',
-        marginTop: euiTheme.euiSizeM,
-        textAlign: 'right',
-        lineHeight: '18px',
-        display: 'inline-block',
-        transition: 'none',
-        width: `${barScore}%`,
-        backgroundColor:
-          severity === 'critical'
-            ? mlColors.critical
-            : severity === 'major'
-            ? mlColors.major
-            : severity === 'minor'
-            ? mlColors.minor
-            : mlColors.warning,
+        color:
+          severity.id === 'critical'
+            ? euiTheme.colors.textDanger
+            : severity.id === 'major'
+            ? euiTheme.colors.textRisk
+            : severity.id === 'minor'
+            ? euiTheme.colors.textWarning
+            : severity.id === 'warning' || severity.id === 'low'
+            ? euiTheme.colors.textNeutral
+            : euiTheme.colors.textSubdued,
       }),
-    scoreLabel: (severity: string) =>
-      css({
-        textAlign: 'center',
-        lineHeight: '14px',
-        whiteSpace: 'nowrap',
-        fontSize: euiTheme.euiFontSizeXS,
-        marginLeft: euiTheme.euiSizeXS,
-        display: 'inline',
-        borderColor:
-          severity === 'critical'
-            ? mlColors.critical
-            : severity === 'major'
-            ? mlColors.major
-            : severity === 'minor'
-            ? mlColors.minor
-            : mlColors.warning,
-      }),
-    totalScoreLabel: css({
-      width: euiTheme.euiSizeXL,
-      verticalAlign: 'top',
-      textAlign: 'center',
-      color: euiTheme.euiColorDarkShade,
-      fontSize: '11px',
-      lineHeight: '14px',
-      borderRadius: euiTheme.euiBorderRadius,
-      padding: `calc(${euiTheme.euiSizeXS} / 2)`,
-      display: 'inline-block',
-      border: euiTheme.euiBorderThin,
-    }),
   };
 };

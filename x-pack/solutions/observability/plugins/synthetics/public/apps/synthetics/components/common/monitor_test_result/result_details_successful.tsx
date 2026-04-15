@@ -12,7 +12,7 @@ import { StepMetrics, TimingDetails } from './result_details';
 import { useJourneySteps } from '../../monitor_details/hooks/use_journey_steps';
 import { JourneyStepScreenshotContainer } from '../screenshot/journey_step_screenshot_container';
 import { formatMillisecond } from '../../step_details_page/common/network_data/data_formatting';
-import { JourneyStep } from '../../../../../../common/runtime_types';
+import type { JourneyStep } from '../../../../../../common/runtime_types';
 import { IMAGE_UN_AVAILABLE } from '../../step_details_page/step_screenshot/last_successful_screenshot';
 import { fetchLastSuccessfulCheck } from '../../../state';
 
@@ -39,6 +39,7 @@ export const ResultDetailsSuccessful = ({
     });
     // FIXME: Dario is not sure what step._id is being used for,
     // so he'll leave it in place
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [timestamp, monitorId, stepIndex, location, step._id]);
 
   const { currentStep } = useJourneySteps(
@@ -58,7 +59,7 @@ export const ResultDetailsSuccessful = ({
           <EuiSpacer size="m" />
           <JourneyStepScreenshotContainer
             checkGroup={data?.monitor.check_group}
-            initialStepNumber={data?.synthetics?.step?.index}
+            initialStepNumber={stepIndex}
             stepStatus={data?.synthetics?.payload?.status}
             allStepsLoaded={!loading}
             retryFetchOnRevisit={false}

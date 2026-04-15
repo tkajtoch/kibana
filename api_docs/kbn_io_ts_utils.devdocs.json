@@ -32,6 +32,8 @@
           "<LiteralValue, undefined, unknown>"
         ],
         "path": "src/platform/packages/shared/kbn-io-ts-utils/src/literal_value_from_undefined_rt/index.ts",
+        "lineNumber": 12,
+        "columnNumber": 14,
         "deprecated": false,
         "trackAdoption": false,
         "children": [
@@ -46,6 +48,8 @@
               "LiteralValue"
             ],
             "path": "src/platform/packages/shared/kbn-io-ts-utils/src/literal_value_from_undefined_rt/index.ts",
+            "lineNumber": 13,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false,
             "isRequired": true
@@ -65,6 +69,8 @@
           "(message: string) => Error"
         ],
         "path": "src/platform/packages/shared/kbn-io-ts-utils/src/decode_or_throw.ts",
+        "lineNumber": 44,
+        "columnNumber": 14,
         "deprecated": false,
         "trackAdoption": false,
         "children": [
@@ -79,6 +85,8 @@
               "string"
             ],
             "path": "src/platform/packages/shared/kbn-io-ts-utils/src/decode_or_throw.ts",
+            "lineNumber": 44,
+            "columnNumber": 34,
             "deprecated": false,
             "trackAdoption": false,
             "isRequired": true
@@ -98,16 +106,12 @@
           "<DecodedValue, EncodedValue, InputValue>(runtimeType: ",
           "Type",
           "<DecodedValue, EncodedValue, InputValue>) => ",
-          {
-            "pluginId": "@kbn/core-http-server",
-            "scope": "server",
-            "docId": "kibKbnCoreHttpServerPluginApi",
-            "section": "def-server.RouteValidationFunction",
-            "text": "RouteValidationFunction"
-          },
+          "RouteValidationFunction",
           "<DecodedValue>"
         ],
         "path": "src/platform/packages/shared/kbn-io-ts-utils/src/route_validation/index.ts",
+        "lineNumber": 18,
+        "columnNumber": 14,
         "deprecated": false,
         "trackAdoption": false,
         "children": [
@@ -123,6 +127,8 @@
               "<DecodedValue, EncodedValue, InputValue>"
             ],
             "path": "src/platform/packages/shared/kbn-io-ts-utils/src/route_validation/index.ts",
+            "lineNumber": 20,
+            "columnNumber": 5,
             "deprecated": false,
             "trackAdoption": false,
             "isRequired": true
@@ -144,6 +150,8 @@
           "<DecodedValue, EncodedValue, InputValue>, createError?: ErrorFactory) => (inputValue: InputValue) => DecodedValue"
         ],
         "path": "src/platform/packages/shared/kbn-io-ts-utils/src/decode_or_throw.ts",
+        "lineNumber": 50,
+        "columnNumber": 14,
         "deprecated": false,
         "trackAdoption": false,
         "children": [
@@ -159,6 +167,8 @@
               "<DecodedValue, EncodedValue, InputValue>"
             ],
             "path": "src/platform/packages/shared/kbn-io-ts-utils/src/decode_or_throw.ts",
+            "lineNumber": 52,
+            "columnNumber": 5,
             "deprecated": false,
             "trackAdoption": false,
             "isRequired": true
@@ -174,6 +184,8 @@
               "ErrorFactory"
             ],
             "path": "src/platform/packages/shared/kbn-io-ts-utils/src/decode_or_throw.ts",
+            "lineNumber": 53,
+            "columnNumber": 5,
             "deprecated": false,
             "trackAdoption": false,
             "isRequired": true
@@ -193,6 +205,8 @@
           "(type: T) => T"
         ],
         "path": "src/platform/packages/shared/kbn-io-ts-utils/src/deep_exact_rt/index.ts",
+        "lineNumber": 16,
+        "columnNumber": 1,
         "deprecated": false,
         "trackAdoption": false,
         "children": [
@@ -207,6 +221,8 @@
               "T"
             ],
             "path": "src/platform/packages/shared/kbn-io-ts-utils/src/deep_exact_rt/index.ts",
+            "lineNumber": 16,
+            "columnNumber": 68,
             "deprecated": false,
             "trackAdoption": false,
             "isRequired": true
@@ -260,6 +276,8 @@
           "; }>>"
         ],
         "path": "src/platform/packages/shared/kbn-io-ts-utils/src/deep_exact_rt/index.ts",
+        "lineNumber": 18,
+        "columnNumber": 1,
         "deprecated": false,
         "trackAdoption": false,
         "children": [
@@ -276,6 +294,8 @@
               "ParseableType"
             ],
             "path": "src/platform/packages/shared/kbn-io-ts-utils/src/deep_exact_rt/index.ts",
+            "lineNumber": 18,
+            "columnNumber": 29,
             "deprecated": false,
             "trackAdoption": false,
             "isRequired": true
@@ -297,6 +317,8 @@
           "[]) => string"
         ],
         "path": "src/platform/packages/shared/kbn-io-ts-utils/src/decode_or_throw.ts",
+        "lineNumber": 41,
+        "columnNumber": 14,
         "deprecated": false,
         "trackAdoption": false,
         "children": [
@@ -312,6 +334,8 @@
               "[]"
             ],
             "path": "src/platform/packages/shared/kbn-io-ts-utils/src/decode_or_throw.ts",
+            "lineNumber": 41,
+            "columnNumber": 30,
             "deprecated": false,
             "trackAdoption": false,
             "isRequired": true
@@ -333,6 +357,8 @@
           "<number, number, unknown>"
         ],
         "path": "src/platform/packages/shared/kbn-io-ts-utils/src/in_range_rt/index.ts",
+        "lineNumber": 31,
+        "columnNumber": 14,
         "deprecated": false,
         "trackAdoption": false,
         "children": [
@@ -347,6 +373,8 @@
               "number"
             ],
             "path": "src/platform/packages/shared/kbn-io-ts-utils/src/in_range_rt/index.ts",
+            "lineNumber": 31,
+            "columnNumber": 37,
             "deprecated": false,
             "trackAdoption": false,
             "isRequired": true
@@ -362,6 +390,8 @@
               "number"
             ],
             "path": "src/platform/packages/shared/kbn-io-ts-utils/src/in_range_rt/index.ts",
+            "lineNumber": 31,
+            "columnNumber": 52,
             "deprecated": false,
             "trackAdoption": false,
             "isRequired": true
@@ -383,6 +413,8 @@
           "<number, number, unknown>"
         ],
         "path": "src/platform/packages/shared/kbn-io-ts-utils/src/in_range_rt/index.ts",
+        "lineNumber": 19,
+        "columnNumber": 14,
         "deprecated": false,
         "trackAdoption": false,
         "children": [
@@ -397,6 +429,8 @@
               "number"
             ],
             "path": "src/platform/packages/shared/kbn-io-ts-utils/src/in_range_rt/index.ts",
+            "lineNumber": 19,
+            "columnNumber": 27,
             "deprecated": false,
             "trackAdoption": false,
             "isRequired": true
@@ -412,6 +446,8 @@
               "number"
             ],
             "path": "src/platform/packages/shared/kbn-io-ts-utils/src/in_range_rt/index.ts",
+            "lineNumber": 19,
+            "columnNumber": 42,
             "deprecated": false,
             "trackAdoption": false,
             "isRequired": true
@@ -443,6 +479,8 @@
           ">"
         ],
         "path": "src/platform/packages/shared/kbn-io-ts-utils/src/is_greater_or_equal/index.ts",
+        "lineNumber": 18,
+        "columnNumber": 14,
         "deprecated": false,
         "trackAdoption": false,
         "children": [
@@ -457,6 +495,8 @@
               "number"
             ],
             "path": "src/platform/packages/shared/kbn-io-ts-utils/src/is_greater_or_equal/index.ts",
+            "lineNumber": 18,
+            "columnNumber": 36,
             "deprecated": false,
             "trackAdoption": false,
             "isRequired": true
@@ -478,6 +518,8 @@
           "<T1, T2>"
         ],
         "path": "src/platform/packages/shared/kbn-io-ts-utils/src/merge_rt/index.ts",
+        "lineNumber": 35,
+        "columnNumber": 1,
         "deprecated": false,
         "trackAdoption": false,
         "children": [
@@ -492,6 +534,8 @@
               "T1"
             ],
             "path": "src/platform/packages/shared/kbn-io-ts-utils/src/merge_rt/index.ts",
+            "lineNumber": 35,
+            "columnNumber": 61,
             "deprecated": false,
             "trackAdoption": false,
             "isRequired": true
@@ -507,6 +551,8 @@
               "T2"
             ],
             "path": "src/platform/packages/shared/kbn-io-ts-utils/src/merge_rt/index.ts",
+            "lineNumber": 35,
+            "columnNumber": 68,
             "deprecated": false,
             "trackAdoption": false,
             "isRequired": true
@@ -536,6 +582,8 @@
           "<any, any>; _A: any; _O: any; _I: unknown; }"
         ],
         "path": "src/platform/packages/shared/kbn-io-ts-utils/src/merge_rt/index.ts",
+        "lineNumber": 37,
+        "columnNumber": 1,
         "deprecated": false,
         "trackAdoption": false,
         "children": [
@@ -551,6 +599,8 @@
               "[]"
             ],
             "path": "src/platform/packages/shared/kbn-io-ts-utils/src/merge_rt/index.ts",
+            "lineNumber": 37,
+            "columnNumber": 25,
             "deprecated": false,
             "trackAdoption": false,
             "isRequired": true
@@ -572,6 +622,8 @@
           "<any, any, unknown>"
         ],
         "path": "src/platform/packages/shared/kbn-io-ts-utils/src/strict_keys_rt/index.ts",
+        "lineNumber": 136,
+        "columnNumber": 1,
         "deprecated": false,
         "trackAdoption": false,
         "children": [
@@ -586,6 +638,8 @@
               "T"
             ],
             "path": "src/platform/packages/shared/kbn-io-ts-utils/src/strict_keys_rt/index.ts",
+            "lineNumber": 136,
+            "columnNumber": 47,
             "deprecated": false,
             "trackAdoption": false,
             "isRequired": true
@@ -607,6 +661,8 @@
           ") => never"
         ],
         "path": "src/platform/packages/shared/kbn-io-ts-utils/src/decode_or_throw.ts",
+        "lineNumber": 46,
+        "columnNumber": 14,
         "deprecated": false,
         "trackAdoption": false,
         "children": [
@@ -621,6 +677,8 @@
               "ErrorFactory"
             ],
             "path": "src/platform/packages/shared/kbn-io-ts-utils/src/decode_or_throw.ts",
+            "lineNumber": 46,
+            "columnNumber": 29,
             "deprecated": false,
             "trackAdoption": false,
             "isRequired": true
@@ -644,6 +702,8 @@
           ") => JSONSchema"
         ],
         "path": "src/platform/packages/shared/kbn-io-ts-utils/src/to_json_schema/index.ts",
+        "lineNumber": 51,
+        "columnNumber": 14,
         "deprecated": false,
         "trackAdoption": false,
         "children": [
@@ -660,6 +720,8 @@
               "ParseableType"
             ],
             "path": "src/platform/packages/shared/kbn-io-ts-utils/src/to_json_schema/index.ts",
+            "lineNumber": 51,
+            "columnNumber": 30,
             "deprecated": false,
             "trackAdoption": false,
             "isRequired": true
@@ -678,6 +740,8 @@
         "label": "InRangeBrand",
         "description": [],
         "path": "src/platform/packages/shared/kbn-io-ts-utils/src/in_range_rt/index.ts",
+        "lineNumber": 13,
+        "columnNumber": 1,
         "deprecated": false,
         "trackAdoption": false,
         "children": [
@@ -700,6 +764,8 @@
               "[\"InRange\"]"
             ],
             "path": "src/platform/packages/shared/kbn-io-ts-utils/src/in_range_rt/index.ts",
+            "lineNumber": 14,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           }
@@ -714,6 +780,8 @@
         "label": "IsGreaterOrEqualBrand",
         "description": [],
         "path": "src/platform/packages/shared/kbn-io-ts-utils/src/is_greater_or_equal/index.ts",
+        "lineNumber": 12,
+        "columnNumber": 1,
         "deprecated": false,
         "trackAdoption": false,
         "children": [
@@ -736,6 +804,8 @@
               "[\"IsGreaterOrEqual\"]"
             ],
             "path": "src/platform/packages/shared/kbn-io-ts-utils/src/is_greater_or_equal/index.ts",
+            "lineNumber": 13,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           }
@@ -750,6 +820,8 @@
         "label": "NonEmptyStringBrand",
         "description": [],
         "path": "src/platform/packages/shared/kbn-io-ts-utils/src/non_empty_string_rt/index.ts",
+        "lineNumber": 14,
+        "columnNumber": 1,
         "deprecated": false,
         "trackAdoption": false,
         "children": [
@@ -772,6 +844,8 @@
               "[\"NonEmptyString\"]"
             ],
             "path": "src/platform/packages/shared/kbn-io-ts-utils/src/non_empty_string_rt/index.ts",
+            "lineNumber": 15,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           }
@@ -796,6 +870,8 @@
           " extends { time: string; tiebreaker: number; } & { gid?: string | undefined; fromAutoReload?: boolean | undefined; }"
         ],
         "path": "src/platform/packages/shared/kbn-io-ts-utils/src/time_key_rt/index.ts",
+        "lineNumber": 52,
+        "columnNumber": 1,
         "deprecated": false,
         "trackAdoption": false,
         "children": [
@@ -807,6 +883,8 @@
             "label": "gid",
             "description": [],
             "path": "src/platform/packages/shared/kbn-io-ts-utils/src/time_key_rt/index.ts",
+            "lineNumber": 53,
+            "columnNumber": 3,
             "deprecated": false,
             "trackAdoption": false
           }
@@ -831,6 +909,8 @@
           ">"
         ],
         "path": "src/platform/packages/shared/kbn-io-ts-utils/src/index_pattern_rt/index.ts",
+        "lineNumber": 30,
+        "columnNumber": 1,
         "deprecated": false,
         "trackAdoption": false,
         "initialIsOpen": false
@@ -856,6 +936,8 @@
           ">"
         ],
         "path": "src/platform/packages/shared/kbn-io-ts-utils/src/in_range_rt/index.ts",
+        "lineNumber": 17,
+        "columnNumber": 1,
         "deprecated": false,
         "trackAdoption": false,
         "initialIsOpen": false
@@ -881,6 +963,8 @@
           ">"
         ],
         "path": "src/platform/packages/shared/kbn-io-ts-utils/src/is_greater_or_equal/index.ts",
+        "lineNumber": 16,
+        "columnNumber": 1,
         "deprecated": false,
         "trackAdoption": false,
         "initialIsOpen": false
@@ -896,6 +980,8 @@
           "{ time: string; tiebreaker: number; }"
         ],
         "path": "src/platform/packages/shared/kbn-io-ts-utils/src/time_key_rt/index.ts",
+        "lineNumber": 41,
+        "columnNumber": 1,
         "deprecated": false,
         "trackAdoption": false,
         "initialIsOpen": false
@@ -921,6 +1007,8 @@
           ">"
         ],
         "path": "src/platform/packages/shared/kbn-io-ts-utils/src/non_empty_string_rt/index.ts",
+        "lineNumber": 18,
+        "columnNumber": 1,
         "deprecated": false,
         "trackAdoption": false,
         "initialIsOpen": false
@@ -936,6 +1024,8 @@
           "{ time: string; tiebreaker: number; } & { gid?: string | undefined; fromAutoReload?: boolean | undefined; }"
         ],
         "path": "src/platform/packages/shared/kbn-io-ts-utils/src/time_key_rt/index.ts",
+        "lineNumber": 50,
+        "columnNumber": 1,
         "deprecated": false,
         "trackAdoption": false,
         "initialIsOpen": false
@@ -954,6 +1044,8 @@
           "<unknown[], string, unknown>"
         ],
         "path": "src/platform/packages/shared/kbn-io-ts-utils/src/array_to_string_rt/index.ts",
+        "lineNumber": 13,
+        "columnNumber": 14,
         "deprecated": false,
         "trackAdoption": false,
         "initialIsOpen": false
@@ -970,6 +1062,8 @@
           "<string, string | number, unknown>"
         ],
         "path": "src/platform/packages/shared/kbn-io-ts-utils/src/time_key_rt/index.ts",
+        "lineNumber": 17,
+        "columnNumber": 14,
         "deprecated": false,
         "trackAdoption": false,
         "initialIsOpen": false
@@ -986,6 +1080,8 @@
           "<string, string, unknown>"
         ],
         "path": "src/platform/packages/shared/kbn-io-ts-utils/src/datemath_string_rt/index.ts",
+        "lineNumber": 20,
+        "columnNumber": 14,
         "deprecated": false,
         "trackAdoption": false,
         "initialIsOpen": false
@@ -1006,6 +1102,8 @@
           ">"
         ],
         "path": "src/platform/packages/shared/kbn-io-ts-utils/src/date_rt/index.ts",
+        "lineNumber": 19,
+        "columnNumber": 14,
         "deprecated": false,
         "trackAdoption": false,
         "initialIsOpen": false
@@ -1026,6 +1124,8 @@
           ">"
         ],
         "path": "src/platform/packages/shared/kbn-io-ts-utils/src/index_pattern_rt/index.ts",
+        "lineNumber": 32,
+        "columnNumber": 14,
         "deprecated": false,
         "trackAdoption": false,
         "initialIsOpen": false
@@ -1042,6 +1142,8 @@
           "<number, string, unknown>"
         ],
         "path": "src/platform/packages/shared/kbn-io-ts-utils/src/iso_to_epoch_rt/index.ts",
+        "lineNumber": 16,
+        "columnNumber": 14,
         "deprecated": false,
         "trackAdoption": false,
         "initialIsOpen": false
@@ -1058,6 +1160,8 @@
           "<number, string, unknown>"
         ],
         "path": "src/platform/packages/shared/kbn-io-ts-utils/src/iso_to_epoch_secs_rt/index.ts",
+        "lineNumber": 15,
+        "columnNumber": 14,
         "deprecated": false,
         "trackAdoption": false,
         "initialIsOpen": false
@@ -1074,6 +1178,8 @@
           "<any, string, unknown>"
         ],
         "path": "src/platform/packages/shared/kbn-io-ts-utils/src/json_rt/index.ts",
+        "lineNumber": 13,
+        "columnNumber": 14,
         "deprecated": false,
         "trackAdoption": false,
         "initialIsOpen": false
@@ -1094,6 +1200,8 @@
           "; }>"
         ],
         "path": "src/platform/packages/shared/kbn-io-ts-utils/src/time_key_rt/index.ts",
+        "lineNumber": 37,
+        "columnNumber": 14,
         "deprecated": false,
         "trackAdoption": false,
         "initialIsOpen": false
@@ -1120,6 +1228,8 @@
           ">"
         ],
         "path": "src/platform/packages/shared/kbn-io-ts-utils/src/non_empty_string_rt/index.ts",
+        "lineNumber": 20,
+        "columnNumber": 14,
         "deprecated": false,
         "trackAdoption": false,
         "initialIsOpen": false
@@ -1136,6 +1246,8 @@
           "<boolean, boolean, unknown>"
         ],
         "path": "src/platform/packages/shared/kbn-io-ts-utils/src/to_boolean_rt/index.ts",
+        "lineNumber": 22,
+        "columnNumber": 14,
         "deprecated": false,
         "trackAdoption": false,
         "initialIsOpen": false
@@ -1152,6 +1264,8 @@
           "<number, number, unknown>"
         ],
         "path": "src/platform/packages/shared/kbn-io-ts-utils/src/to_number_rt/index.ts",
+        "lineNumber": 12,
+        "columnNumber": 14,
         "deprecated": false,
         "trackAdoption": false,
         "initialIsOpen": false

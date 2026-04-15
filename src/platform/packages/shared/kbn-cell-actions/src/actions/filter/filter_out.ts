@@ -23,9 +23,9 @@ import {
 import { ACTION_INCOMPATIBLE_VALUE_WARNING } from '../translations';
 import type { DefaultActionsSupportedValue } from '../types';
 
-const ICON = 'minusInCircle';
+const ICON = 'minusCircle';
 const FILTER_OUT = i18n.translate('cellActions.actions.filterOut', {
-  defaultMessage: 'Filter Out',
+  defaultMessage: 'Filter out',
 });
 
 export const createFilterOutActionFactory = createCellActionFactory(

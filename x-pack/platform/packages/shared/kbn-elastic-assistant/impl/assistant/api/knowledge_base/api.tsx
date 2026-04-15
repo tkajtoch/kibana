@@ -5,17 +5,17 @@
  * 2.0.
  */
 
-import {
-  API_VERSIONS,
+import type {
   CreateKnowledgeBaseRequestParams,
   CreateKnowledgeBaseResponse,
-  ELASTIC_AI_ASSISTANT_KNOWLEDGE_BASE_INDICES_URL,
-  ELASTIC_AI_ASSISTANT_KNOWLEDGE_BASE_URL,
-  GetKnowledgeBaseIndicesResponse,
   ReadKnowledgeBaseRequestParams,
   ReadKnowledgeBaseResponse,
 } from '@kbn/elastic-assistant-common';
-import { HttpSetup, IHttpFetchError } from '@kbn/core-http-browser';
+import {
+  API_VERSIONS,
+  ELASTIC_AI_ASSISTANT_KNOWLEDGE_BASE_URL,
+} from '@kbn/elastic-assistant-common';
+import type { HttpSetup, IHttpFetchError } from '@kbn/core-http-browser';
 
 /**
  * API call for getting the status of the Knowledge Base. Provide
@@ -40,7 +40,7 @@ export const getKnowledgeBaseStatus = async ({
     const response = await http.fetch(path, {
       method: 'GET',
       signal,
-      version: API_VERSIONS.internal.v1,
+      version: API_VERSIONS.public.v1,
     });
 
     return response as ReadKnowledgeBaseResponse;
@@ -71,37 +71,8 @@ export const postKnowledgeBase = async ({
   const response = await http.fetch(path, {
     method: 'POST',
     signal,
-    version: API_VERSIONS.internal.v1,
+    version: API_VERSIONS.public.v1,
   });
 
   return response as CreateKnowledgeBaseResponse;
-};
-
-/**
- * API call for getting indices that have fields of `semantic_text` type.
- *
- * @param {Object} options - The options object.
- * @param {HttpSetup} options.http - HttpSetup
- * @param {AbortSignal} [options.signal] - AbortSignal
- *
- * @returns {Promise<GetKnowledgeBaseIndicesResponse | IHttpFetchError>}
- */
-export const getKnowledgeBaseIndices = async ({
-  http,
-  signal,
-}: {
-  http: HttpSetup;
-  signal?: AbortSignal | undefined;
-}): Promise<GetKnowledgeBaseIndicesResponse | IHttpFetchError> => {
-  try {
-    const response = await http.fetch(ELASTIC_AI_ASSISTANT_KNOWLEDGE_BASE_INDICES_URL, {
-      method: 'GET',
-      signal,
-      version: API_VERSIONS.internal.v1,
-    });
-
-    return response as GetKnowledgeBaseIndicesResponse;
-  } catch (error) {
-    return error as IHttpFetchError;
-  }
 };

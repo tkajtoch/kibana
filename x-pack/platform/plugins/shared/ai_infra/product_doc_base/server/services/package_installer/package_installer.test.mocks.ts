@@ -7,6 +7,7 @@
 
 export const validateArtifactArchiveMock = jest.fn();
 export const fetchArtifactVersionsMock = jest.fn();
+export const fetchSecurityLabsVersionsMock = jest.fn();
 export const createIndexMock = jest.fn();
 export const populateIndexMock = jest.fn();
 
@@ -16,6 +17,7 @@ jest.doMock('./steps', () => {
     ...actual,
     validateArtifactArchive: validateArtifactArchiveMock,
     fetchArtifactVersions: fetchArtifactVersionsMock,
+    fetchSecurityLabsVersions: fetchSecurityLabsVersionsMock,
     createIndex: createIndexMock,
     populateIndex: populateIndexMock,
   };
@@ -24,6 +26,8 @@ jest.doMock('./steps', () => {
 export const downloadToDiskMock = jest.fn();
 export const openZipArchiveMock = jest.fn();
 export const loadMappingFileMock = jest.fn();
+export const loadManifestFileMock = jest.fn();
+export const ensureDefaultElserDeployedMock = jest.fn();
 
 jest.doMock('./utils', () => {
   const actual = jest.requireActual('./utils');
@@ -32,5 +36,7 @@ jest.doMock('./utils', () => {
     downloadToDisk: downloadToDiskMock,
     openZipArchive: openZipArchiveMock,
     loadMappingFile: loadMappingFileMock,
+    loadManifestFile: loadManifestFileMock,
+    ensureDefaultElserDeployed: ensureDefaultElserDeployedMock,
   };
 });

@@ -8,14 +8,14 @@
 import { i18n } from '@kbn/i18n';
 import type { KibanaRequest } from '@kbn/core/server';
 import type { RequestStatistics, RequestStatus } from '@kbn/inspector-plugin/common';
-import { InspectResponse } from '../../typings/common';
-import { WrappedElasticsearchClientError } from './unwrap_es_response';
+import type { InspectResponse } from '../../typings/common';
+import type { WrappedElasticsearchClientError } from './unwrap_es_response';
 
 /**
  * Get statistics to show on inspector tab.
  *
  * If you're using searchSource (which we're not), this gets populated from
- * https://github.com/elastic/kibana/blob/c7d742cb8b8935f3812707a747a139806e4be203/src/plugins/data/common/search/search_source/inspect/inspector_stats.ts
+ * src/plugins/data/common/search/search_source/inspect/inspector_stats.ts
  *
  * We do most of the same here, but not using searchSource.
  */

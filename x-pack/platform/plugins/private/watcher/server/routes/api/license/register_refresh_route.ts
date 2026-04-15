@@ -5,7 +5,7 @@
  * 2.0.
  */
 
-import { RouteDependencies } from '../../../types';
+import type { RouteDependencies } from '../../../types';
 /*
 In order for the client to have the most up-to-date snapshot of the current license,
 it needs to make a round-trip to the kibana server. This refresh endpoint is provided
@@ -17,6 +17,12 @@ export function registerRefreshRoute({ router, license }: RouteDependencies) {
   router.get(
     {
       path: '/api/watcher/license/refresh',
+      security: {
+        authz: {
+          enabled: false,
+          reason: 'Relies on license for authorization',
+        },
+      },
       validate: false,
     },
     license.guardApiRoute((ctx, request, response) => {

@@ -5,13 +5,14 @@
  * 2.0.
  */
 
-import React, { ReactNode } from 'react';
-import { EuiHighlight, EuiSelectableOption } from '@elastic/eui';
-import styled from 'styled-components';
-import { euiLightVars } from '@kbn/ui-theme';
+import type { ReactNode } from 'react';
+import React from 'react';
+import type { EuiSelectableOption } from '@elastic/eui';
+import { EuiHighlight } from '@elastic/eui';
+import styled from '@emotion/styled';
 
 const StyledSpan = styled.span`
-  color: ${euiLightVars.euiColorSuccessText};
+  color: ${({ theme }) => theme.euiTheme.colors.success};
   font-weight: 500;
   :not(:last-of-type)::after {
     content: '•';

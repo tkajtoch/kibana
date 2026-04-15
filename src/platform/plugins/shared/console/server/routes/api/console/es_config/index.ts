@@ -7,23 +7,46 @@
  * License v3.0 only", or the "Server Side Public License, v 1".
  */
 
-import { EsConfigApiResponse } from '../../../../../common/types/api_responses';
-import { RouteDependencies } from '../../..';
+import type { EsConfigApiResponse } from '../../../../../common/types/api_responses';
+import { stripCredentialsFromUrl } from '../../../../lib/utils';
+import type { RouteDependencies } from '../../..';
 
-export const registerEsConfigRoute = ({ router, services }: RouteDependencies): void => {
-  router.get({ path: '/api/console/es_config', validate: false }, async (ctx, req, res) => {
-    const cloudUrl = services.esLegacyConfigService.getCloudUrl();
-    if (cloudUrl) {
-      const body: EsConfigApiResponse = { host: cloudUrl };
+export const registerEsConfigRoute = ({ router, services, proxy }: RouteDependencies): void => {
+  router.get(
+    {
+      path: '/api/console/es_config',
+      security: {
+        authz: {
+          enabled: false,
+          reason: 'Low effort request for config content',
+        },
+      },
+      validate: false,
+    },
+    async (ctx, req, res) => {
+      const cloudUrl = services.esLegacyConfigService.getCloudUrl();
+
+      // Always get the actual proxy hosts for allHosts
+      const legacyConfig = await proxy.readLegacyESConfig();
+      const { hosts } = legacyConfig;
+      const sanitizedHosts = hosts.map(stripCredentialsFromUrl);
+
+      if (cloudUrl) {
+        const body: EsConfigApiResponse = {
+          host: stripCredentialsFromUrl(cloudUrl),
+          // Use actual proxy hosts, not cloudUrl
+          allHosts: sanitizedHosts,
+        };
+
+        return res.ok({ body });
+      }
+
+      const body: EsConfigApiResponse = {
+        host: sanitizedHosts[0],
+        allHosts: sanitizedHosts,
+      };
 
       return res.ok({ body });
     }
-    const {
-      hosts: [host],
-    } = await services.esLegacyConfigService.readConfig();
-
-    const body: EsConfigApiResponse = { host };
-
-    return res.ok({ body });
-  });
+  );
 };

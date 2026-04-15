@@ -4,12 +4,12 @@
  * 2.0; you may not use this file except in compliance with the Elastic License
  * 2.0.
  */
-import type * as estypes from '@elastic/elasticsearch/lib/api/typesWithBodyKey';
+import type { estypes } from '@elastic/elasticsearch';
 import { get } from 'lodash';
 import type { Observable } from 'rxjs';
 import { of } from 'rxjs';
 import { catchError, map } from 'rxjs';
-import type { AggregationsTermsAggregation } from '@elastic/elasticsearch/lib/api/typesWithBodyKey';
+import type { AggregationsTermsAggregation } from '@elastic/elasticsearch/lib/api/types';
 import type {
   IKibanaSearchResponse,
   IKibanaSearchRequest,
@@ -33,7 +33,7 @@ export const getStringFieldStatsRequest = (
   params: FieldStatsCommonRequestParams,
   fields: Field[]
 ) => {
-  const { index, query, runtimeFieldMap } = params;
+  const { index, query, runtimeFieldMap, projectRouting } = params;
 
   const size = 0;
 
@@ -62,7 +62,8 @@ export const getStringFieldStatsRequest = (
   return {
     index,
     size,
-    body: searchBody,
+    ...searchBody,
+    ...(projectRouting ? { project_routing: projectRouting } : {}),
   };
 };
 

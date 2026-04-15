@@ -55,7 +55,16 @@ export const LogCategorizationAppState: FC<LogCategorizationAppStateProps> = ({
   }
 
   const datePickerDeps: DatePickerDependencies = {
-    ...pick(appContextValue, ['data', 'http', 'notifications', 'theme', 'uiSettings', 'i18n']),
+    ...pick(appContextValue, [
+      'data',
+      'http',
+      'notifications',
+      'theme',
+      'uiSettings',
+      'userProfile',
+      'i18n',
+      'cps',
+    ]),
     uiSettingsKeys: UI_SETTINGS,
     showFrozenDataTierChoice,
   };

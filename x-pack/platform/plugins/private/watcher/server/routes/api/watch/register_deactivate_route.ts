@@ -6,9 +6,9 @@
  */
 
 import { schema } from '@kbn/config-schema';
-import { IScopedClusterClient } from '@kbn/core/server';
+import type { IScopedClusterClient } from '@kbn/core/server';
 import { get } from 'lodash';
-import { RouteDependencies } from '../../../types';
+import type { RouteDependencies } from '../../../types';
 import {
   buildServerWatchStatusModel,
   buildClientWatchStatusModel,
@@ -32,6 +32,12 @@ export function registerDeactivateRoute({
   router.put(
     {
       path: '/api/watcher/watch/{watchId}/deactivate',
+      security: {
+        authz: {
+          enabled: false,
+          reason: 'Relies on es client for authorization',
+        },
+      },
       validate: {
         params: paramsSchema,
       },

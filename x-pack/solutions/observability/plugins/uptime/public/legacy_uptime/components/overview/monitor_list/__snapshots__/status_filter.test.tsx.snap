@@ -4,94 +4,98 @@ exports[`StatusFilterComponent renders without errors for valid props 1`] = `
 <div
   class="euiFilterGroup emotion-euiFilterGroup-uncompressed"
 >
-  <button
-    class="euiButtonEmpty euiFilterButton euiFilterButton-hasActiveFilters emotion-euiButtonDisplay-euiButtonEmpty-m-empty-text-euiFilterButton-withNext-hasActiveFilters"
-    data-test-subj="xpack.synthetics.filterBar.filterStatusAll"
-    type="button"
+  <div
+    class="euiFilterButton__wrapper css-1anz60t-wrapper-withNext-hasToggle"
   >
-    <span
-      class="euiButtonEmpty__content emotion-euiButtonDisplayContent-euiFilterButton__content"
+    <button
+      aria-pressed="true"
+      class="euiButtonGroupButton euiButtonGroupButton-isSelected euiFilterButton euiFilterButton-isSelected euiFilterButton-hasActiveFilters euiFilterButton-isToggle emotion-euiButtonDisplay-s-defaultMinWidth-euiButtonGroupButton-compressed-fill-text-euiFilterButton-hasActiveFilters-toggle"
+      data-test-subj="xpack.synthetics.filterBar.filterStatusAll"
+      type="button"
     >
       <span
-        class="euiFilterButton__text emotion-euiFilterButton__text"
-        data-text="All"
-        title="All"
+        class="emotion-euiButtonDisplayContent-euiButtonGroupButton__content-compressed-euiFilterButton__content"
       >
-        All
+        <span
+          class="euiFilterButton__text emotion-euiFilterButton__text"
+          data-text="All"
+          title="All"
+        >
+          All
+        </span>
       </span>
-    </span>
-  </button>
-  <button
-    class="euiButtonEmpty euiFilterButton emotion-euiButtonDisplay-euiButtonEmpty-m-empty-text-euiFilterButton-withNext"
-    data-test-subj="xpack.synthetics.filterBar.filterStatusUp"
-    type="button"
+    </button>
+  </div>
+  <div
+    class="euiFilterButton__wrapper css-1anz60t-wrapper-withNext-hasToggle"
   >
-    <span
-      class="euiButtonEmpty__content emotion-euiButtonDisplayContent-euiFilterButton__content"
+    <button
+      aria-pressed="false"
+      class="euiButtonGroupButton euiFilterButton euiFilterButton-isToggle emotion-euiButtonDisplay-s-defaultMinWidth-euiButtonGroupButton-compressed-empty-text-euiFilterButton-toggle"
+      data-test-subj="xpack.synthetics.filterBar.filterStatusUp"
+      type="button"
     >
       <span
-        class="euiFilterButton__text emotion-euiFilterButton__text"
-        data-text="Up"
-        title="Up"
+        class="emotion-euiButtonDisplayContent-euiButtonGroupButton__content-compressed-euiFilterButton__content"
       >
-        Up
+        <span
+          class="euiFilterButton__text emotion-euiFilterButton__text"
+          data-text="Up"
+          title="Up"
+        >
+          Up
+        </span>
       </span>
-    </span>
-  </button>
-  <button
-    class="euiButtonEmpty euiFilterButton emotion-euiButtonDisplay-euiButtonEmpty-m-empty-text-euiFilterButton"
-    data-test-subj="xpack.synthetics.filterBar.filterStatusDown"
-    type="button"
+    </button>
+  </div>
+  <div
+    class="euiFilterButton__wrapper css-1nn8k4u-wrapper-hasToggle"
   >
-    <span
-      class="euiButtonEmpty__content emotion-euiButtonDisplayContent-euiFilterButton__content"
+    <button
+      aria-pressed="false"
+      class="euiButtonGroupButton euiFilterButton euiFilterButton-isToggle emotion-euiButtonDisplay-s-defaultMinWidth-euiButtonGroupButton-compressed-empty-text-euiFilterButton-toggle"
+      data-test-subj="xpack.synthetics.filterBar.filterStatusDown"
+      type="button"
     >
       <span
-        class="euiFilterButton__text emotion-euiFilterButton__text"
-        data-text="Down"
-        title="Down"
+        class="emotion-euiButtonDisplayContent-euiButtonGroupButton__content-compressed-euiFilterButton__content"
       >
-        Down
+        <span
+          class="euiFilterButton__text emotion-euiFilterButton__text"
+          data-text="Down"
+          title="Down"
+        >
+          Down
+        </span>
       </span>
-    </span>
-  </button>
+    </button>
+  </div>
 </div>
 `;
 
 exports[`StatusFilterComponent shallow renders without errors for valid props 1`] = `
-<ContextProvider
-  value={
+<Router
+  history={
     Object {
-      "history": Object {
-        "action": "POP",
-        "block": [Function],
-        "canGo": [Function],
-        "createHref": [Function],
-        "entries": Array [
-          Object {
-            "hash": "",
-            "key": "TestKeyForTesting",
-            "pathname": "/",
-            "search": "",
-            "state": undefined,
-          },
-        ],
-        "go": [Function],
-        "goBack": [Function],
-        "goForward": [Function],
-        "index": 0,
-        "length": 1,
-        "listen": [Function],
-        "location": Object {
+      "action": "POP",
+      "block": [Function],
+      "canGo": [Function],
+      "createHref": [Function],
+      "entries": Array [
+        Object {
           "hash": "",
           "key": "TestKeyForTesting",
           "pathname": "/",
           "search": "",
           "state": undefined,
         },
-        "push": [Function],
-        "replace": [Function],
-      },
+      ],
+      "go": [Function],
+      "goBack": [Function],
+      "goForward": [Function],
+      "index": 0,
+      "length": 1,
+      "listen": [Function],
       "location": Object {
         "hash": "",
         "key": "TestKeyForTesting",
@@ -99,53 +103,11 @@ exports[`StatusFilterComponent shallow renders without errors for valid props 1`
         "search": "",
         "state": undefined,
       },
-      "match": Object {
-        "isExact": true,
-        "params": Object {},
-        "path": "/",
-        "url": "/",
-      },
-      "staticContext": undefined,
+      "push": [Function],
+      "replace": [Function],
     }
   }
 >
-  <ContextProvider
-    value={
-      Object {
-        "action": "POP",
-        "block": [Function],
-        "canGo": [Function],
-        "createHref": [Function],
-        "entries": Array [
-          Object {
-            "hash": "",
-            "key": "TestKeyForTesting",
-            "pathname": "/",
-            "search": "",
-            "state": undefined,
-          },
-        ],
-        "go": [Function],
-        "goBack": [Function],
-        "goForward": [Function],
-        "index": 0,
-        "length": 1,
-        "listen": [Function],
-        "location": Object {
-          "hash": "",
-          "key": "TestKeyForTesting",
-          "pathname": "/",
-          "search": "",
-          "state": undefined,
-        },
-        "push": [Function],
-        "replace": [Function],
-      }
-    }
-  >
-    <CompatRouter>
-      <StatusFilter />
-    </CompatRouter>
-  </ContextProvider>
-</ContextProvider>
+  <StatusFilter />
+</Router>
 `;

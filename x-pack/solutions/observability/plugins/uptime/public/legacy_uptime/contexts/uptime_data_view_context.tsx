@@ -5,9 +5,10 @@
  * 2.0.
  */
 
-import React, { createContext, useContext, FC, PropsWithChildren } from 'react';
+import type { FC, PropsWithChildren } from 'react';
+import React, { createContext, useContext } from 'react';
 import { useFetcher } from '@kbn/observability-shared-plugin/public';
-import { DataViewsPublicPluginStart, DataView } from '@kbn/data-views-plugin/public';
+import type { DataViewsPublicPluginStart, DataView } from '@kbn/data-views-plugin/public';
 import { useHasData } from '../components/overview/empty_state/use_has_data';
 
 export const UptimeDataViewContext = createContext({} as DataView);
@@ -28,6 +29,7 @@ export const UptimeDataViewContextProvider: FC<
     }
     // FIXME: Dario thinks there is a better way to do this but
     // he's getting tired and maybe the Uptime folks can fix it
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [heartbeatIndices, indexStatus?.indexExists]);
 
   return <UptimeDataViewContext.Provider value={data!} children={children} />;

@@ -6,10 +6,8 @@
  */
 
 import type { ISearchRequestParams } from '@kbn/search-types';
-import {
-  LastEventIndexKey,
-  TimelineEventsLastEventTimeRequestOptions,
-} from '../../../../../../common/api/search_strategy/timeline/timeline';
+import type { TimelineEventsLastEventTimeRequestOptions } from '../../../../../../common/api/search_strategy/timeline/timeline';
+import { LastEventIndexKey } from '../../../../../../common/api/search_strategy/timeline/timeline';
 
 import { assertUnreachable } from '../../../../../../common/utility_types';
 
@@ -41,93 +39,7 @@ export const buildLastEventTimeQuery = ({
             index: indicesToQuery.network,
             ignore_unavailable: true,
             track_total_hits: false,
-            body: {
-              query: { bool: { filter: { bool: { should: getIpDetailsFilter(details.ip) } } } },
-              _source: false,
-              fields: [
-                {
-                  field: '@timestamp',
-                  format: 'strict_date_optional_time',
-                },
-              ],
-              size: 1,
-              sort: [
-                {
-                  '@timestamp': {
-                    order: 'desc',
-                  },
-                },
-              ],
-            },
-          };
-        }
-        throw new Error('buildLastEventTimeQuery - no IP argument provided');
-      case LastEventIndexKey.hostDetails:
-        if (details.hostName) {
-          return {
-            allow_no_indices: true,
-            index: indicesToQuery.hosts,
-            ignore_unavailable: true,
-            track_total_hits: false,
-            body: {
-              query: { bool: { filter: getHostDetailsFilter(details.hostName) } },
-              _source: false,
-              fields: [
-                {
-                  field: '@timestamp',
-                  format: 'strict_date_optional_time',
-                },
-              ],
-              size: 1,
-              sort: [
-                {
-                  '@timestamp': {
-                    order: 'desc',
-                  },
-                },
-              ],
-            },
-          };
-        }
-        throw new Error('buildLastEventTimeQuery - no hostName argument provided');
-      case LastEventIndexKey.userDetails:
-        if (details.userName) {
-          return {
-            allow_no_indices: true,
-            index: indicesToQuery.hosts,
-            ignore_unavailable: true,
-            track_total_hits: false,
-            body: {
-              query: { bool: { filter: getUserDetailsFilter(details.userName) } },
-              _source: false,
-              fields: [
-                {
-                  field: '@timestamp',
-                  format: 'strict_date_optional_time',
-                },
-              ],
-              size: 1,
-              sort: [
-                {
-                  '@timestamp': {
-                    order: 'desc',
-                  },
-                },
-              ],
-            },
-          };
-        }
-        throw new Error('buildLastEventTimeQuery - no userName argument provided');
-      case LastEventIndexKey.hosts:
-      case LastEventIndexKey.network:
-      case LastEventIndexKey.users:
-        return {
-          allow_no_indices: true,
-          index: indicesToQuery[indexKey],
-          ignore_unavailable: true,
-          track_total_hits: false,
-          body: {
-            query: { match_all: {} },
+            query: { bool: { filter: { bool: { should: getIpDetailsFilter(details.ip) } } } },
             _source: false,
             fields: [
               {
@@ -143,7 +55,85 @@ export const buildLastEventTimeQuery = ({
                 },
               },
             ],
-          },
+          };
+        }
+        throw new Error('buildLastEventTimeQuery - no IP argument provided');
+      case LastEventIndexKey.hostDetails:
+        if (details.hostName) {
+          return {
+            allow_no_indices: true,
+            index: indicesToQuery.hosts,
+            ignore_unavailable: true,
+            track_total_hits: false,
+            query: { bool: { filter: getHostDetailsFilter(details.hostName) } },
+            _source: false,
+            fields: [
+              {
+                field: '@timestamp',
+                format: 'strict_date_optional_time',
+              },
+            ],
+            size: 1,
+            sort: [
+              {
+                '@timestamp': {
+                  order: 'desc',
+                },
+              },
+            ],
+          };
+        }
+        throw new Error('buildLastEventTimeQuery - no hostName argument provided');
+      case LastEventIndexKey.userDetails:
+        if (details.userName) {
+          return {
+            allow_no_indices: true,
+            index: indicesToQuery.hosts,
+            ignore_unavailable: true,
+            track_total_hits: false,
+            query: { bool: { filter: getUserDetailsFilter(details.userName) } },
+            _source: false,
+            fields: [
+              {
+                field: '@timestamp',
+                format: 'strict_date_optional_time',
+              },
+            ],
+            size: 1,
+            sort: [
+              {
+                '@timestamp': {
+                  order: 'desc',
+                },
+              },
+            ],
+          };
+        }
+        throw new Error('buildLastEventTimeQuery - no userName argument provided');
+      case LastEventIndexKey.hosts:
+      case LastEventIndexKey.network:
+      case LastEventIndexKey.users:
+        return {
+          allow_no_indices: true,
+          index: indicesToQuery[indexKey],
+          ignore_unavailable: true,
+          track_total_hits: false,
+          query: { match_all: {} },
+          _source: false,
+          fields: [
+            {
+              field: '@timestamp',
+              format: 'strict_date_optional_time',
+            },
+          ],
+          size: 1,
+          sort: [
+            {
+              '@timestamp': {
+                order: 'desc',
+              },
+            },
+          ],
         };
       default:
         return assertUnreachable(eventIndexKey);

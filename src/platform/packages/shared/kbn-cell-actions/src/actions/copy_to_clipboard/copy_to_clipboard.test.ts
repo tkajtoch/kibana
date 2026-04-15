@@ -39,11 +39,11 @@ describe('Default createCopyToClipboardActionFactory', () => {
   });
 
   it('should return display name', () => {
-    expect(copyToClipboardAction.getDisplayName(context)).toEqual('Copy to Clipboard');
+    expect(copyToClipboardAction.getDisplayName(context)).toEqual('Copy to clipboard');
   });
 
   it('should return icon type', () => {
-    expect(copyToClipboardAction.getIconType(context)).toEqual('copyClipboard');
+    expect(copyToClipboardAction.getIconType(context)).toEqual('copy');
   });
 
   describe('isCompatible', () => {

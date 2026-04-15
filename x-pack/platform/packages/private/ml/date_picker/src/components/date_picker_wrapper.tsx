@@ -88,10 +88,6 @@ interface DatePickerWrapperProps {
    */
   width?: EuiSuperDatePickerProps['width'];
   /**
-   * Boolean flag to set use of flex group wrapper
-   */
-  flexGroup?: boolean;
-  /**
    * Boolean flag to disable the date picker
    */
   isDisabled?: boolean;
@@ -108,6 +104,10 @@ interface DatePickerWrapperProps {
    * Tooltip message for the update button
    */
   tooltipMessage?: string;
+  /**
+   * Data test subject for the refresh button
+   */
+  dataTestSubj?: string;
 }
 
 /**
@@ -123,17 +123,18 @@ export const DatePickerWrapper: FC<DatePickerWrapperProps> = (props) => {
     isLoading = false,
     showRefresh,
     width,
-    flexGroup = true,
     isDisabled = false,
     needsUpdate,
     onRefresh,
     tooltipMessage,
+    dataTestSubj = 'mlDatePickerRefreshPageButton',
   } = props;
   const {
     data,
     notifications: { toasts },
     uiSettings: config,
     uiSettingsKeys,
+    userProfile,
     theme,
     i18n: i18nStart,
   } = useDatePickerContext();
@@ -226,7 +227,7 @@ export const DatePickerWrapper: FC<DatePickerWrapperProps> = (props) => {
                 }}
               />
             </EuiButton>,
-            { theme, i18n: i18nStart }
+            { theme, i18n: i18nStart, userProfile }
           ),
         },
         { toastLifeTimeMs: 30000 }
@@ -243,6 +244,7 @@ export const DatePickerWrapper: FC<DatePickerWrapperProps> = (props) => {
   );
 
   const dateFormat = config.get('dateFormat');
+  const timeZoneName = config.get('dateFormat:tz');
   const timePickerQuickRanges = config.get<TimePickerQuickRange[]>(
     uiSettingsKeys.TIMEPICKER_QUICK_RANGES
   );
@@ -331,6 +333,12 @@ export const DatePickerWrapper: FC<DatePickerWrapperProps> = (props) => {
             ...(needsUpdate ? { needsUpdate } : {}),
           }}
           width={width}
+          showTimeWindowButtons={{
+            showZoomIn: true,
+          }}
+          timeZoneDisplayProps={{
+            timeZone: timeZoneName,
+          }}
         />
       </EuiFlexItem>
       {showRefresh === true || !isTimeRangeSelectorEnabled ? (
@@ -341,7 +349,7 @@ export const DatePickerWrapper: FC<DatePickerWrapperProps> = (props) => {
               color={needsUpdate ? 'accentSecondary' : 'primary'}
               iconType={needsUpdate ? 'kqlFunction' : 'refresh'}
               onClick={handleRefresh}
-              data-test-subj={`mlDatePickerRefreshPageButton${isLoading ? ' loading' : ' loaded'}`}
+              data-test-subj={`${dataTestSubj}${isLoading ? ' loading' : ' loaded'}`}
               isLoading={isLoading}
               isDisabled={isDisabled}
             >
@@ -362,6 +370,8 @@ export const DatePickerWrapper: FC<DatePickerWrapperProps> = (props) => {
       ) : null}
     </>
   );
+
+  const flexGroup = !isTimeRangeSelectorEnabled || isAutoRefreshOnly === true;
 
   const wrapped = flexGroup ? (
     <EuiFlexGroup gutterSize="s" alignItems="center">

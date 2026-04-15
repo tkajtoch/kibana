@@ -7,7 +7,7 @@
 
 import { deserializeListAutoFollowPatterns } from '../../../../common/services/auto_follow_pattern_serialization';
 import { addBasePath } from '../../../services';
-import { RouteDependencies } from '../../../types';
+import type { RouteDependencies } from '../../../types';
 
 /**
  * Get a list of all auto-follow patterns
@@ -20,6 +20,12 @@ export const registerFetchRoute = ({
   router.get(
     {
       path: addBasePath('/auto_follow_patterns'),
+      security: {
+        authz: {
+          enabled: false,
+          reason: 'Relies on es client for authorization',
+        },
+      },
       validate: false,
     },
     license.guardApiRoute(async (context, request, response) => {

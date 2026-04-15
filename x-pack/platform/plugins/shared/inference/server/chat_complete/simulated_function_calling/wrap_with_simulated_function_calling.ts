@@ -5,16 +5,15 @@
  * 2.0.
  */
 
-import {
-  MessageRole,
+import type {
   AssistantMessage,
   Message,
   ToolMessage,
   UserMessage,
   ToolChoice,
-  ToolChoiceType,
   ToolDefinition,
 } from '@kbn/inference-common';
+import { MessageRole, ToolChoiceType } from '@kbn/inference-common';
 import { TOOL_USE_END, TOOL_USE_START } from './constants';
 import { getSystemMessageInstructions } from './get_system_instructions';
 
@@ -52,9 +51,25 @@ export function wrapWithSimulatedFunctionCalling({
       return message;
     })
     .map((message) => {
+      let content = message.content;
+
+      if (typeof content === 'string') {
+        content = replaceFunctionsWithTools(content);
+      } else if (Array.isArray(content)) {
+        content = content.map((contentPart) => {
+          if (contentPart.type === 'text') {
+            return {
+              ...contentPart,
+              text: replaceFunctionsWithTools(contentPart.text),
+            };
+          }
+          return contentPart;
+        });
+      }
+
       return {
         ...message,
-        content: message.content ? replaceFunctionsWithTools(message.content) : message.content,
+        content,
       };
     });
 

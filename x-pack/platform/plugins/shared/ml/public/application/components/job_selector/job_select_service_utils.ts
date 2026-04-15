@@ -7,13 +7,15 @@
 
 import { i18n } from '@kbn/i18n';
 import moment from 'moment';
-import d3 from 'd3';
+import { extent as d3Extent } from 'd3-array';
+import { scaleLinear } from 'd3-scale';
 
 import type { Dictionary } from '../../../../common/types/common';
 import type { MlJobWithTimeRange } from '../../../../common/types/anomaly_detection_jobs';
+import type { MlJobGroupWithTimeRange } from './job_selector_flyout';
 
 export function getGroupsFromJobs(jobs: MlJobWithTimeRange[]) {
-  const groups: Dictionary<any> = {};
+  const groups: Dictionary<MlJobGroupWithTimeRange> = {};
   const groupsMap: Dictionary<any> = {};
 
   jobs.forEach((job) => {
@@ -86,7 +88,7 @@ export function getTimeRangeFromSelection(jobs: MlJobWithTimeRange[], selection:
   if (jobs.length > 0) {
     const times: number[] = [];
     jobs.forEach((job) => {
-      if (selection.includes(job.job_id)) {
+      if (selection.includes(job.job_id) || selection.some((s) => job.groups?.includes(s))) {
         if (job.timeRange.from !== undefined) {
           times.push(job.timeRange.from);
         }
@@ -96,7 +98,7 @@ export function getTimeRangeFromSelection(jobs: MlJobWithTimeRange[], selection:
       }
     });
     if (times.length) {
-      const extent = d3.extent(times);
+      const extent = d3Extent(times);
       const selectedTime = {
         from: moment(extent[0]).toISOString(),
         to: moment(extent[1]).toISOString(),
@@ -117,7 +119,7 @@ export function normalizeTimes(
 
   const min = Math.min(...jobsWithTimeRange.map((job) => +job.timeRange.from));
   const max = Math.max(...jobsWithTimeRange.map((job) => +job.timeRange.to));
-  const ganttScale = d3.scale.linear().domain([min, max]).range([1, ganttBarWidth]);
+  const ganttScale = scaleLinear().domain([min, max]).range([1, ganttBarWidth]);
 
   jobs.forEach((job) => {
     if (job.timeRange.to !== undefined && job.timeRange.from !== undefined) {

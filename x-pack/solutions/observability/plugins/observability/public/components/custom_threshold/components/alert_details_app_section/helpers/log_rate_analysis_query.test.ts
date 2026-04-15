@@ -8,7 +8,7 @@
 import { COMPARATORS } from '@kbn/alerting-comparators';
 import { ALERT_RULE_PARAMETERS } from '@kbn/rule-data-utils';
 import { Aggregators } from '../../../../../../common/custom_threshold_rule/types';
-import { CustomThresholdRuleTypeParams } from '../../../types';
+import type { CustomThresholdRuleTypeParams } from '../../../types';
 import { getLogRateAnalysisEQQuery } from './log_rate_analysis_query';
 
 describe('buildEsQuery', () => {
@@ -128,6 +128,12 @@ describe('buildEsQuery', () => {
   ];
 
   test.each(testData)('should generate correct es query for $title', ({ alert }) => {
-    expect(getLogRateAnalysisEQQuery(alert)).toMatchSnapshot();
+    expect(
+      getLogRateAnalysisEQQuery(alert, {
+        allowLeadingWildcards: true,
+        queryStringOptions: {},
+        ignoreFilterIfFieldNotInIndex: false,
+      })
+    ).toMatchSnapshot();
   });
 });

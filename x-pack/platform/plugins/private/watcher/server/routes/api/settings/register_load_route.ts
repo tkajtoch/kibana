@@ -5,10 +5,10 @@
  * 2.0.
  */
 
-import { IScopedClusterClient } from '@kbn/core/server';
+import type { IScopedClusterClient } from '@kbn/core/server';
 // @ts-ignore
 import { Settings } from '../../../models/settings';
-import { RouteDependencies } from '../../../types';
+import type { RouteDependencies } from '../../../types';
 
 function fetchClusterSettings(client: IScopedClusterClient) {
   return client.asCurrentUser.cluster.getSettings({
@@ -21,6 +21,12 @@ export function registerLoadRoute({ router, license, lib: { handleEsError } }: R
   router.get(
     {
       path: '/api/watcher/settings',
+      security: {
+        authz: {
+          enabled: false,
+          reason: 'Relies on es client for authorization',
+        },
+      },
       validate: false,
     },
     license.guardApiRoute(async (ctx, request, response) => {

@@ -7,7 +7,7 @@
 
 import { schema } from '@kbn/config-schema';
 import { addBasePath } from '../../../services';
-import { RouteDependencies } from '../../../types';
+import type { RouteDependencies } from '../../../types';
 
 /**
  * Unfollow follower index's leader index
@@ -22,6 +22,12 @@ export const registerUnfollowRoute = ({
   router.put(
     {
       path: addBasePath('/follower_indices/{id}/unfollow'),
+      security: {
+        authz: {
+          enabled: false,
+          reason: 'Relies on es client for authorization',
+        },
+      },
       validate: {
         params: paramsSchema,
       },

@@ -7,7 +7,7 @@
 
 import { schema } from '@kbn/config-schema';
 import { putLicense } from '../../../lib/license';
-import { RouteDependencies } from '../../../types';
+import type { RouteDependencies } from '../../../types';
 import { addBasePath } from '../../helpers';
 
 export function registerLicenseRoute({
@@ -18,6 +18,12 @@ export function registerLicenseRoute({
   router.put(
     {
       path: addBasePath(''),
+      security: {
+        authz: {
+          enabled: false,
+          reason: 'Relies on es client for authorization',
+        },
+      },
       validate: {
         query: schema.object({ acknowledge: schema.string() }),
         body: schema.object({
