@@ -2408,12 +2408,21 @@
     chroma-js "^2.4.2"
     lodash "^4.17.21"
 
-"@elastic/eui@114.1.0":
-  version "114.1.0"
-  resolved "https://registry.yarnpkg.com/@elastic/eui/-/eui-114.1.0.tgz#c85fe29f092af1ccbf73c2dc5ea15fceb486852d"
-  integrity sha512-vQo87fKXKN217kLpQ46BY/sKg/AZ9dGhHsZEWfqG5iDATs5Qu9egfxaEU4+QvQn8na0YuGfOtBGj7i4jnZ4GuA==
+"@elastic/eui-theme-common@9.0.0-snapshot.1776170631053":
+  version "9.0.0-snapshot.1776170631053"
+  resolved "https://registry.yarnpkg.com/@elastic/eui-theme-common/-/eui-theme-common-9.0.0-snapshot.1776170631053.tgz#d6ec2fee0718f3bedccbae6f1f4ca78d90dffbeb"
+  integrity sha512-1xZekN5P/qEAJaXD/1Rp6+17xxN8H5uYGzQEHgKsv904uGhnBUvjhoy2WX8mzX9pROJ1qpGUDXV+g0FV3NwOZQ==
   dependencies:
-    "@elastic/eui-theme-common" "9.0.0"
+    "@types/lodash" "^4.14.202"
+    chroma-js "^2.4.2"
+    lodash "^4.17.21"
+
+"@elastic/eui@114.1.0-snapshot.1776170631053":
+  version "114.1.0-snapshot.1776170631053"
+  resolved "https://registry.yarnpkg.com/@elastic/eui/-/eui-114.1.0-snapshot.1776170631053.tgz#f08d0c0df426823ab7468d25bef1181dc3619153"
+  integrity sha512-yHvM2+qXuyFfCLgq1wMtfZjoi/QST/buy5vy1bQdJvd528KKtZG6rPghH0WT5hsnJnEqcdYTgHiZbjKgl51tSQ==
+  dependencies:
+    "@elastic/eui-theme-common" "9.0.0-snapshot.1776170631053"
     "@elastic/prismjs-esql" "^1.1.2"
     "@hello-pangea/dnd" "^16.6.0"
     "@types/lodash" "^4.14.202"
